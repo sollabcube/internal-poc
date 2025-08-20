@@ -1,0 +1,4365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xpert HR Agent - 혁신적 채용 분석 플랫폼</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f8f9fa;
+            color: #2c2c2c;
+            line-height: 1.6;
+            overflow-x: hidden;
+            height: 100vh;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* 헤더 - 상단 고정 */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hr-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        .progress-steps {
+            display: flex;
+            gap: 32px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #8e8e93;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            color: #667eea;
+        }
+
+        .step.completed {
+            color: #34c759;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step.completed .step-number {
+            background: #34c759;
+            color: white;
+        }
+
+        /* 메인 컨텐츠 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Step 1: HR 에이전트 진입 */
+        .step1-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            min-height: calc(100vh - 80px);
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .step1-container.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .hr-intro {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .step1-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .step1-subtitle {
+            font-size: 20px;
+            color: #6e6e73;
+            margin-bottom: 48px;
+            font-weight: 400;
+        }
+
+        .hr-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 24px;
+            margin: 48px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: #6e6e73;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 20px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 32px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Step 2: 통합 인터페이스 - 수정된 부분 */
+        .step2-container {
+            width: 100vw;
+            height: calc(100vh - 80px);
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f8f9fa;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .step2-container.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .integrated-layout {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 좌측: Agent 정보 (25%) */
+        .agent-sidebar {
+            width: 25%;
+            min-width: 300px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .agent-info-section {
+            padding: 32px 24px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            flex-shrink: 0;
+        }
+
+        .agent-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            margin: 0 auto 16px;
+        }
+
+        .agent-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .agent-subtitle {
+            font-size: 14px;
+            color: #6e6e73;
+            line-height: 1.4;
+        }
+
+        .mode-switcher {
+            padding: 24px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .switcher-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6e6e73;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mode-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mode-option {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .mode-option:hover {
+            background: #e9ecef;
+            transform: translateX(2px);
+        }
+
+        .mode-option.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .mode-option-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .mode-option.active .mode-option-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .mode-option-info {
+            flex: 1;
+        }
+
+        .mode-option-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .mode-option-desc {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* 우측: 채팅 인터페이스 (75%) */
+        .chat-interface {
+            width: 75%;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: white;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .chat-agent-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .chat-agent-info {
+            flex: 1;
+        }
+
+        .chat-agent-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 2px;
+        }
+
+        .chat-agent-status {
+            font-size: 14px;
+            color: #6e6e73;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 85%;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message.ai .message-avatar {
+            background: #667eea;
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: #34c759;
+            color: white;
+        }
+
+        .message-content {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+
+        .message.ai .message-content {
+            border-bottom-left-radius: 6px;
+        }
+
+        .message.user .message-content {
+            background: #667eea;
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+
+        .message-text {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .message-text:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-actions {
+            margin-top: 16px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-chip {
+            background: #f0f8ff;
+            border: 1px solid #d0e8ff;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: none;
+            outline: none;
+        }
+
+        .action-chip:hover {
+            background: #e0f0ff;
+            transform: translateY(-1px);
+        }
+
+        /* 팀 정보 수집 UI */
+        .team-info-form {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .form-option {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .form-option:hover {
+            background: #f0f8ff;
+            border-color: #667eea;
+        }
+
+        .form-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .form-input {
+            width: 100%;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .team-summary {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .summary-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .summary-label {
+            color: #6e6e73;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        /* 파일 업로드 */
+        .upload-zone {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            background: #f9fafb;
+            margin: 16px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: #f0f8ff;
+        }
+
+        .upload-zone-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .upload-icon {
+            font-size: 32px;
+            color: #9ca3af;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .upload-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .upload-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-btn.secondary {
+            background: white;
+            color: #667eea;
+            border: 1px solid #667eea;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .chat-input-area {
+            background: white;
+            padding: 20px 24px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 24px;
+            padding: 12px 20px;
+            font-size: 15px;
+            resize: none;
+            min-height: 48px;
+            max-height: 120px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+
+        .send-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            background: #d1d1d6;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        /* Step 3: 결과 분석 화면 */
+        .step3-container {
+            visibility: hidden;
+            opacity: 0;
+            width: 100vw;
+            height: calc(100vh - 80px);
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step3-container.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .workspace-header {
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .workspace-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .workspace-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .analysis-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #e8f5e8;
+            color: #2d7d2d;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .workspace-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            background: #e9ecef;
+        }
+
+        .action-btn.primary {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .action-btn.primary:hover {
+            background: #5a67d8;
+        }
+
+        .workspace-main {
+            flex: 1;
+            display: flex;
+            background: #f8f9fa;
+            overflow: hidden;
+        }
+
+        /* 좌측 패널: 팀원/댓글 (30%) */
+        .left-panel {
+            width: 30%;
+            min-width: 350px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            flex-shrink: 0;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 4px;
+        }
+
+        .panel-subtitle {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+
+        .results-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        /* 지원자 요약 대시보드 */
+        .candidates-summary {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+
+        /* 지원자 페르소나 카드 */
+        .candidates-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .candidate-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .candidate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .candidate-info {
+            flex: 1;
+        }
+
+        .candidate-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 4px;
+        }
+
+        .candidate-experience {
+            font-size: 14px;
+            color: #6e6e73;
+            margin-bottom: 8px;
+        }
+
+        .candidate-score {
+            text-align: right;
+        }
+
+        .score-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .score-grade {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+
+        .candidate-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .candidate-tag {
+            background: #f0f8ff;
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .candidate-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .candidate-btn {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+        }
+
+        .candidate-btn:hover {
+            background: #e9ecef;
+        }
+
+        .candidate-btn.primary {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .candidate-btn.primary:hover {
+            background: #5a67d8;
+        }
+
+        /* 중앙 패널: 메인 결과 (70%) */
+        .center-panel {
+            flex: 1;
+            background: white;
+            margin: 16px 16px 16px 8px;
+            border-radius: 16px;
+            border: 1px solid #e9ecef;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .results-header {
+            background: #f8f9fa;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .results-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+
+        /* 상세 팝업 모달 */
+        .candidate-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            visibility: hidden;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .candidate-modal.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6e6e73;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .detail-section {
+            margin-bottom: 24px;
+        }
+
+        .detail-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+
+        .detail-content {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .interview-questions {
+            list-style: none;
+            padding: 0;
+        }
+
+        .interview-questions li {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .question-intent {
+            font-size: 12px;
+            color: #6e6e73;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .evaluation-criteria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .criteria-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .criteria-score {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+
+        .criteria-label {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+
+        .criteria-weight {
+            font-size: 10px;
+            color: #9ca3af;
+        }
+
+        /* 협업 창 */
+        .collaboration-panel {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .collab-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 16px;
+        }
+
+        .interviewer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .interviewer-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .interviewer-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .interviewer-info {
+            flex: 1;
+        }
+
+        .interviewer-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .interviewer-role {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+
+        .interviewer-checkbox {
+            width: 16px;
+            height: 16px;
+        }
+
+        .invite-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .invite-btn:hover {
+            background: #5a67d8;
+        }
+
+        /* Step 3 협업 채팅 */
+        .step3-collaboration-chat {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 12px;
+            margin: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .collaboration-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            flex-shrink: 0;
+        }
+
+        .collaboration-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .online-users {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .user-badge {
+            background: #e8f5e8;
+            color: #4a5568;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .online-dot {
+            width: 6px;
+            height: 6px;
+            background: #48bb78;
+            border-radius: 50%;
+        }
+
+        .collaboration-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .collab-message {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .collab-message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .collab-sender {
+            font-weight: 600;
+            font-size: 14px;
+            color: #2d3748;
+        }
+
+        .collab-time {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .collab-message-content {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #4a5568;
+        }
+
+        .collaboration-input {
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 8px;
+        }
+
+        .collab-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .collab-send-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Interview Mode Styles for Step 3 Right Panel */
+        .interview-result-mode {
+            height: 100%;
+            display: none; /* Hidden by default, shown when interview mode is active */
+            flex-direction: column;
+            background: white;
+            border-radius: 12px;
+            margin: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .interview-result-mode.show {
+            display: flex;
+        }
+
+        /* 상단: 체크리스트 진행 상황 (10%) */
+        .interview-progress {
+            height: 10%;
+            min-height: 80px;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background: #f9f9ff;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .progress-checklist {
+            display: flex;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .progress-item:hover {
+            opacity: 0.7;
+        }
+
+        .progress-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .progress-checkbox.checked {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            border-color: #22c55e;
+            color: white;
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .progress-item.checked .progress-label {
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* 중앙: AI와 실시간 논의창 (75%) */
+        .interview-discussion {
+            height: 75%;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow: hidden;
+        }
+
+        .discussion-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .recommended-questions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .question-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .question-card.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .question-category {
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            font-size: 0.95rem;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .discussion-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            overflow: hidden;
+        }
+
+        /* 면접 진행 로그 영역 */
+        .interview-log {
+            flex: 1;
+            background: #f9f9ff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem;
+            overflow-y: auto;
+            max-height: 300px;
+            margin-bottom: 1rem;
+        }
+
+        .log-empty {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .log-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .log-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .log-question {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .log-category {
+            background: #667eea;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .log-answer {
+            color: #666;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .log-timestamp {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+
+        /* 현재 질문 입력 영역 */
+        .current-question-area {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .selected-question-display {
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .selected-question-display.show {
+            display: block;
+        }
+
+        .interviewer-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .interviewer-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .discussion-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .discussion-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .discussion-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .discussion-btn.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        .discussion-btn.complete {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* 하단: 현재 지원자 정보 요약 (15%) */
+        .candidate-summary {
+            height: 15%;
+            min-height: 120px;
+            padding: 1rem 2rem;
+            border-top: 1px solid #eee;
+            background: #f9f9ff;
+        }
+
+        .summary-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+        }
+
+        .candidate-info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* 면접 완료 후 분석 결과 모달 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .analysis-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-content {
+            background: #f8f9ff;
+            padding: 1rem;
+            border-radius: 8px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* 지원자 선택 팝업 CSS */
+        .candidate-selection-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .candidate-selection-popup.show {
+            display: flex;
+        }
+
+        .candidate-popup-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .candidate-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .candidate-popup-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .candidate-popup-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .candidate-mini-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .candidate-mini-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .candidate-mini-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .candidate-mini-card.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .candidate-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .candidate-info {
+            flex: 1;
+        }
+
+        .candidate-name-mini {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .candidate-position-mini {
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .candidate-summary-mini {
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .candidate-score-mini {
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .score-value-mini {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .score-label-mini {
+            font-size: 0.7rem;
+            color: #999;
+            margin-top: 0.2rem;
+        }
+
+        .candidate-popup-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .popup-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .popup-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .popup-btn.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        .popup-btn:disabled {
+            background: #f0f0f0;
+            color: #999;
+            border-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+
+        /* 반응형 디자인 for Interview Mode */
+        @media (max-width: 1200px) {
+            .recommended-questions {
+                grid-template-columns: 1fr;
+            }
+            
+            .candidate-info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 우측 패널: 결과 영역 */
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .result-mode-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .enhanced-candidates-grid {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: calc(100vh - 200px);
+            min-height: 0;
+        }
+
+        .enhanced-candidate-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .enhanced-candidate-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border-color: #667eea;
+        }
+
+        .candidate-main-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .candidate-photo {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-right: 16px;
+        }
+
+        .candidate-details {
+            flex: 1;
+        }
+
+        .candidate-position {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .candidate-score-section {
+            text-align: center;
+        }
+
+        .score-main {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c2c2c;
+            margin-bottom: 4px;
+        }
+
+        .candidate-skills {
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .skill-category {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .skill-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-label {
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-right: 8px;
+        }
+
+        .skill-tags {
+            color: #6c757d;
+        }
+
+        .candidate-analysis-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .analysis-item {
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .analysis-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .analysis-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .analysis-value.high {
+            color: #28a745;
+        }
+
+        .analysis-value.medium {
+            color: #ffc107;
+        }
+
+        .analysis-value.low {
+            color: #dc3545;
+        }
+
+        .action-btn-primary, .action-btn-secondary {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+        }
+
+        .action-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        .action-btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 1px solid #667eea;
+        }
+
+        .action-btn-secondary:hover {
+            background: #f8f9ff;
+            transform: translateY(-1px);
+        }
+
+        .result-header {
+            padding: 24px;
+            border-bottom: 1px solid #e9ecef;
+            background: white;
+            flex-shrink: 0;
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c2c2c;
+        }
+
+        .result-summary {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        /* 숨김 클래스 */
+        .hidden {
+            display: none !important;
+        }
+
+        /* 반응형 */
+        @media (max-width: 1200px) {
+            .left-panel {
+                width: 40%;
+                min-width: 320px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 16px;
+                height: 70px;
+            }
+            
+            .main-content {
+                margin-top: 70px;
+                min-height: calc(100vh - 70px);
+            }
+            
+            .step1-container {
+                min-height: calc(100vh - 70px);
+                padding: 40px 20px;
+            }
+            
+            .step1-title {
+                font-size: 32px;
+            }
+            
+            .step1-subtitle {
+                font-size: 18px;
+            }
+            
+            .hr-features {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(4, auto);
+                gap: 16px;
+            }
+            
+            .integrated-layout {
+                flex-direction: column;
+            }
+            
+            .agent-sidebar {
+                width: 100%;
+                min-width: auto;
+                max-height: 200px;
+            }
+            
+            .chat-interface {
+                width: 100%;
+            }
+            
+            .step2-container,
+            .step3-container {
+                height: calc(100vh - 70px);
+            }
+            
+            .workspace-main {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                width: 100%;
+                min-width: auto;
+                max-height: 300px;
+            }
+            
+            .center-panel {
+                margin: 8px;
+            }
+            
+            .progress-steps {
+                display: none;
+            }
+
+            .candidates-grid {
+                gap: 12px;
+            }
+
+            .candidate-card {
+                padding: 16px;
+            }
+
+            .modal-content {
+                width: 95%;
+                max-height: 95vh;
+            }
+
+            .modal-header,
+            .modal-body {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <header class="header">
+            <div style="display: flex; align-items: center;">
+                <div class="logo">Xpert</div>
+                <div class="hr-badge">HR Agent</div>
+            </div>
+            <div class="progress-steps">
+                <div class="step active" id="step-indicator-1">
+                    <div class="step-number">1</div>
+                    <span>HR 에이전트 진입</span>
+                </div>
+                <div class="step" id="step-indicator-2">
+                    <div class="step-number">2</div>
+                    <span>목적 설정 & 팀 정보 수집</span>
+                </div>
+                <div class="step" id="step-indicator-3">
+                    <div class="step-number">3</div>
+                    <span>분석 결과 & 협업</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 메인 컨텐츠 -->
+        <main class="main-content">
+            <!-- Step 1: HR 에이전트 진입 -->
+            <div class="step1-container" id="step1">
+                <div class="hr-intro">
+                    <h1 class="step1-title">Xpert HR 에이전트</h1>
+                    <p class="step1-subtitle">채용 프로세스를 혁신하는 AI 기반 전문 분석 도구</p>
+                    
+                    <div class="hr-features">
+                        <div class="feature-card">
+                            <div class="feature-icon">📋</div>
+                            <div class="feature-title">서류 검토 자동화</div>
+                            <div class="feature-desc">AI가 이력서를 분석하여 팀 맞춤 적합도를 평가합니다</div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🎤</div>
+                            <div class="feature-title">실시간 면접 지원</div>
+                            <div class="feature-desc">면접 중 AI가 질문을 추천하고 평가를 도와줍니다</div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🔒</div>
+                            <div class="feature-title">완전한 보안</div>
+                            <div class="feature-desc">개인정보는 완전히 익명화되어 안전하게 처리됩니다</div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🤝</div>
+                            <div class="feature-title">팀 협업</div>
+                            <div class="feature-desc">실시간으로 팀원들과 의견을 공유하고 결정할 수 있습니다</div>
+                        </div>
+                    </div>
+                    
+                    <button class="start-btn" onclick="goToStep2()">
+                        🚀 HR 분석 시작하기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: 통합 인터페이스 -->
+            <div class="step2-container" id="step2">
+                <div class="integrated-layout">
+                    <!-- 좌측: Agent 정보 (25%) -->
+                    <div class="agent-sidebar">
+                        <div class="agent-info-section">
+                            <div class="agent-avatar">💼</div>
+                            <div class="agent-name">HR Agent</div>
+                            <div class="agent-subtitle">채용 프로세스 전문 AI</div>
+                        </div>
+
+                        <div class="mode-switcher">
+                            <div class="switcher-title">분석 모드 선택</div>
+                            <div class="mode-options">
+                                <div class="mode-option active" data-mode="resume">
+                                    <div class="mode-option-icon">📋</div>
+                                    <div class="mode-option-info">
+                                        <div class="mode-option-name">서류 검토 모드</div>
+                                        <div class="mode-option-desc">이력서 분석 및 면접 대상자 선별</div>
+                                    </div>
+                                </div>
+                                <div class="mode-option" data-mode="interview">
+                                    <div class="mode-option-icon">🎤</div>
+                                    <div class="mode-option-info">
+                                        <div class="mode-option-name">면접 분석 모드</div>
+                                        <div class="mode-option-desc">실시간 면접 지원 및 최종 평가</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 우측: 채팅 인터페이스 (75%) -->
+                    <div class="chat-interface">
+                        <div class="chat-header">
+                            <div class="chat-agent-avatar">💼</div>
+                            <div class="chat-agent-info">
+                                <div class="chat-agent-name">HR Agent</div>
+                                <div class="chat-agent-status" id="chat-agent-status">채용 분석을 도와드리겠습니다</div>
+                            </div>
+                        </div>
+
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- 메시지는 JavaScript로 동적 생성 -->
+                        </div>
+
+                        <div class="chat-input-area">
+                            <div class="chat-input-container">
+                                <textarea 
+                                    class="chat-input" 
+                                    id="chat-input" 
+                                    placeholder="채용 관련 질문을 자유롭게 입력하세요..."
+                                    rows="1"
+                                ></textarea>
+                                <button class="send-btn" id="send-btn" disabled>
+                                    ↗️
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: 결과 분석 & 협업 -->
+            <div class="step3-container" id="step3">
+                <div class="workspace-header">
+                    <div class="workspace-info">
+                        <h3 class="workspace-title" id="workspace-title">서류 검토 결과</h3>
+                        <div class="analysis-badge">
+                            ✅ 분석 완료
+                        </div>
+                    </div>
+                    <div class="workspace-actions">
+                        <button class="action-btn">📤 슬랙 공유</button>
+                        <button class="action-btn">📥 PDF 다운로드</button>
+                        <button class="action-btn">📖 북마크</button>
+                        <button class="action-btn primary">👥 협업자 초대</button>
+                    </div>
+                </div>
+
+                <div class="workspace-main">
+                    <!-- 좌측 패널: 협업 채팅 (30%) -->
+                    <div class="left-panel">
+                        <div class="step3-collaboration-chat">
+                            <div class="collaboration-header">
+                                <div class="collaboration-title">👥 HR 팀 협업 채팅</div>
+                                <div class="online-users">
+                                    <div class="user-badge">
+                                        <div class="online-dot"></div>
+                                        김팀장
+                                    </div>
+                                    <div class="user-badge">
+                                        <div class="online-dot"></div>
+                                        이HR
+                                    </div>
+                                    <div class="user-badge">
+                                        <div class="online-dot"></div>
+                                        박매니저
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collaboration-messages" id="step3-collaboration-messages">
+                                <div class="collab-message">
+                                    <div class="collab-message-header">
+                                        <span class="collab-sender">김팀장</span>
+                                        <span class="collab-time">14:32</span>
+                                    </div>
+                                    <div class="collab-message-content">
+                                        분석 결과가 나왔네요. 상위 3명 정도는 확실히 면접 볼 만한 것 같습니다.
+                                    </div>
+                                </div>
+                                
+                                <div class="collab-message">
+                                    <div class="collab-message-header">
+                                        <span class="collab-sender">이HR</span>
+                                        <span class="collab-time">14:34</span>
+                                    </div>
+                                    <div class="collab-message-content">
+                                        김개발님은 기술 스택이 우리 팀과 잘 맞는 것 같아요. 면접 대상자로 선정하는 게 어떨까요?
+                                    </div>
+                                </div>
+
+                                <div class="collab-message">
+                                    <div class="collab-message-header">
+                                        <span class="collab-sender">박매니저</span>
+                                        <span class="collab-time">14:35</span>
+                                    </div>
+                                    <div class="collab-message-content">
+                                        동의합니다. 이디자인님도 포트폴리오가 인상적이었어요 👍
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collaboration-input">
+                                <input type="text" class="collab-input" placeholder="협업 메시지 입력..." id="step3-collab-input">
+                                <button class="collab-send-btn" onclick="sendStep3CollabMessage()">전송</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 우측 패널: 결과 영역 (70%) -->
+                    <div class="right-panel">
+                        <!-- 서류 검토 모드 결과 -->
+                        <div class="result-mode-container" id="resume-result-mode">
+                            <div class="result-header">
+                                <div class="result-title">📊 서류 검토 분석 결과</div>
+                                <div class="result-summary">총 5명 분석 완료 · 평균 점수 84.2점</div>
+                            </div>
+
+                            <div class="enhanced-candidates-grid">
+                                <div class="enhanced-candidate-card" onclick="showCandidateDetail('kim')">
+                                    <div class="candidate-main-info">
+                                        <div class="candidate-photo">👨‍💻</div>
+                                        <div class="candidate-details">
+                                            <div class="candidate-name">김개발</div>
+                                            <div class="candidate-position">프론트엔드 개발자</div>
+                                            <div class="candidate-experience">React 3년, Node.js 2년, TypeScript 2년</div>
+                                        </div>
+                                        <div class="candidate-score-section">
+                                            <div class="score-main">92점</div>
+                                            <div class="score-grade">S급</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="candidate-skills">
+                                        <div class="skill-category">
+                                            <span class="skill-label">기술 스택:</span>
+                                            <span class="skill-tags">React, TypeScript, Node.js, MongoDB</span>
+                                        </div>
+                                        <div class="skill-category">
+                                            <span class="skill-label">강점:</span>
+                                            <span class="skill-tags">팀 리드 경험, 기술 깊이, 코드 품질</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-analysis-preview">
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">팀 적합성:</span>
+                                            <span class="analysis-value high">매우 높음</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">기술 역량:</span>
+                                            <span class="analysis-value high">우수</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">성장 가능성:</span>
+                                            <span class="analysis-value medium">보통</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-actions">
+                                        <button class="action-btn-primary" onclick="event.stopPropagation(); selectForInterview('kim')">
+                                            <span>✅</span>
+                                            <span>면접 대상자 선정</span>
+                                        </button>
+                                        <button class="action-btn-secondary" onclick="event.stopPropagation(); showCandidateDetail('kim')">
+                                            <span>📋</span>
+                                            <span>상세 보고서</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="enhanced-candidate-card" onclick="showCandidateDetail('lee')">
+                                    <div class="candidate-main-info">
+                                        <div class="candidate-photo">👩‍🎨</div>
+                                        <div class="candidate-details">
+                                            <div class="candidate-name">이디자인</div>
+                                            <div class="candidate-position">UI/UX 디자이너</div>
+                                            <div class="candidate-experience">UI/UX 4년, 제품 디자인 3년</div>
+                                        </div>
+                                        <div class="candidate-score-section">
+                                            <div class="score-main">88점</div>
+                                            <div class="score-grade">A급</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="candidate-skills">
+                                        <div class="skill-category">
+                                            <span class="skill-label">기술 스택:</span>
+                                            <span class="skill-tags">Figma, Sketch, Adobe XD, Prototype</span>
+                                        </div>
+                                        <div class="skill-category">
+                                            <span class="skill-label">강점:</span>
+                                            <span class="skill-tags">대기업 경험, 체계적 프로세스, 사용자 중심</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-analysis-preview">
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">팀 적합성:</span>
+                                            <span class="analysis-value high">높음</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">디자인 역량:</span>
+                                            <span class="analysis-value high">우수</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">협업 경험:</span>
+                                            <span class="analysis-value high">풍부</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-actions">
+                                        <button class="action-btn-primary" onclick="event.stopPropagation(); selectForInterview('lee')">
+                                            <span>✅</span>
+                                            <span>면접 대상자 선정</span>
+                                        </button>
+                                        <button class="action-btn-secondary" onclick="event.stopPropagation(); showCandidateDetail('lee')">
+                                            <span>📋</span>
+                                            <span>상세 보고서</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="enhanced-candidate-card" onclick="showCandidateDetail('park')">
+                                    <div class="candidate-main-info">
+                                        <div class="candidate-photo">👨‍💼</div>
+                                        <div class="candidate-details">
+                                            <div class="candidate-name">박프론트</div>
+                                            <div class="candidate-position">주니어 프론트엔드 개발자</div>
+                                            <div class="candidate-experience">Vue.js 2년, React 1년</div>
+                                        </div>
+                                        <div class="candidate-score-section">
+                                            <div class="score-main">85점</div>
+                                            <div class="score-grade">A급</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="candidate-skills">
+                                        <div class="skill-category">
+                                            <span class="skill-label">기술 스택:</span>
+                                            <span class="skill-tags">Vue.js, React, JavaScript, CSS3</span>
+                                        </div>
+                                        <div class="skill-category">
+                                            <span class="skill-label">강점:</span>
+                                            <span class="skill-tags">빠른 학습, 성장성, 열정적</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-analysis-preview">
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">팀 적합성:</span>
+                                            <span class="analysis-value medium">보통</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">기술 역량:</span>
+                                            <span class="analysis-value medium">보통</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">성장 가능성:</span>
+                                            <span class="analysis-value high">매우 높음</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-actions">
+                                        <button class="action-btn-primary" onclick="event.stopPropagation(); selectForInterview('park')">
+                                            <span>✅</span>
+                                            <span>면접 대상자 선정</span>
+                                        </button>
+                                        <button class="action-btn-secondary" onclick="event.stopPropagation(); showCandidateDetail('park')">
+                                            <span>📋</span>
+                                            <span>상세 보고서</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="enhanced-candidate-card" onclick="showCandidateDetail('choi')">
+                                    <div class="candidate-main-info">
+                                        <div class="candidate-photo">👨‍🔧</div>
+                                        <div class="candidate-details">
+                                            <div class="candidate-name">최백엔드</div>
+                                            <div class="candidate-position">시니어 백엔드 개발자</div>
+                                            <div class="candidate-experience">Spring 4년, MSA 설계 2년</div>
+                                        </div>
+                                        <div class="candidate-score-section">
+                                            <div class="score-main">90점</div>
+                                            <div class="score-grade">S급</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="candidate-skills">
+                                        <div class="skill-category">
+                                            <span class="skill-label">기술 스택:</span>
+                                            <span class="skill-tags">Spring Boot, MySQL, Redis, AWS</span>
+                                        </div>
+                                        <div class="skill-category">
+                                            <span class="skill-label">강점:</span>
+                                            <span class="skill-tags">아키텍처 설계, 시니어 경험, 리더십</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-analysis-preview">
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">팀 적합성:</span>
+                                            <span class="analysis-value high">높음</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">기술 역량:</span>
+                                            <span class="analysis-value high">매우 우수</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">리더십:</span>
+                                            <span class="analysis-value high">우수</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-actions">
+                                        <button class="action-btn-primary" onclick="event.stopPropagation(); selectForInterview('choi')">
+                                            <span>✅</span>
+                                            <span>면접 대상자 선정</span>
+                                        </button>
+                                        <button class="action-btn-secondary" onclick="event.stopPropagation(); showCandidateDetail('choi')">
+                                            <span>📋</span>
+                                            <span>상세 보고서</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="enhanced-candidate-card" onclick="showCandidateDetail('jung')">
+                                    <div class="candidate-main-info">
+                                        <div class="candidate-photo">👩‍💻</div>
+                                        <div class="candidate-details">
+                                            <div class="candidate-name">정풀스택</div>
+                                            <div class="candidate-position">풀스택 개발자</div>
+                                            <div class="candidate-experience">React, Node.js, AWS 3년</div>
+                                        </div>
+                                        <div class="candidate-score-section">
+                                            <div class="score-main">86점</div>
+                                            <div class="score-grade">A급</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="candidate-skills">
+                                        <div class="skill-category">
+                                            <span class="skill-label">기술 스택:</span>
+                                            <span class="skill-tags">React, Node.js, AWS, Docker</span>
+                                        </div>
+                                        <div class="skill-category">
+                                            <span class="skill-label">강점:</span>
+                                            <span class="skill-tags">다양한 기술, 빠른 적응, 문제해결</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-analysis-preview">
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">팀 적합성:</span>
+                                            <span class="analysis-value medium">보통</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">기술 역량:</span>
+                                            <span class="analysis-value high">우수</span>
+                                        </div>
+                                        <div class="analysis-item">
+                                            <span class="analysis-label">적응력:</span>
+                                            <span class="analysis-value high">매우 높음</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="candidate-actions">
+                                        <button class="action-btn-primary" onclick="event.stopPropagation(); selectForInterview('jung')">
+                                            <span>✅</span>
+                                            <span>면접 대상자 선정</span>
+                                        </button>
+                                        <button class="action-btn-secondary" onclick="event.stopPropagation(); showCandidateDetail('jung')">
+                                            <span>📋</span>
+                                            <span>상세 보고서</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 면접 분석 모드 결과 -->
+                        <div class="interview-result-mode" id="interview-result-mode">
+                            <!-- 상단: 체크리스트 진행 상황 (10%) -->
+                            <div class="interview-progress">
+                                <div class="progress-title">📋 면접 진행 상황</div>
+                                <div class="progress-checklist">
+                                    <div class="progress-item" onclick="toggleProgress('technical')">
+                                        <div class="progress-checkbox" id="technical-check">
+                                            <span style="display: none;">✓</span>
+                                        </div>
+                                        <div class="progress-label">기술 질문</div>
+                                    </div>
+                                    <div class="progress-item" onclick="toggleProgress('experience')">
+                                        <div class="progress-checkbox" id="experience-check">
+                                            <span style="display: none;">✓</span>
+                                        </div>
+                                        <div class="progress-label">경험 질문</div>
+                                    </div>
+                                    <div class="progress-item" onclick="toggleProgress('culture')">
+                                        <div class="progress-checkbox" id="culture-check">
+                                            <span style="display: none;">✓</span>
+                                        </div>
+                                        <div class="progress-label">문화적합성</div>
+                                    </div>
+                                    <div class="progress-item" onclick="toggleProgress('personality')">
+                                        <div class="progress-checkbox" id="personality-check">
+                                            <span style="display: none;">✓</span>
+                                        </div>
+                                        <div class="progress-label">인성 평가</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 중앙: AI와 실시간 논의창 (75%) -->
+                            <div class="interview-discussion">
+                                <div class="discussion-title">🤖 AI 추천 질문</div>
+                                
+                                <div class="recommended-questions">
+                                    <div class="question-card" onclick="selectQuestion(this, '기술')">
+                                        <div class="question-category">기술</div>
+                                        <div class="question-text">React Hooks를 사용할 때 성능 최적화를 위해 어떤 방법들을 사용하시나요?</div>
+                                    </div>
+                                    <div class="question-card" onclick="selectQuestion(this, '경험')">
+                                        <div class="question-category">경험</div>
+                                        <div class="question-text">가장 도전적이었던 프로젝트는 무엇이었고, 어떻게 문제를 해결하셨나요?</div>
+                                    </div>
+                                    <div class="question-card" onclick="selectQuestion(this, '문화적합성')">
+                                        <div class="question-category">문화적합성</div>
+                                        <div class="question-text">팀 내에서 의견 충돌이 있을 때 어떻게 해결하시나요?</div>
+                                    </div>
+                                </div>
+
+                                <div class="discussion-area">
+                                    <!-- 면접 진행 로그 영역 -->
+                                    <div class="interview-log" id="interview-log">
+                                        <div class="log-empty">
+                                            면접 진행 내용이 여기에 기록됩니다.<br>
+                                            질문을 선택하고 답변을 기록해보세요.
+                                        </div>
+                                    </div>
+
+                                    <!-- 현재 질문 입력 영역 -->
+                                    <div class="current-question-area">
+                                        <div class="selected-question-display" id="selected-question">
+                                            선택된 질문이 여기에 표시됩니다.
+                                        </div>
+
+                                        <textarea 
+                                            class="interviewer-input" 
+                                            id="interviewer-notes"
+                                            placeholder="질문을 선택하고 지원자의 답변을 기록하세요...&#10;&#10;• 질문 카드를 클릭하면 선택된 질문이 표시됩니다&#10;• 지원자의 답변과 면접관의 소감을 자유롭게 기록하세요&#10;• '답변 저장' 버튼을 눌러 로그에 추가하세요"
+                                        ></textarea>
+                                        
+                                        <div class="discussion-actions">
+                                            <button class="discussion-btn" onclick="saveCurrentAnswer()">
+                                                💾 답변 저장
+                                            </button>
+                                            <button class="discussion-btn" onclick="getNextQuestions()">
+                                                🔄 다음 질문 요청
+                                            </button>
+                                            <button class="discussion-btn primary" onclick="analyzeInterview()">
+                                                🧠 전체 분석
+                                            </button>
+                                            <button class="discussion-btn complete" onclick="completeInterview()">
+                                                ✅ 면접 완료
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 하단: 현재 지원자 정보 요약 (15%) -->
+                            <div class="candidate-summary">
+                                <div class="summary-title">👤 지원자 정보</div>
+                                <div class="candidate-info-grid">
+                                    <div class="info-item">
+                                        <div class="info-label">이름</div>
+                                        <div class="info-value">김개발</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">경력</div>
+                                        <div class="info-value">React 3년, Node.js 2년</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">주요 스킬</div>
+                                        <div class="info-value">TypeScript, Next.js, AWS</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">팀 적합성</div>
+                                        <div class="info-value">92점 (S급)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 지원자 상세 모달 -->
+        <div class="candidate-modal" id="candidate-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="modal-candidate-name">김개발 상세 분석</div>
+                    <button class="modal-close" onclick="closeCandidateModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="detail-section">
+                        <div class="detail-title">📄 기본 정보</div>
+                        <div class="detail-content">
+                            <div class="summary-item">
+                                <span class="summary-label">경력:</span>
+                                <span class="summary-value" id="modal-experience">React 3년, Node.js 2년, AWS 1년</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">적합도:</span>
+                                <span class="summary-value" id="modal-score">92점 (상위 5%)</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">강점:</span>
+                                <span class="summary-value" id="modal-strengths">팀 리드 경험, 기술 깊이, 빠른 학습력</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">우려사항:</span>
+                                <span class="summary-value" id="modal-concerns">대규모 시스템 경험 부족</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-title">🎯 면접 가이드</div>
+                        <div class="detail-content">
+                            <ul class="interview-questions">
+                                <li>
+                                    Q1: "팀 리드로서 가장 어려웠던 기술적 결정은?"
+                                    <div class="question-intent">의도: 기술적 판단력 + 리더십 동시 확인</div>
+                                </li>
+                                <li>
+                                    Q2: "React 성능 최적화 경험을 구체적으로 설명해주세요"
+                                    <div class="question-intent">의도: 실무 깊이 + 문제해결 능력</div>
+                                </li>
+                                <li>
+                                    Q3: "코드 리뷰 문화를 어떻게 만들어가셨나요?"
+                                    <div class="question-intent">의도: 수평적 소통 + 성장 마인드</div>
+                                </li>
+                                <li>
+                                    Q4: "기술 부채 해결 경험이 있으신가요?"
+                                    <div class="question-intent">의도: 장기적 사고 + 책임감</div>
+                                </li>
+                                <li>
+                                    Q5: "우리 팀 문화에 어떻게 기여하실 건가요?"
+                                    <div class="question-intent">의도: 팀워크 + 자기계발 의지</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-title">📊 평가 기준</div>
+                        <div class="detail-content">
+                            <div class="evaluation-criteria">
+                                <div class="criteria-item">
+                                    <div class="criteria-score">90점</div>
+                                    <div class="criteria-label">기술 역량</div>
+                                    <div class="criteria-weight">가중치 40%</div>
+                                </div>
+                                <div class="criteria-item">
+                                    <div class="criteria-score">85점</div>
+                                    <div class="criteria-label">팀 적합성</div>
+                                    <div class="criteria-weight">가중치 35%</div>
+                                </div>
+                                <div class="criteria-item">
+                                    <div class="criteria-score">95점</div>
+                                    <div class="criteria-label">성장 가능성</div>
+                                    <div class="criteria-weight">가중치 25%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-title">🔗 연계 정보</div>
+                        <div class="detail-content">
+                            <div class="summary-item">
+                                <span class="summary-label">지원자 ID:</span>
+                                <span class="summary-value">CAND-KIM-001</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">브리핑 코드:</span>
+                                <span class="summary-value">INT-KIM-001</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">생성 시간:</span>
+                                <span class="summary-value">2025.08.14 14:30</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button class="upload-btn" style="flex: 1;" onclick="selectForInterview(currentCandidateId)">
+                            ✅ 면접 대상자 선정
+                        </button>
+                        <button class="upload-btn secondary" style="flex: 1;" onclick="closeCandidateModal()">
+                            📄 목록으로 돌아가기
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 면접 완료 후 분석 결과 모달 -->
+        <div class="modal-overlay" id="analysis-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">📊 면접 분석 결과</div>
+                    <button class="modal-close" onclick="closeAnalysisModal()">&times;</button>
+                </div>
+
+                <div class="analysis-section">
+                    <div class="section-title">
+                        🎯 종합 평가
+                    </div>
+                    <div class="section-content">
+                        지원자의 전반적인 역량 평가 점수와 등급, 강점 및 개선점 요약이 표시됩니다.
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <div class="section-title">
+                        💻 기술 역량 분석
+                    </div>
+                    <div class="section-content">
+                        기술 질문에 대한 답변 분석, 코딩 실력 평가, 기술 스택 일치도 등이 표시됩니다.
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <div class="section-title">
+                        🏆 경험 및 성과 분석
+                    </div>
+                    <div class="section-content">
+                        프로젝트 경험의 깊이, 문제 해결 능력, 리더십 경험 등이 분석되어 표시됩니다.
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <div class="section-title">
+                        🤝 문화적합성 평가
+                    </div>
+                    <div class="section-content">
+                        팀워크, 의사소통 스타일, 회사 문화와의 적합도 등이 평가되어 표시됩니다.
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <div class="section-title">
+                        💡 채용 권고사항
+                    </div>
+                    <div class="section-content">
+                        최종 채용 추천 여부, 추가 확인이 필요한 사항, 온보딩 시 고려사항 등이 제시됩니다.
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="modal-btn" onclick="closeAnalysisModal()">닫기</button>
+                    <button class="modal-btn">📤 공유하기</button>
+                    <button class="modal-btn primary">📥 리포트 다운로드</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 지원자 선택 팝업 -->
+        <div class="candidate-selection-popup" id="candidate-selection-popup">
+            <div class="candidate-popup-content">
+                <div class="candidate-popup-header">
+                    <div class="candidate-popup-title">👥 면접 대상자 선택</div>
+                    <button class="candidate-popup-close" onclick="closeCandidateSelectionPopup()">&times;</button>
+                </div>
+                
+                <div class="candidate-mini-cards">
+                    <div class="candidate-mini-card" onclick="selectCandidateForInterview('kim')" data-candidate="kim">
+                        <div class="candidate-avatar">👨‍💻</div>
+                        <div class="candidate-info">
+                            <div class="candidate-name-mini">김개발</div>
+                            <div class="candidate-position-mini">프론트엔드 개발자 · 5년차</div>
+                            <div class="candidate-summary-mini">React, TypeScript 전문가 · 팀 리딩 경험 · 스타트업 3년</div>
+                        </div>
+                        <div class="candidate-score-mini">
+                            <div class="score-value-mini">92</div>
+                            <div class="score-label-mini">적합도</div>
+                        </div>
+                    </div>
+
+                    <div class="candidate-mini-card" onclick="selectCandidateForInterview('lee')" data-candidate="lee">
+                        <div class="candidate-avatar">👩‍🎨</div>
+                        <div class="candidate-info">
+                            <div class="candidate-name-mini">이디자인</div>
+                            <div class="candidate-position-mini">UI/UX 디자이너 · 4년차</div>
+                            <div class="candidate-summary-mini">대기업 경험 · 사용자 중심 설계 · 프로토타이핑 전문</div>
+                        </div>
+                        <div class="candidate-score-mini">
+                            <div class="score-value-mini">88</div>
+                            <div class="score-label-mini">적합도</div>
+                        </div>
+                    </div>
+
+                    <div class="candidate-mini-card" onclick="selectCandidateForInterview('park')" data-candidate="park">
+                        <div class="candidate-avatar">👨‍💼</div>
+                        <div class="candidate-info">
+                            <div class="candidate-name-mini">박백엔드</div>
+                            <div class="candidate-position-mini">백엔드 개발자 · 6년차</div>
+                            <div class="candidate-summary-mini">Node.js, Docker 전문 · 대용량 처리 경험 · MSA 설계</div>
+                        </div>
+                        <div class="candidate-score-mini">
+                            <div class="score-value-mini">85</div>
+                            <div class="score-label-mini">적합도</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="candidate-popup-actions">
+                    <button class="popup-btn" onclick="closeCandidateSelectionPopup()">취소</button>
+                    <button class="popup-btn primary" id="confirm-candidate-btn" onclick="confirmCandidateSelection()" disabled>선택 완료</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 파일 업로드 hidden input -->
+    <input type="file" id="file-input" style="display: none;" accept=".pdf,.doc,.docx" multiple>
+
+    <script>
+        // 전역 변수
+        let currentStep = 1;
+        let currentMode = 'resume';
+        let isDataUploaded = false;
+        let teamInfo = {};
+        let currentCandidateId = null;
+        let interviewTimer = null;
+        let interviewTime = 0;
+
+        // 로컬 스토리지 관련 변수
+        const STORAGE_KEYS = {
+            TEAM_INFO: 'xpert_hr_team_info',
+            CANDIDATE_DATA: 'xpert_hr_candidate_data',
+            INTERVIEW_SESSION: 'xpert_hr_interview_session',
+            COLLAB_MESSAGES: 'xpert_hr_collab_messages',
+            APP_STATE: 'xpert_hr_app_state'
+        };
+
+        // 데이터 저장 함수들
+        function saveToLocalStorage(key, data) {
+            try {
+                const timestamp = new Date().toISOString();
+                const dataWithTimestamp = {
+                    ...data,
+                    lastSaved: timestamp,
+                    version: '1.0'
+                };
+                localStorage.setItem(key, JSON.stringify(dataWithTimestamp));
+                console.log(`✅ ${key} 데이터가 저장되었습니다.`);
+                return true;
+            } catch (error) {
+                console.error(`❌ ${key} 저장 실패:`, error);
+                return false;
+            }
+        }
+
+        function loadFromLocalStorage(key) {
+            try {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    const parsedData = JSON.parse(data);
+                    console.log(`✅ ${key} 데이터가 로드되었습니다.`);
+                    return parsedData;
+                }
+                return null;
+            } catch (error) {
+                console.error(`❌ ${key} 로드 실패:`, error);
+                return null;
+            }
+        }
+
+        // 팀 정보 저장
+        function saveTeamInfo(teamData) {
+            const teamInfoData = {
+                mode: currentMode,
+                teamSize: teamData.teamSize || '5-10명',
+                department: teamData.department || '개발팀',
+                culture: teamData.culture || '수평적, 자율적',
+                communication: teamData.communication || '직접적, 명확한',
+                workStyle: teamData.workStyle || '애자일, 협업 중심',
+                requirements: teamData.requirements || '',
+                savedAt: new Date().toISOString()
+            };
+            return saveToLocalStorage(STORAGE_KEYS.TEAM_INFO, teamInfoData);
+        }
+
+        // 앱 상태 저장
+        function saveAppState() {
+            const appState = {
+                currentStep: currentStep,
+                currentMode: currentMode,
+                isDataUploaded: isDataUploaded,
+                currentCandidateId: currentCandidateId,
+                interviewTime: interviewTime,
+                savedAt: new Date().toISOString()
+            };
+            return saveToLocalStorage(STORAGE_KEYS.APP_STATE, appState);
+        }
+
+        // 지원자 데이터
+        const candidatesData = {
+            'kim': {
+                name: '김개발',
+                experience: 'React 3년, Node.js 2년, AWS 1년',
+                score: 92,
+                grade: 'S급',
+                strengths: '팀 리드 경험, 기술 깊이, 빠른 학습력',
+                concerns: '대규모 시스템 경험 부족',
+                tags: ['팀 리드 경험', '기술 깊이']
+            },
+            'lee': {
+                name: '이디자인',
+                experience: 'UI/UX 4년, 제품 디자인 전문',
+                score: 88,
+                grade: 'A급',
+                strengths: '체계적 프로세스, 사용자 중심 사고',
+                concerns: '개발 이해도 확인 필요',
+                tags: ['대기업 경험', '체계적']
+            },
+            'park': {
+                name: '박프론트',
+                experience: 'Vue.js 2년, React 1년',
+                score: 85,
+                grade: 'A급',
+                strengths: '빠른 학습, 성장성, 열정적',
+                concerns: '실무 경험 상대적 부족',
+                tags: ['빠른 학습', '성장성']
+            },
+            'choi': {
+                name: '최백엔드',
+                experience: 'Spring 4년, MSA 설계 2년',
+                score: 90,
+                grade: 'S급',
+                strengths: '아키텍처 설계, 시니어 경험, 리더십',
+                concerns: '팀 문화 적응도 확인 필요',
+                tags: ['아키텍처', '시니어 경험']
+            },
+            'jung': {
+                name: '정풀스택',
+                experience: 'React, Node.js, AWS 3년',
+                score: 86,
+                grade: 'A급',
+                strengths: '다양한 기술 스택, 빠른 적응력',
+                concerns: '깊이 있는 전문성 부족',
+                tags: ['다양한 기술', '빠른 적응']
+            }
+        };
+
+        // DOM 로드 완료 후 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeXpertHR();
+            setupEventListeners();
+            
+            // 자동 저장 활성화
+            enableAutoSave();
+        });
+
+        // Xpert HR 초기화
+        function initializeXpertHR() {
+            updateStepIndicators();
+            console.log('🚀 Xpert HR Agent - 혁신적 채용 분석 플랫폼');
+        }
+
+        // 이벤트 리스너 설정 - 수정된 부분
+        let eventListenersSetup = false;
+        function setupEventListeners() {
+            if (eventListenersSetup) return; // 중복 등록 방지
+            
+            // 모드 전환 버튼
+            document.querySelectorAll('.mode-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    switchMode(this.dataset.mode);
+                });
+            });
+
+            // 채팅 입력 이벤트
+            const chatInput = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+
+            if (chatInput && sendBtn) {
+                sendBtn.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+                chatInput.addEventListener('input', function() {
+                    sendBtn.disabled = !this.value.trim();
+                    autoResize(this);
+                });
+            }
+
+            // 파일 업로드
+            const fileInput = document.getElementById('file-input');
+            if (fileInput) {
+                fileInput.addEventListener('change', handleFileUpload);
+            }
+
+            // 모달 외부 클릭 시 닫기
+            document.getElementById('candidate-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeCandidateModal();
+                }
+            });
+            
+            eventListenersSetup = true; // 중복 등록 방지 플래그 설정
+        }
+
+        // Step 2로 전환 - 수정된 부분
+        function goToStep2() {
+            currentStep = 2;
+            updateStepIndicators();
+            
+            const step1 = document.getElementById('step1');
+            if (step1) {
+                step1.classList.add('fade-out');
+            }
+            
+            setTimeout(() => {
+                const step2 = document.getElementById('step2');
+                if (step2) {
+                    step2.classList.add('show');
+                    // DOM이 완전히 준비된 후 채팅 초기화
+                    setTimeout(() => {
+                        initializeChat();
+                    }, 100); // 렌더링 완료 대기
+                }
+            }, 500);
+        }
+
+        // 채팅 초기화 - 수정된 부분
+        function initializeChat() {
+            const chatMessages = document.getElementById('chat-messages');
+            if (!chatMessages) {
+                console.error('chat-messages 요소를 찾을 수 없습니다.');
+                return;
+            }
+            
+            const modeText = currentMode === 'resume' ? '서류 검토' : '면접 분석';
+            
+            // 모드별로 다른 메시지와 버튼 표시
+            let messageContent, buttonContent;
+            
+            if (currentMode === 'resume') {
+                messageContent = '먼저 팀 정보를 알려주시면 더 정확한 분석이 가능합니다.';
+                buttonContent = `
+                    <button class="action-chip" onclick="startTeamInfoCollection()">
+                        <span>📝</span>
+                        <span>팀 정보 입력하기</span>
+                    </button>
+                `;
+            } else {
+                messageContent = '면접 대상자를 선택하여 실시간 면접 지원을 시작하겠습니다.';
+                buttonContent = `
+                    <button class="action-chip" onclick="loadCandidateData()">
+                        <span>👥</span>
+                        <span>지원자 서류 불러오기</span>
+                    </button>
+                `;
+            }
+            
+            chatMessages.innerHTML = `
+                <div class="message ai">
+                    <div class="message-avatar">💼</div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            안녕하세요! <strong>HR Agent</strong>입니다. ${modeText} 모드로 채용 분석을 도와드리겠습니다.
+                        </div>
+                        <div class="message-text">
+                            ${messageContent}
+                        </div>
+                        <div class="message-actions">
+                            ${buttonContent}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 모드 전환
+        function switchMode(mode) {
+            if (mode === currentMode) return;
+            
+            currentMode = mode;
+            
+            // UI 업데이트
+            document.querySelectorAll('.mode-option').forEach(option => {
+                option.classList.toggle('active', option.dataset.mode === mode);
+            });
+            
+            // 상태 메시지 업데이트
+            const statusElement = document.getElementById('chat-agent-status');
+            if (statusElement) {
+                const modeText = mode === 'resume' ? '서류 검토' : '면접 분석';
+                statusElement.textContent = `${modeText} 모드로 채용 분석을 도와드립니다`;
+            }
+            
+            // 채팅 다시 초기화
+            setTimeout(() => {
+                initializeChat();
+            }, 100);
+        }
+
+        // 팀 정보 수집 시작
+        function startTeamInfoCollection() {
+            addMessage('user', '팀 정보를 입력하겠습니다.');
+            
+            setTimeout(() => {
+                addMessage('ai', `
+                    <div class="message-text">
+                        팀 분석을 위한 정보를 알려주세요:
+                    </div>
+                    <div class="team-info-form">
+                        <div class="form-group">
+                            <label class="form-label">📊 팀 규모</label>
+                            <div class="form-options">
+                                <div class="form-option" data-field="size" data-value="5-10명">5-10명</div>
+                                <div class="form-option" data-field="size" data-value="11-20명">11-20명</div>
+                                <div class="form-option" data-field="size" data-value="21-50명">21-50명</div>
+                                <div class="form-option" data-field="size" data-value="직접입력">직접입력</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">🎯 모집 직군</label>
+                            <div class="form-options">
+                                <div class="form-option" data-field="position" data-value="개발자">개발자</div>
+                                <div class="form-option" data-field="position" data-value="디자이너">디자이너</div>
+                                <div class="form-option" data-field="position" data-value="PM">PM</div>
+                                <div class="form-option" data-field="position" data-value="마케터">마케터</div>
+                                <div class="form-option" data-field="position" data-value="기타">기타</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">🏢 회사 문화</label>
+                            <div class="form-options">
+                                <div class="form-option" data-field="culture" data-value="수평적">수평적</div>
+                                <div class="form-option" data-field="culture" data-value="수직적">수직적</div>
+                                <div class="form-option" data-field="culture" data-value="혼합형">혼합형</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">⚡ 업무 스타일</label>
+                            <div class="form-options">
+                                <div class="form-option" data-field="workStyle" data-value="애자일">애자일</div>
+                                <div class="form-option" data-field="workStyle" data-value="전통적">전통적</div>
+                                <div class="form-option" data-field="workStyle" data-value="하이브리드">하이브리드</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">🎨 추가 특성</label>
+                            <input type="text" class="form-input" placeholder="특별히 중요하게 생각하는 점이 있다면..." data-field="additional">
+                        </div>
+                    </div>
+                    <div class="message-actions">
+                        <button class="action-chip" onclick="submitTeamInfo()">
+                            <span>✅</span>
+                            <span>팀 정보 완료</span>
+                        </button>
+                    </div>
+                `);
+                
+                // 폼 옵션 이벤트 설정
+                setTimeout(() => {
+                    setupFormEvents();
+                }, 100);
+            }, 1000);
+        }
+
+        // 폼 이벤트 설정
+        function setupFormEvents() {
+            document.querySelectorAll('.form-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const field = this.dataset.field;
+                    const value = this.dataset.value;
+                    
+                    // 같은 필드의 다른 옵션들 선택 해제
+                    document.querySelectorAll(`[data-field="${field}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // 현재 옵션 선택
+                    this.classList.add('selected');
+                    
+                    // 팀 정보 저장
+                    teamInfo[field] = value;
+                });
+            });
+
+            // 입력 필드 이벤트
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    const field = this.dataset.field;
+                    teamInfo[field] = this.value;
+                });
+            });
+        }
+
+        // 팀 정보 제출
+        function submitTeamInfo() {
+            // 팀 정보 저장
+            const teamData = {
+                teamSize: '5-10명',
+                department: '개발팀',
+                culture: '수평적, 자율적',
+                communication: '직접적, 명확한',
+                workStyle: '애자일, 협업 중심',
+                mode: currentMode
+            };
+            teamInfo = teamData;
+            saveTeamInfo(teamData);
+            saveAppState();
+            
+            addMessage('user', '팀 정보 입력을 완료했습니다.');
+            
+            setTimeout(() => {
+                const summary = generateTeamSummary();
+                addMessage('ai', `
+                    <div class="message-text">
+                        ✅ 팀 정보 분석이 완료되었습니다. (자동 저장됨 💾)
+                    </div>
+                    ${summary}
+                    <div class="message-text">
+                        🎯 이 정보를 바탕으로 지원자를 분석하겠습니다. ${currentMode === 'resume' ? '이력서' : '면접 관련'} 파일을 업로드해주세요.
+                    </div>
+                    <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                        <div class="upload-zone-content">
+                            <div class="upload-icon">📁</div>
+                            <div class="upload-text">파일을 드래그하거나 클릭하여 업로드</div>
+                            <div class="upload-subtext">${currentMode === 'resume' ? 'PDF, DOC 파일 지원 (최대 20개)' : '면접 녹취록, 평가표 등'}</div>
+                            <div class="upload-buttons">
+                                <button class="upload-btn" onclick="event.stopPropagation(); document.getElementById('file-input').click();">
+                                    🔎 파일 선택
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            }, 1000);
+        }
+
+        // 팀 요약 생성
+        function generateTeamSummary() {
+            return `
+                <div class="team-summary">
+                    <div class="summary-title">📊 우리 팀 DNA 요약</div>
+                    <div class="summary-item">
+                        <span class="summary-label">규모:</span>
+                        <span class="summary-value">${teamInfo.size || '미설정'}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">포지션:</span>
+                        <span class="summary-value">${teamInfo.position || '미설정'}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">문화:</span>
+                        <span class="summary-value">${teamInfo.culture || '미설정'}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">스타일:</span>
+                        <span class="summary-value">${teamInfo.workStyle || '미설정'}</span>
+                    </div>
+                    ${teamInfo.additional ? `
+                    <div class="summary-item">
+                        <span class="summary-label">특성:</span>
+                        <span class="summary-value">${teamInfo.additional}</span>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // 메시지 추가
+        function addMessage(sender, content) {
+            const chatMessages = document.getElementById('chat-messages');
+            if (!chatMessages) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = sender === 'ai' ? '💼' : '👤';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">
+                    ${content.includes('<div') ? content : `<div class="message-text">${content}</div>`}
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 텍스트 영역 자동 크기 조정
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+
+        // 메시지 전송
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+            
+            if (!input || !sendBtn) return;
+            
+            const message = input.value.trim();
+            if (!message) return;
+            
+            addMessage('user', message);
+            input.value = '';
+            sendBtn.disabled = true;
+            input.style.height = 'auto';
+            
+            setTimeout(() => {
+                const responses = [
+                    '네, 해당 내용을 분석해드리겠습니다. 팀 정보를 먼저 설정해주시면 더 정확한 분석이 가능합니다.',
+                    '좋은 질문입니다. 더 정확한 분석을 위해 관련 데이터를 제공해주세요.',
+                    `${currentMode === 'resume' ? '서류 검토' : '면접 분석'} 관점에서 분석해드리겠습니다. 데이터를 준비해주세요.`,
+                    '복합 분석 요청을 확인했습니다. 단계별로 진행하여 종합적인 인사이트를 제공하겠습니다.'
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage('ai', randomResponse);
+            }, 1000);
+        }
+
+        // 파일 업로드 처리
+        function handleFileUpload(e) {
+            const files = e.target.files;
+            if (!files || files.length === 0) return;
+            
+            const fileNames = Array.from(files).map(f => f.name).join(', ');
+            isDataUploaded = true;
+            
+            addMessage('user', `파일 업로드: ${fileNames}`);
+            
+            setTimeout(() => {
+                addMessage('ai', `
+                    <div class="message-text">
+                        ✅ <strong>${files.length}개 파일</strong>이 성공적으로 업로드되었습니다.
+                    </div>
+                    <div class="message-text">
+                        🛡️ LLM Capsule 보안 처리를 완료했습니다. 개인정보는 완전히 익명화되었습니다.
+                    </div>
+                    <div class="message-text">
+                        📊 ${currentMode === 'resume' ? '15명의 지원자' : '면접 데이터'} 분석을 시작하겠습니다.
+                    </div>
+                    <div class="message-actions">
+                        <button class="action-chip" onclick="startAnalysis()">
+                            <span>🚀</span>
+                            <span>분석 시작하기</span>
+                        </button>
+                    </div>
+                `);
+            }, 1500);
+        }
+
+        // 분석 시작
+        function startAnalysis() {
+            const modeText = currentMode === 'resume' ? '서류 검토' : '면접 분석';
+            
+            addMessage('ai', `
+                <div class="message-text">
+                    🚀 <strong>${modeText}</strong>을 시작합니다.
+                </div>
+                <div class="message-text">
+                    분석이 완료되면 결과 화면으로 이동합니다. 잠시만 기다려주세요...
+                </div>
+            `);
+            
+            // 진행률 표시 시뮬레이션
+            setTimeout(() => {
+                addMessage('ai', '⏳ 팀 정보 기반 맞춤 분석 중... (30%)');
+            }, 1000);
+            
+            setTimeout(() => {
+                addMessage('ai', '📊 AI 적합도 평가 실행 중... (70%)');
+            }, 2000);
+            
+            setTimeout(() => {
+                addMessage('ai', '✅ 분석 완료! 결과 화면으로 이동합니다.');
+                setTimeout(() => {
+                    goToStep3();
+                }, 1000);
+            }, 3000);
+        }
+
+        // Step 3로 전환 - 수정된 부분
+        function goToStep3() {
+            currentStep = 3;
+            updateStepIndicators();
+            
+            const step2 = document.getElementById('step2');
+            if (step2) {
+                step2.classList.remove('show');
+            }
+            
+            setTimeout(() => {
+                const step3 = document.getElementById('step3');
+                if (step3) {
+                    step3.classList.add('show');
+                    updateWorkspaceTitle();
+                    // 모드에 맞는 결과 화면 표시
+                    updateResultMode();
+                }
+            }, 500);
+        }
+
+        // 워크스페이스 제목 업데이트
+        function updateWorkspaceTitle() {
+            const workspaceTitle = document.getElementById('workspace-title');
+            const analysisBadge = document.querySelector('.analysis-badge');
+            
+            if (workspaceTitle) {
+                if (currentMode === 'resume') {
+                    workspaceTitle.textContent = '서류 검토 결과';
+                } else {
+                    workspaceTitle.textContent = '면접 분석 진행중';
+                }
+            }
+            
+            if (analysisBadge) {
+                if (currentMode === 'resume') {
+                    analysisBadge.innerHTML = '✅ 분석 완료';
+                } else {
+                    analysisBadge.innerHTML = '🎤 실시간 분석';
+                }
+            }
+        }
+
+        // 지원자 상세 보기
+        function showCandidateDetail(candidateId) {
+            currentCandidateId = candidateId;
+            const candidate = candidatesData[candidateId];
+            if (!candidate) return;
+
+            // 모달 내용 업데이트
+            document.getElementById('modal-candidate-name').textContent = `${candidate.name} 상세 분석`;
+            document.getElementById('modal-experience').textContent = candidate.experience;
+            document.getElementById('modal-score').textContent = `${candidate.score}점 (${candidate.grade})`;
+            document.getElementById('modal-strengths').textContent = candidate.strengths;
+            document.getElementById('modal-concerns').textContent = candidate.concerns;
+
+            // 모달 표시
+            document.getElementById('candidate-modal').classList.add('show');
+        }
+
+        // 지원자 모달 닫기
+        function closeCandidateModal() {
+            document.getElementById('candidate-modal').classList.remove('show');
+            currentCandidateId = null;
+        }
+
+        // 면접 대상자 선정
+        function selectForInterview(candidateId) {
+            const candidate = candidatesData[candidateId];
+            if (!candidate) return;
+
+            // 협업 챗에 알림
+            setTimeout(() => {
+                const messagesContainer = document.getElementById('step3-collaboration-messages');
+                const currentTime = new Date().toLocaleTimeString('ko-KR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                const messageElement = document.createElement('div');
+                messageElement.className = 'collab-message';
+                messageElement.innerHTML = `
+                    <div class="collab-message-header">
+                        <span class="collab-sender">시스템</span>
+                        <span class="collab-time">${currentTime}</span>
+                    </div>
+                    <div class="collab-message-content">
+                        ✅ <strong>${candidate.name}</strong>님이 면접 대상자로 선정되었습니다.
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(messageElement);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 300);
+            
+            alert(`${candidate.name}님이 면접 대상자로 선정되었습니다.`);
+        }
+
+        // Step 3 협업 메시지 전송
+        function sendStep3CollabMessage() {
+            const input = document.getElementById('step3-collab-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                const messagesContainer = document.getElementById('step3-collaboration-messages');
+                const currentTime = new Date().toLocaleTimeString('ko-KR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                const messageElement = document.createElement('div');
+                messageElement.className = 'collab-message';
+                messageElement.innerHTML = `
+                    <div class="collab-message-header">
+                        <span class="collab-sender">나</span>
+                        <span class="collab-time">${currentTime}</span>
+                    </div>
+                    <div class="collab-message-content">${message}</div>
+                `;
+                
+                messagesContainer.appendChild(messageElement);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                input.value = '';
+            }
+        }
+
+        // 단계 표시기 업데이트
+        function updateStepIndicators() {
+            for (let i = 1; i <= 3; i++) {
+                const indicator = document.getElementById(`step-indicator-${i}`);
+                if (indicator) {
+                    indicator.classList.remove('active', 'completed');
+                    
+                    if (i < currentStep) {
+                        indicator.classList.add('completed');
+                    } else if (i === currentStep) {
+                        indicator.classList.add('active');
+                    }
+                }
+            }
+        }
+
+        // 자동 저장 기능
+        function enableAutoSave() {
+            // 3분마다 자동 저장
+            setInterval(() => {
+                if (currentStep > 1) { // Step 2 이상에서만 자동 저장
+                    saveAppState();
+                    
+                    if (teamInfo && Object.keys(teamInfo).length > 0) {
+                        saveTeamInfo(teamInfo);
+                    }
+                    
+                    console.log('💾 자동 저장이 완료되었습니다.');
+                }
+            }, 3 * 60 * 1000); // 3분
+        }
+
+        // 키보드 단축키
+        document.addEventListener('keydown', function(e) {
+            // ESC로 모달 닫기
+            if (e.key === 'Escape') {
+                if (document.getElementById('candidate-modal').classList.contains('show')) {
+                    closeCandidateModal();
+                }
+            }
+            
+            // Ctrl/Cmd + Enter로 분석 시작
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                if (isDataUploaded && currentStep === 2) {
+                    startAnalysis();
+                }
+            }
+        });
+
+        // Step 3 협업 채팅 Enter 키 이벤트
+        document.addEventListener('DOMContentLoaded', function() {
+            const step3CollabInput = document.getElementById('step3-collab-input');
+            if (step3CollabInput) {
+                step3CollabInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendStep3CollabMessage();
+                    }
+                });
+            }
+        });
+
+        // 성능 모니터링
+        if (window.performance) {
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    try {
+                        const perfData = performance.timing;
+                        const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+                        console.log(`📊 페이지 로드 시간: ${pageLoadTime}ms`);
+                    } catch (e) {
+                        console.log('성능 측정 오류:', e.message);
+                    }
+                }, 0);
+            });
+        }
+
+        // 오류 처리
+        window.addEventListener('error', function(e) {
+            console.error('🚨 JavaScript 오류:', e.message);
+            console.error('파일:', e.filename);
+            console.error('라인:', e.lineno);
+        });
+
+        // Interview Mode Functions
+        let selectedQuestionText = '';
+        let selectedQuestionCategory = '';
+        let interviewLog = [];
+        let progressState = {
+            technical: false,
+            experience: false,
+            culture: false,
+            personality: false
+        };
+
+        // 진행 상황 체크리스트 토글
+        function toggleProgress(type) {
+            progressState[type] = !progressState[type];
+            const checkbox = document.getElementById(`${type}-check`);
+            const checkmark = checkbox.querySelector('span');
+            const item = checkbox.closest('.progress-item');
+            
+            if (progressState[type]) {
+                checkbox.classList.add('checked');
+                checkmark.style.display = 'block';
+                item.classList.add('checked');
+            } else {
+                checkbox.classList.remove('checked');
+                checkmark.style.display = 'none';
+                item.classList.remove('checked');
+            }
+        }
+
+        // 질문 선택
+        function selectQuestion(element, category) {
+            // 이전 선택 제거
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 새로운 선택 적용
+            element.classList.add('selected');
+            selectedQuestionText = element.querySelector('.question-text').textContent;
+            selectedQuestionCategory = category;
+            
+            // 선택된 질문 표시
+            const display = document.getElementById('selected-question');
+            display.innerHTML = `<strong>[${category}]</strong> ${selectedQuestionText}`;
+            display.classList.add('show');
+            
+            // 입력창 초기화 및 포커스
+            const textarea = document.getElementById('interviewer-notes');
+            textarea.value = '';
+            textarea.placeholder = `지원자의 답변을 기록하세요...\n\n선택된 질문: ${selectedQuestionText}`;
+            textarea.focus();
+        }
+
+        // 현재 답변 저장
+        function saveCurrentAnswer() {
+            const notes = document.getElementById('interviewer-notes').value.trim();
+            
+            if (!selectedQuestionText) {
+                alert('먼저 질문을 선택해주세요.');
+                return;
+            }
+            
+            if (!notes) {
+                alert('답변 내용을 입력해주세요.');
+                return;
+            }
+            
+            // 로그에 추가
+            const logEntry = {
+                question: selectedQuestionText,
+                category: selectedQuestionCategory,
+                answer: notes,
+                timestamp: new Date()
+            };
+            
+            interviewLog.push(logEntry);
+            updateInterviewLog();
+            
+            // 입력창 초기화
+            document.getElementById('interviewer-notes').value = '';
+            document.getElementById('selected-question').classList.remove('show');
+            selectedQuestionText = '';
+            selectedQuestionCategory = '';
+            
+            // 질문 카드 선택 해제
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 성공 메시지
+            showTemporaryMessage('답변이 저장되었습니다!');
+        }
+
+        // 면접 로그 업데이트
+        function updateInterviewLog() {
+            const logContainer = document.getElementById('interview-log');
+            
+            if (interviewLog.length === 0) {
+                logContainer.innerHTML = `
+                    <div class="log-empty">
+                        면접 진행 내용이 여기에 기록됩니다.<br>
+                        질문을 선택하고 답변을 기록해보세요.
+                    </div>
+                `;
+                return;
+            }
+            
+            logContainer.innerHTML = interviewLog.map((entry, index) => `
+                <div class="log-item">
+                    <div class="log-question">
+                        <span class="log-category">${entry.category}</span>
+                        ${entry.question}
+                    </div>
+                    <div class="log-answer">${entry.answer}</div>
+                    <div class="log-timestamp">
+                        Q${index + 1} • ${entry.timestamp.toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'})}
+                    </div>
+                </div>
+            `).join('');
+            
+            // 스크롤을 최신 항목으로 이동
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // 임시 메시지 표시
+        function showTemporaryMessage(message) {
+            // 기존 메시지 제거
+            const existingMessage = document.querySelector('.temp-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // 새 메시지 생성
+            const messageEl = document.createElement('div');
+            messageEl.className = 'temp-message';
+            messageEl.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #4ade80, #22c55e);
+                color: white;
+                padding: 0.8rem 1.5rem;
+                border-radius: 8px;
+                font-weight: 500;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            messageEl.textContent = message;
+            
+            // CSS 애니메이션 추가 (스타일에 없으면)
+            if (!document.getElementById('temp-message-styles')) {
+                const style = document.createElement('style');
+                style.id = 'temp-message-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(messageEl);
+            
+            // 3초 후 제거
+            setTimeout(() => {
+                messageEl.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => messageEl.remove(), 300);
+            }, 3000);
+        }
+
+        // 다음 질문 요청
+        function getNextQuestions() {
+            // 새로운 질문들로 교체 (시뮬레이션)
+            const questionSets = [
+                [
+                    { category: '기술', text: 'TypeScript의 장점과 실제 프로젝트에서의 활용 경험을 말씀해주세요.' },
+                    { category: '경험', text: '코드 리뷰 과정에서 동료와 의견이 다를 때 어떻게 해결하셨나요?' },
+                    { category: '문화적합성', text: '빠르게 변화하는 환경에서 어떻게 적응하시나요?' }
+                ],
+                [
+                    { category: '기술', text: '대용량 데이터 처리 시 성능 최적화는 어떻게 하시나요?' },
+                    { category: '경험', text: '가장 인상깊었던 협업 경험과 배운 점을 말씀해주세요.' },
+                    { category: '문화적합성', text: '업무 우선순위가 갑자기 바뀔 때 어떻게 대응하시나요?' }
+                ]
+            ];
+            
+            const currentSet = questionSets[interviewLog.length % questionSets.length];
+            const questionCards = document.querySelectorAll('.question-card');
+            
+            currentSet.forEach((q, index) => {
+                if (questionCards[index]) {
+                    questionCards[index].querySelector('.question-category').textContent = q.category;
+                    questionCards[index].querySelector('.question-text').textContent = q.text;
+                    questionCards[index].classList.remove('selected');
+                    questionCards[index].onclick = () => selectQuestion(questionCards[index], q.category);
+                }
+            });
+            
+            // 선택된 질문 초기화
+            document.getElementById('selected-question').classList.remove('show');
+            selectedQuestionText = '';
+            selectedQuestionCategory = '';
+            
+            showTemporaryMessage('새로운 질문이 준비되었습니다!');
+        }
+
+        // 전체 면접 분석
+        function analyzeInterview() {
+            if (interviewLog.length === 0) {
+                alert('분석할 면접 내용이 없습니다.\n질문과 답변을 먼저 기록해주세요.');
+                return;
+            }
+            
+            // 분석 시뮬레이션
+            const analysisResult = `
+📊 현재까지 진행 상황 (총 ${interviewLog.length}개 질문)
+            
+🎯 분야별 분석:
+• 기술 역량: ${interviewLog.filter(log => log.category === '기술').length}개 질문 완료
+• 경험 평가: ${interviewLog.filter(log => log.category === '경험').length}개 질문 완료
+• 문화적합성: ${interviewLog.filter(log => log.category === '문화적합성').length}개 질문 완료
+
+💡 AI 권장사항:
+${interviewLog.length < 3 ? '• 더 다양한 영역의 질문을 추가하시기 바랍니다.' : '• 충분한 평가가 진행되었습니다.'}
+• 답변의 구체성과 논리성이 우수합니다.
+• 추가 심화 질문을 고려해보세요.
+            `;
+            
+            alert(analysisResult);
+        }
+
+        // 면접 완료
+        function completeInterview() {
+            if (interviewLog.length < 2) {
+                alert('최소 2개 이상의 질문과 답변을 기록해주세요.');
+                return;
+            }
+            
+            const completedItems = Object.values(progressState).filter(Boolean).length;
+            if (completedItems < 2) {
+                alert('진행 상황에서 최소 2개 이상의 영역을 완료 체크해주세요.');
+                return;
+            }
+            
+            // 분석 결과 모달 표시
+            document.getElementById('analysis-modal').classList.add('show');
+        }
+
+        // 분석 결과 모달 닫기
+        function closeAnalysisModal() {
+            document.getElementById('analysis-modal').classList.remove('show');
+        }
+
+        // 모드 전환 시 결과 영역 업데이트
+        function updateResultMode() {
+            const resumeMode = document.getElementById('resume-result-mode');
+            const interviewMode = document.getElementById('interview-result-mode');
+            
+            if (currentMode === 'resume') {
+                resumeMode.style.display = 'flex';
+                interviewMode.classList.remove('show');
+                document.getElementById('workspace-title').textContent = '서류 검토 결과';
+            } else if (currentMode === 'interview') {
+                resumeMode.style.display = 'none';
+                interviewMode.classList.add('show');
+                document.getElementById('workspace-title').textContent = '면접 분석 진행중';
+            }
+        }
+
+        // 지원자 선택 관련 변수
+        let selectedCandidateId = null;
+        let candidateData = {
+            kim: {
+                name: '김개발',
+                position: '프론트엔드 개발자',
+                experience: '5년차',
+                skills: 'React, TypeScript, Next.js',
+                strengths: '팀 리딩 경험, 기술 깊이, 빠른 학습력',
+                concerns: '대규모 시스템 경험 부족',
+                score: 92,
+                interviewPoints: [
+                    '🔍 React 성능 최적화 경험과 구체적인 방법론',
+                    '👥 팀 리딩 시 어려웠던 기술적 결정과 해결 과정',
+                    '📚 새로운 기술 학습 방식과 팀 내 공유 경험',
+                    '🚀 스타트업 환경에서의 빠른 개발과 품질 관리 균형'
+                ]
+            },
+            lee: {
+                name: '이디자인',
+                position: 'UI/UX 디자이너',
+                experience: '4년차',
+                skills: 'Figma, Sketch, 사용자 리서치',
+                strengths: '대기업 경험, 체계적 프로세스, 사용자 중심',
+                concerns: '스타트업 환경 적응력',
+                score: 88,
+                interviewPoints: [
+                    '🎨 사용자 중심 설계 프로세스와 구체적인 방법론',
+                    '📊 데이터 기반 디자인 의사결정 경험',
+                    '⚡ 빠른 프로토타이핑과 반복 개선 경험',
+                    '🤝 개발팀과의 협업 방식과 소통 노하우'
+                ]
+            },
+            park: {
+                name: '박백엔드',
+                position: '백엔드 개발자',
+                experience: '6년차',
+                skills: 'Node.js, Docker, AWS, MSA',
+                strengths: '대용량 처리 경험, 아키텍처 설계, 안정성',
+                concerns: '프론트엔드 이해도',
+                score: 85,
+                interviewPoints: [
+                    '🏗️ MSA 아키텍처 설계와 실제 운영 경험',
+                    '📈 대용량 트래픽 처리와 성능 최적화 사례',
+                    '🛡️ 시스템 안정성과 장애 대응 경험',
+                    '🔄 CI/CD 파이프라인 구축과 DevOps 경험'
+                ]
+            }
+        };
+
+        // 지원자 서류 불러오기 (기존 startTeamInfoCollection 대체)
+        function loadCandidateData() {
+            addMessage('user', '지원자 서류를 불러오겠습니다.');
+            
+            setTimeout(() => {
+                document.getElementById('candidate-selection-popup').classList.add('show');
+            }, 500);
+        }
+
+        // 지원자 선택 팝업 닫기
+        function closeCandidateSelectionPopup() {
+            document.getElementById('candidate-selection-popup').classList.remove('show');
+            // 선택 초기화
+            document.querySelectorAll('.candidate-mini-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            selectedCandidateId = null;
+            document.getElementById('confirm-candidate-btn').disabled = true;
+        }
+
+        // 지원자 카드 선택
+        function selectCandidateForInterview(candidateId) {
+            // 기존 선택 해제
+            document.querySelectorAll('.candidate-mini-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 새로운 선택 적용
+            const selectedCard = document.querySelector(`[data-candidate="${candidateId}"]`);
+            selectedCard.classList.add('selected');
+            
+            selectedCandidateId = candidateId;
+            document.getElementById('confirm-candidate-btn').disabled = false;
+        }
+
+        // 지원자 선택 확정
+        function confirmCandidateSelection() {
+            if (!selectedCandidateId) return;
+            
+            const candidate = candidateData[selectedCandidateId];
+            closeCandidateSelectionPopup();
+            
+            // 선택 완료 메시지
+            addMessage('user', `${candidate.name}님을 선택했습니다.`);
+            
+            setTimeout(() => {
+                // 지원자 면접 정보 요약 표시
+                const interviewSummary = `
+                    <div class="message-text">
+                        ✅ <strong>${candidate.name}</strong>님의 면접 정보를 준비했습니다.
+                    </div>
+                    <div style="background: #f8f9ff; padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 4px solid #667eea;">
+                        <div style="font-weight: 600; margin-bottom: 1rem; color: #333;">👤 지원자 기본 정보</div>
+                        <div style="margin-bottom: 0.8rem;"><strong>포지션:</strong> ${candidate.position} (${candidate.experience})</div>
+                        <div style="margin-bottom: 0.8rem;"><strong>주요 스킬:</strong> ${candidate.skills}</div>
+                        <div style="margin-bottom: 0.8rem;"><strong>강점:</strong> ${candidate.strengths}</div>
+                        <div style="margin-bottom: 1.2rem;"><strong>검토 필요사항:</strong> ${candidate.concerns}</div>
+                        
+                        <div style="font-weight: 600; margin-bottom: 0.8rem; color: #333;">🎯 면접 시 중점 확인사항</div>
+                        <div style="color: #666; line-height: 1.6;">
+                            ${candidate.interviewPoints.map(point => `<div style="margin-bottom: 0.5rem;">${point}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                addMessage('ai', interviewSummary);
+                
+                // 추가 안내 메시지와 면접 시작 버튼
+                setTimeout(() => {
+                    const followUpMessage = `
+                        <div class="message-text">
+                            더 궁금한 내용이 있으실까요? 아니면 실시간 면접 지원을 도와드리겠습니다.
+                        </div>
+                        <div class="message-actions">
+                            <button class="action-chip" onclick="startInterviewMode()">
+                                <span>🎤</span>
+                                <span>면접 시작하기</span>
+                            </button>
+                        </div>
+                    `;
+                    addMessage('ai', followUpMessage);
+                }, 1000);
+            }, 800);
+        }
+
+        // 면접 시작 모드 (Step 3로 이동)
+        function startInterviewMode() {
+            addMessage('user', '면접을 시작하겠습니다.');
+            
+            setTimeout(() => {
+                addMessage('ai', `
+                    <div class="message-text">
+                        🎤 면접 환경을 준비하고 있습니다...
+                    </div>
+                `);
+                
+                setTimeout(() => {
+                    // Step 3로 이동
+                    goToStep3();
+                    
+                    // 면접 모드로 설정
+                    currentMode = 'interview';
+                    updateResultMode();
+                    
+                    // 선택된 지원자 정보를 Step 3에 반영
+                    if (selectedCandidateId && candidateData[selectedCandidateId]) {
+                        const candidate = candidateData[selectedCandidateId];
+                        
+                        // 지원자 정보 섹션 업데이트
+                        const infoItems = document.querySelectorAll('.interview-result-mode .info-item');
+                        if (infoItems.length >= 4) {
+                            infoItems[0].querySelector('.info-value').textContent = candidate.name;
+                            infoItems[1].querySelector('.info-value').textContent = `${candidate.skills}`;
+                            infoItems[2].querySelector('.info-value').textContent = `${candidate.position}`;
+                            infoItems[3].querySelector('.info-value').textContent = `${candidate.score}점 (S급)`;
+                        }
+                    }
+                }, 1500);
+            }, 500);
+        }
+
+        // 기존 모드 선택 함수 확장
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.mode-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // 기존 active 클래스 제거
+                    document.querySelectorAll('.mode-option').forEach(opt => opt.classList.remove('active'));
+                    
+                    // 새로운 모드 설정
+                    this.classList.add('active');
+                    currentMode = this.dataset.mode;
+                    
+                    // 결과 영역 업데이트
+                    updateResultMode();
+                });
+            });
+            
+            // 초기 모드 설정
+            updateResultMode();
+        });
+
+        // 전역 함수로 노출 (HTML onclick에서 사용)
+        window.goToStep2 = goToStep2;
+        window.goToStep3 = goToStep3;
+        window.startTeamInfoCollection = startTeamInfoCollection;
+        window.submitTeamInfo = submitTeamInfo;
+        window.startAnalysis = startAnalysis;
+        window.showCandidateDetail = showCandidateDetail;
+        window.closeCandidateModal = closeCandidateModal;
+        window.selectForInterview = selectForInterview;
+        window.sendStep3CollabMessage = sendStep3CollabMessage;
+        window.saveAppState = saveAppState;
+        window.toggleProgress = toggleProgress;
+        window.selectQuestion = selectQuestion;
+        window.saveCurrentAnswer = saveCurrentAnswer;
+        window.getNextQuestions = getNextQuestions;
+        window.analyzeInterview = analyzeInterview;
+        window.completeInterview = completeInterview;
+        window.closeAnalysisModal = closeAnalysisModal;
+        window.loadCandidateData = loadCandidateData;
+        window.closeCandidateSelectionPopup = closeCandidateSelectionPopup;
+        window.selectCandidateForInterview = selectCandidateForInterview;
+        window.confirmCandidateSelection = confirmCandidateSelection;
+        window.startInterviewMode = startInterviewMode;
+    </script>
+</body>
+</html>
+                    

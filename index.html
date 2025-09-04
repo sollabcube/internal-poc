@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xpert v2.2 - AI 기반 전략 협업 플랫폼</title>
+    <title>Xpert - 데이터 협업 워크스페이스</title>
     <style>
         * {
             margin: 0;
@@ -12,449 +12,726 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f8f9fa;
             color: #2c2c2c;
             line-height: 1.6;
             overflow-x: hidden;
-            height: 100vh;
         }
 
         .container {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
-        /* 헤더 - 상단 고정 */
+        /* 헤더 */
         .header {
             background: white;
-            border-bottom: 1px solid #e9ecef;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-bottom: 2px solid #e9ecef;
+            padding: 20px 32px;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            height: 80px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 32px;
+            font-weight: 800;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .progress-steps {
+        .progress-flow {
             display: flex;
-            gap: 32px;
+            gap: 24px;
+            align-items: center;
         }
 
-        .step {
+        .step-indicator {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            padding: 8px 16px;
+            border-radius: 24px;
             font-size: 14px;
-            color: #8e8e93;
-            transition: all 0.3s ease;
-        }
-
-        .step.active {
-            color: #667eea;
-        }
-
-        .step.completed {
-            color: #34c759;
-        }
-
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
-        .step.active .step-number {
-            background: #667eea;
-            color: white;
-            transform: scale(1.1);
-        }
-
-        .step.completed .step-number {
+        .step-indicator.completed {
             background: #34c759;
             color: white;
         }
 
-        /* 메인 컨텐츠 - 헤더 아래 시작 */
+        .step-indicator.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .step-indicator.pending {
+            background: #f1f3f4;
+            color: #6e6e73;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* 메인 콘텐츠 */
         .main-content {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            margin-top: 80px; /* 헤더 높이만큼 여백 */
-            min-height: calc(100vh - 80px);
-        }
-
-        /* Step 1: 역할 선택 */
-        .step1-container {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 40px;
-            min-height: calc(100vh - 80px);
-            opacity: 1;
-            transition: all 0.5s ease;
-        }
-
-        .step1-container.fade-out {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        .role-selection {
-            max-width: 1000px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .step1-title {
-            font-size: 42px;
-            font-weight: 700;
-            color: #1d1d1f;
-            margin-bottom: 16px;
-            letter-spacing: -0.5px;
-        }
-
-        .step1-subtitle {
-            font-size: 20px;
-            color: #6e6e73;
-            margin-bottom: 48px;
-            font-weight: 400;
-        }
-
-        .role-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 40px;
+            margin-top: 100px;
+            padding: 0;
+            max-width: none;
+            margin-left: 0;
+            margin-right: 0;
             width: 100%;
         }
 
-        .role-card {
+        /* 워크스페이스 컨테이너 */
+        .workspace-container {
             background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 20px;
-            padding: 32px 24px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            text-align: center;
-            position: relative;
+            border-radius: 0;
+            box-shadow: none;
+            margin-bottom: 0;
             overflow: hidden;
-            width: 100%;
-            min-height: 240px;
+            height: calc(100vh - 120px);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
-        .role-card:hover {
-            border-color: #667eea;
-            transform: translateY(-8px);
-            box-shadow: 0 16px 48px rgba(102, 126, 234, 0.15);
-        }
-
-        .role-card.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            transform: translateY(-8px);
-        }
-
-        .role-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
+        .workspace-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            padding: 32px 40px;
+            border-bottom: 1px solid #e9ecef;
+            background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+        }
+
+        .workspace-title {
             font-size: 28px;
-            color: white;
-            margin: 0 auto 20px;
-            flex-shrink: 0;
-        }
-
-        .role-card.selected .role-icon {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .role-name {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: inherit;
-        }
-
-        .role-description {
-            font-size: 16px;
-            color: inherit;
-            opacity: 0.8;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            flex: 1;
-        }
-
-        .role-keywords {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: auto;
-        }
-
-        .keyword {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .role-card.selected .keyword {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        /* Step 2: 통합 인터페이스 (2.5:7.5) */
-        .step2-container {
-            display: none;
-            width: 100vw;
-            height: 100vh;
-            position: fixed;
-            top: 80px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            opacity: 0;
-            transition: all 0.5s ease;
-            background: #f8f9fa;
-        }
-
-        .step2-container.show {
-            display: block;
-            opacity: 1;
-        }
-
-        .integrated-layout {
-            display: flex;
-            width: 100%;
-            height: calc(100vh - 80px);
-        }
-
-        /* 좌측: Agent 정보 + 역할 전환 (25%) */
-        .agent-sidebar {
-            width: 25%;
-            min-width: 300px;
-            background: white;
-            border-right: 1px solid #e9ecef;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .agent-info-section {
-            padding: 32px 24px;
-            text-align: center;
-            border-bottom: 1px solid #f0f0f0;
-            flex-shrink: 0;
-        }
-
-        .agent-avatar {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: white;
-            margin: 0 auto 16px;
-        }
-
-        .agent-name {
-            font-size: 20px;
             font-weight: 700;
             color: #1d1d1f;
             margin-bottom: 8px;
         }
 
-        .agent-subtitle {
-            font-size: 14px;
+        .workspace-subtitle {
+            font-size: 16px;
+            color: #6e6e73;
+        }
+
+        .workspace-stats {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6e6e73;
+            margin-top: 4px;
+        }
+
+        /* 협업 워크스페이스 */
+        .collaboration-workspace {
+            display: grid;
+            grid-template-columns: 1fr;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .collaboration-workspace.with-panels {
+            grid-template-columns: 600px 1fr 640px;
+        }
+
+        /* 팀 요청 패널 */
+        .team-requests-panel {
+            border-right: 1px solid #e9ecef;
+            background: #fafbfc;
+            padding: 24px;
+            display: none;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .team-requests-panel.active {
+            display: block;
+        }
+
+        /* 본체 데이터 섹션 */
+        .master-data-section {
+            background: #f8f9ff;
+            border: 1px solid #e0e7ff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .master-data-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .master-data-icon {
+            font-size: 18px;
+        }
+
+        .master-data-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .master-data-stats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .master-stat {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+
+        .master-stat strong {
+            color: #667eea;
+        }
+
+        .master-data-desc {
+            font-size: 13px;
             color: #6e6e73;
             line-height: 1.4;
         }
 
-        .role-switcher {
-            padding: 24px;
-            flex: 1;
-            overflow-y: auto;
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
         }
 
-        .switcher-title {
-            font-size: 14px;
+        .panel-title {
+            font-size: 18px;
             font-weight: 600;
-            color: #6e6e73;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: #1d1d1f;
         }
 
-        .role-options {
+        .team-requests {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 16px;
         }
 
-        .role-option {
-            background: #f8f9fa;
+        .team-request-card {
+            background: white;
             border: 1px solid #e9ecef;
             border-radius: 12px;
             padding: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+
+        .team-request-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .team-request-card.active {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .team-info {
             display: flex;
             align-items: center;
             gap: 12px;
-            text-align: left;
+            margin-bottom: 12px;
         }
 
-        .role-option:hover {
-            background: #e9ecef;
-            transform: translateX(2px);
-        }
-
-        .role-option.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: #667eea;
-        }
-
-        .role-option-icon {
+        .team-avatar {
             width: 32px;
             height: 32px;
-            background: rgba(102, 126, 234, 0.1);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-
-        .role-option.active .role-option-icon {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .role-option-info {
-            flex: 1;
-        }
-
-        .role-option-name {
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .role-option-desc {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        /* 우측: 채팅 인터페이스 (75%) */
-        .chat-interface {
-            width: 75%;
-            background: #f8f9fa;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-header {
-            background: white;
-            padding: 20px 24px;
-            border-bottom: 1px solid #e9ecef;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .chat-agent-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
             color: white;
         }
 
-        .chat-agent-info {
-            flex: 1;
-        }
+        .team-marketing { background: #667eea; }
+        .team-finance { background: #34c759; }
+        .team-sales { background: #ff9500; }
+        .team-dev { background: #5856d6; }
 
-        .chat-agent-name {
-            font-size: 18px;
+        .team-name {
+            font-size: 14px;
             font-weight: 600;
             color: #1d1d1f;
-            margin-bottom: 2px;
         }
 
-        .chat-agent-status {
+        .request-purpose {
+            font-size: 13px;
+            color: #6e6e73;
+            margin-bottom: 8px;
+        }
+
+        .request-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .data-format {
+            font-size: 12px;
+            padding: 4px 8px;
+            background: #f1f3f4;
+            border-radius: 4px;
+            color: #5f6368;
+        }
+        
+        .team-request-btn {
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .team-request-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        .priority-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .priority-high {
+            background: #fee;
+            color: #d73a49;
+        }
+
+        .priority-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .priority-low {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* 중앙 메인 영역 */
+        .collaboration-main {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+            max-height: calc(100vh - 200px);
+        }
+        
+        /* 중앙 패널 통합 타이틀 */
+        .central-panel-title {
+            background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+            border-bottom: 1px solid #e9ecef;
+            padding: 20px 24px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .central-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+        
+        .central-subtitle {
             font-size: 14px;
             color: #6e6e73;
         }
 
-        .chat-messages {
-            flex: 1;
-            padding: 24px;
-            overflow-y: auto;
+        /* 데이터 연결 단계 */
+        .data-connection-stage {
+            padding: 60px;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            min-height: 600px;
         }
 
-        .message {
+        .connection-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 16px;
+        }
+
+        .connection-subtitle {
+            font-size: 18px;
+            color: #6e6e73;
+            margin-bottom: 40px;
+        }
+
+        .connection-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .connection-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 16px;
+            padding: 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .connection-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+        }
+
+        .connection-card.available {
+            border-color: #667eea;
+        }
+
+        .connection-card.coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .connection-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .connection-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+
+        .connection-desc {
+            font-size: 14px;
+            color: #6e6e73;
+            margin-bottom: 16px;
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #f1f3f4;
+            color: #6e6e73;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* AWS 연결 폼 */
+        .aws-connection-form {
+            display: none;
+            max-width: 400px;
+            width: 100%;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-buttons {
             display: flex;
             gap: 12px;
-            max-width: 85%;
-            animation: messageSlide 0.3s ease-out;
+            justify-content: center;
+            margin-top: 24px;
         }
 
-        .message.user {
-            align-self: flex-end;
-            flex-direction: row-reverse;
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
         }
 
-        @keyframes messageSlide {
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f1f3f4;
+            color: #5f6368;
+        }
+
+        /* 합성 데이터 증강 섹션 */
+        .synthetic-data-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .synthetic-options {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .synthetic-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .synthetic-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .synthetic-option label {
+            cursor: pointer;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .request-notification {
+            background: #fff3e0;
+            border: 1px solid #ffcc02;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            color: #f57c00;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .notification-channels {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .channel-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .channel-option input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .channel-option label {
+            cursor: pointer;
+            font-size: 13px;
+            color: #495057;
+        }
+
+        /* 데이터 증강 중 상태 */
+        .team-dataset-card.augmenting, .drop-zone.augmenting {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            position: relative;
+        }
+
+        .augmenting-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* 컬럼 선택 영역 */
+        .column-selection-area {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .column-selection-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 12px;
+        }
+
+        .selected-columns-for-augment {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .augment-column-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .augment-column-option:hover {
+            background: #f0f4ff;
+            border-color: #667eea;
+        }
+
+        .augment-column-option input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .augment-column-option label {
+            cursor: pointer;
+            font-size: 13px;
+            color: #495057;
+            flex: 1;
+        }
+
+        /* 컬럼별 코멘트 영역 */
+        .column-comments {
+            margin-top: 16px;
+        }
+
+        .column-comment-item {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .column-comment-item.show {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .column-comment-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .column-comment-textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 12px;
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+        }
+
+        .column-comment-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(10px);
@@ -465,2136 +742,2128 @@
             }
         }
 
-        .message-avatar {
-            width: 36px;
-            height: 36px;
+        /* 스캔 단계 */
+        .scanning-stage {
+            padding: 60px;
+            text-align: center;
+            display: none;
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
+            background: conic-gradient(#667eea 0% var(--progress), #e9ecef var(--progress) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
-            flex-shrink: 0;
+            margin: 0 auto 24px;
+            position: relative;
         }
 
-        .message.ai .message-avatar {
+        .progress-circle::before {
+            content: '';
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+        }
+
+        .progress-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            z-index: 1;
+        }
+
+        /* 보안 처리 단계 */
+        .processing-stage {
+            padding: 40px;
+            display: none;
+        }
+
+        .processing-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0;
+        }
+
+        .process-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #f1f3f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .step-icon.active {
             background: #667eea;
             color: white;
         }
 
-        .message.user .message-avatar {
+        .step-icon.completed {
             background: #34c759;
             color: white;
         }
 
-        .message-content {
-            background: white;
-            border-radius: 16px;
-            padding: 16px 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            flex: 1;
-        }
-
-        .message.ai .message-content {
-            border-bottom-left-radius: 6px;
-        }
-
-        .message.user .message-content {
-            background: #667eea;
-            color: white;
-            border-bottom-right-radius: 6px;
-        }
-
-        .message-text {
-            font-size: 15px;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-
-        .message-text:last-child {
-            margin-bottom: 0;
-        }
-
-        .message-actions {
-            margin-top: 16px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .action-chip {
-            background: #f0f8ff;
-            border: 1px solid #d0e8ff;
-            border-radius: 20px;
-            padding: 8px 16px;
+        .step-label {
             font-size: 14px;
-            color: #667eea;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            border: none;
-            outline: none;
-        }
-
-        .action-chip:hover {
-            background: #e0f0ff;
-            transform: translateY(-1px);
-        }
-
-        /* Step 2 자연어 인식 강화 */
-        .suggested-questions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-            padding: 0 24px;
-        }
-
-        .suggestion-chip {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 20px;
-            padding: 8px 16px;
-            font-size: 13px;
             color: #6e6e73;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .suggestion-chip:hover {
-            background: #e9ecef;
-            color: #1d1d1f;
-        }
-
-        .upload-zone {
-            border: 2px dashed #d1d5db;
-            border-radius: 12px;
-            padding: 24px;
             text-align: center;
-            background: #f9fafb;
-            margin: 16px 0;
-            transition: all 0.3s ease;
-            cursor: pointer;
         }
 
-        .upload-zone:hover {
-            border-color: #667eea;
-            background: #f0f8ff;
-        }
-
-        .upload-zone-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .upload-icon {
-            font-size: 32px;
-            color: #9ca3af;
-        }
-
-        .upload-text {
-            font-size: 16px;
-            color: #4b5563;
-            font-weight: 500;
-        }
-
-        .upload-subtext {
-            font-size: 14px;
-            color: #9ca3af;
-        }
-
-        .upload-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .upload-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .upload-btn.secondary {
-            background: white;
-            color: #667eea;
-            border: 1px solid #667eea;
-        }
-
-        .upload-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        .chat-input-area {
-            background: white;
-            padding: 20px 24px;
-            border-top: 1px solid #e9ecef;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .chat-input-container {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-        }
-
-        .chat-input {
+        .step-connector {
             flex: 1;
-            border: 2px solid #e9ecef;
-            border-radius: 24px;
-            padding: 12px 20px;
-            font-size: 15px;
-            resize: none;
-            min-height: 48px;
-            max-height: 120px;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-            font-family: inherit;
+            height: 2px;
+            background: #e9ecef;
+            margin: 0 16px;
         }
 
-        .chat-input:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
+        .step-connector.completed {
+            background: #34c759;
         }
 
-        .send-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
-        }
-
-        .send-btn:hover:not(:disabled) {
-            background: #5a67d8;
-            transform: scale(1.05);
-        }
-
-        .send-btn:disabled {
-            background: #d1d1d6;
-            cursor: not-allowed;
-            transform: scale(1);
-        }
-
-        /* Step 3: 협업 워크스페이스 - 35:65 비율 */
-        .step3-container {
+        /* 하이브리드 편집 인터페이스 */
+        .hybrid-editor {
             display: none;
-            width: 100vw;
-            height: 100vh;
-            position: fixed;
-            top: 80px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            opacity: 0;
-            transition: all 0.5s ease;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            padding: 24px;
+            min-height: 500px;
+        }
+
+        .column-tree {
             background: #f8f9fa;
-            flex-direction: column;
+            border-radius: 12px;
+            padding: 20px;
         }
 
-        .step3-container.show {
+        .tree-header {
             display: flex;
-            opacity: 1;
-        }
-
-        .workspace-header {
-            background: white;
-            border-bottom: 1px solid #e9ecef;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
+            justify-content: between;
             align-items: center;
-            flex-shrink: 0;
+            margin-bottom: 16px;
         }
 
-        .workspace-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .workspace-title {
-            font-size: 20px;
+        .tree-title {
+            font-size: 16px;
             font-weight: 600;
             color: #1d1d1f;
         }
 
-        .analysis-badge {
+        .analysis-preview-btn {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .preview-tooltip {
+            position: absolute;
+            top: -120px;
+            right: 0;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-size: 12px;
+            white-space: nowrap;
+            display: none;
+            z-index: 100;
+        }
+
+        .preview-tooltip.show {
+            display: block;
+        }
+
+        .column-group {
+            margin-bottom: 16px;
+        }
+
+        .group-header {
             display: flex;
             align-items: center;
             gap: 8px;
-            background: #e8f5e8;
-            color: #2d7d2d;
-            padding: 8px 16px;
-            border-radius: 20px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .group-header:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .group-icon {
+            font-size: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .group-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .group-name {
             font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .column-list {
+            padding-left: 20px;
+        }
+
+        .column-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .column-item:hover {
+            background: white;
+            border-color: #667eea;
+        }
+
+        .column-item.selected {
+            background: #f8f9ff;
+            border-color: #667eea;
+        }
+
+        .column-name {
+            font-size: 13px;
+            color: #2c2c2c;
+            flex: 1;
+        }
+
+        .column-type {
+            font-size: 11px;
+            color: #6e6e73;
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .column-detail {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .detail-header {
+            margin-bottom: 20px;
+        }
+
+        .selected-column-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .column-info {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #6e6e73;
             font-weight: 600;
         }
 
-        .workspace-actions {
+        .info-value {
+            font-size: 14px;
+            color: #1d1d1f;
+        }
+
+        .column-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .action-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .action-buttons {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .action-btn {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 8px 16px;
-            font-size: 14px;
+            padding: 6px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        .action-btn:hover {
-            background: #e9ecef;
-        }
-
-        .action-btn.primary {
-            background: #667eea;
-            color: white;
+        .action-btn:hover, .action-btn.active {
             border-color: #667eea;
+            background: #f8f9ff;
+            color: #667eea;
         }
 
-        .action-btn.primary:hover {
-            background: #5a67d8;
-        }
-
-        .workspace-main {
-            flex: 1;
-            display: flex;
-            background: #f8f9fa;
-            overflow: hidden;
-        }
-
-        /* 좌측 패널: 팀원/댓글 (30%) */
-        .left-panel {
-            width: 30%;
-            min-width: 350px;
-            background: white;
-            border-right: 1px solid #e9ecef;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .panel-header {
-            padding: 20px;
-            border-bottom: 1px solid #f0f0f0;
-            flex-shrink: 0;
-        }
-
-        .panel-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 4px;
-        }
-
-        .panel-subtitle {
-            font-size: 12px;
-            color: #6e6e73;
-        }
-
-        .team-members {
-            padding: 16px 20px;
-            border-bottom: 1px solid #f0f0f0;
-            flex-shrink: 0;
-        }
-
-        .member-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 0;
-        }
-
-        .member-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #667eea;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .member-info {
-            flex: 1;
-        }
-
-        .member-name {
-            font-size: 14px;
-            font-weight: 500;
-            color: #1d1d1f;
-        }
-
-        .member-role {
-            font-size: 12px;
-            color: #6e6e73;
-        }
-
-        .member-status {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #34c759;
-        }
-
-        /* 팀 채팅 영역 - 안전한 위치 고정 */
-        .team-chat-area {
-            flex: 1;
-            padding: 16px 20px;
-            padding-bottom: 120px; /* 입력창 높이 + 충분한 여유 공간 확보 */
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: calc(100vh - 320px); /* 헤더 + 멤버 + 입력창 높이 제외 */
-        }
-
-        .chat-message-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .chat-user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .chat-message-content {
-            flex: 1;
-        }
-
-        .chat-user-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-
-        .chat-user-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1d1d1f;
-        }
-
-        .chat-user-role {
-            font-size: 12px;
-            color: #6e6e73;
-        }
-
-        .chat-message-text {
-            font-size: 14px;
-            color: #4b5563;
-            line-height: 1.4;
-        }
-
-        .comment-time {
-            font-size: 11px;
-            color: #9ca3af;
-        }
-
-        /* 팀 채팅 입력창 - 절대 위치로 안전 고정 */
-        .team-chat-input {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 30%;
-            min-width: 350px;
-            border-top: 1px solid #f0f0f0;
-            padding: 16px 20px;
-            background: white;
-            z-index: 150;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-        }
-
-        .chat-input-container {
-            display: flex;
-            gap: 8px;
-            align-items: flex-end;
-        }
-
-        .team-input {
-            flex: 1;
-            border: 1px solid #e9ecef;
-            border-radius: 20px;
+        .send-to-workspace {
+            margin-top: 16px;
             padding: 10px 16px;
-            font-size: 14px;
-            resize: none;
-            min-height: 40px;
-            max-height: 100px;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-            font-family: inherit;
-        }
-
-        .team-input:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
-        }
-
-        .team-send-btn {
             background: #667eea;
             color: white;
             border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
+            width: 100%;
         }
 
-        .team-send-btn:hover:not(:disabled) {
-            background: #5a67d8;
-            transform: scale(1.05);
+        .send-to-workspace:hover {
+            background: #5a6fd8;
         }
 
-        .team-send-btn:disabled {
-            background: #d1d1d6;
-            cursor: not-allowed;
-        }
-
-        /* 중앙 패널: 결과 리포트 메인 (70%) */
-        .center-panel {
-            flex: 1;
+        /* 우측 패널 - 개인 작업공간 */
+        .personal-workspace {
+            border-left: 1px solid #e9ecef;
             background: white;
-            margin: 16px 16px 16px 8px;
-            border-radius: 16px;
-            border: 1px solid #e9ecef;
-            overflow: hidden;
+            padding: 24px;
+            display: none;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .personal-workspace.active {
+            display: block;
+        }
+
+        .workspace-header-personal {
+            margin-bottom: 20px;
+        }
+
+        .workspace-title-personal {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .workspace-subtitle-personal {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+
+        .drop-zone {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 200px;
             display: flex;
             flex-direction: column;
-            position: relative;
-        }
-
-        .results-header {
-            background: #f8f9fa;
-            padding: 20px 24px;
-            border-bottom: 1px solid #e9ecef;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .results-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1d1d1f;
-        }
-
-        .results-content {
-            flex: 1;
-            padding: 32px;
-            overflow-y: auto;
-        }
-
-        .executive-summary {
-            background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 32px;
-        }
-
-        .summary-badge {
-            background: #667eea;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 16px;
-        }
-
-        .summary-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1d1d1f;
-            margin-bottom: 16px;
-        }
-
-        .summary-content {
-            font-size: 16px;
-            color: #4b5563;
-            line-height: 1.6;
-        }
-
-        .key-insights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .insight-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #e9ecef;
+            justify-content: center;
             transition: all 0.3s ease;
         }
 
-        .insight-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-        }
-
-        .insight-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-
-        .insight-label {
-            font-size: 14px;
-            color: #6e6e73;
-            margin-bottom: 4px;
-        }
-
-        .insight-change {
-            font-size: 12px;
-            color: #34c759;
-            font-weight: 500;
-        }
-
-        /* 키워드 카드 3개 */
-        .keyword-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .keyword-card {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .keyword-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        .drop-zone.dragover {
             border-color: #667eea;
+            background: #f8f9ff;
         }
 
-        .keyword-icon {
+        .drop-zone-icon {
             font-size: 32px;
             margin-bottom: 12px;
+            opacity: 0.5;
         }
 
-        .keyword-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 8px;
-        }
-
-        .keyword-desc {
+        .drop-zone-text {
             font-size: 14px;
             color: #6e6e73;
         }
 
-        /* 그래프 영역 */
-        .chart-section {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 16px;
-            overflow: hidden;
+        .selected-columns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .chart-header {
-            background: #f8f9fa;
-            padding: 20px 24px;
-            border-bottom: 1px solid #e9ecef;
+        .selected-column {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
         }
 
-        .chart-title {
-            font-size: 18px;
+        .selected-column-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .selected-column-name-small {
+            font-size: 13px;
             font-weight: 600;
             color: #1d1d1f;
-            margin: 0;
         }
 
-        .chart-actions {
+        .selected-column-source {
+            font-size: 11px;
+            color: #6e6e73;
+        }
+
+        .remove-column {
+            background: none;
+            border: none;
+            color: #d73a49;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+        }
+
+        .workspace-actions {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .export-options {
             display: flex;
             gap: 8px;
         }
 
-        .chart-btn {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
+        .export-btn {
+            flex: 1;
             padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
             font-size: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: #6e6e73;
         }
 
-        .chart-btn:hover {
-            background: #f0f8ff;
+        .export-btn:hover {
             border-color: #667eea;
             color: #667eea;
         }
 
-        .chart-placeholder {
-            padding: 60px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 300px;
-            background: #f8f9fa;
-        }
-
-        .chart-placeholder-content {
-            text-align: center;
-            color: #9ca3af;
-        }
-
-        .chart-placeholder-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-            opacity: 0.6;
-        }
-
-        .chart-placeholder-text {
-            font-size: 18px;
-            font-weight: 500;
-            color: #6e6e73;
-            margin-bottom: 8px;
-        }
-
-        .chart-placeholder-desc {
-            font-size: 14px;
-            color: #9ca3af;
-        }
-
-        /* 예시 그래프 영역 (Step 3 결과 리포트용) */
-        .example-chart-section {
+        /* 협업 히스토리 */
+        .collaboration-history {
             background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 16px;
-            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            padding: 32px;
+            display: none;
+        }
+        
+        .collaboration-history.show {
+            display: block;
+        }
+
+        .history-header {
             margin-bottom: 24px;
         }
 
-        .example-chart-header {
-            background: #f8f9fa;
-            padding: 20px 24px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .example-chart-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 4px;
-        }
-
-        .example-chart-subtitle {
-            font-size: 14px;
-            color: #6e6e73;
-        }
-
-        .example-chart-frame {
-            padding: 40px;
-            min-height: 280px;
-            background: #fafbfc;
-            border: 2px dashed #d1d5db;
-            margin: 16px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .example-chart-frame:hover {
-            border-color: #667eea;
-            background: #f0f8ff;
-        }
-
-        /* 번개 버튼 + 호버 확장 패널 (2안) */
-        .floating-actions {
-            position: fixed;
-            right: 24px;
-            bottom: 120px;
-            z-index: 1000;
-        }
-
-        .lightning-btn {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px; /* 둥근 사각형 형태 */
-            border: none;
-            color: white;
+        .history-title {
             font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+
+        .history-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .history-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        .lightning-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-        }
-
-        .lightning-btn.analysis-complete {
-            background: linear-gradient(135deg, #34c759 0%, #28a745 100%);
-        }
-
-        .lightning-btn.analysis-pending {
-            background: linear-gradient(135deg, #ff9500 0%, #ff8c00 100%);
-        }
-
-        .actions-panel {
-            position: absolute;
-            right: 70px;
-            bottom: 0;
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
-            transform: translateX(20px) scale(0.8);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            min-width: 280px;
-            border: 1px solid #e9ecef;
-        }
-
-        .lightning-btn:hover + .actions-panel,
-        .actions-panel:hover {
-            transform: translateX(0) scale(1);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .actions-panel-title {
+        .section-title {
             font-size: 16px;
             font-weight: 600;
             color: #1d1d1f;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .quick-action-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+        .section-count {
+            font-size: 12px;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
         }
 
-        .quick-action-btn {
-            background: #f8f9fa;
+        .history-item {
+            padding: 16px;
             border: 1px solid #e9ecef;
             border-radius: 12px;
-            padding: 16px 12px;
+            transition: all 0.2s ease;
+        }
+
+        .history-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+        }
+
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .history-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .history-status {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .history-item-desc {
             font-size: 13px;
+            color: #6e6e73;
+            margin-bottom: 12px;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .history-action-btn {
+            padding: 6px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            text-align: center;
+        }
+
+        .history-action-btn.approve {
+            border-color: #34c759;
+            color: #34c759;
+        }
+
+        .history-action-btn.reject {
+            border-color: #d73a49;
+            color: #d73a49;
+        }
+
+        .history-action-btn:hover {
+            background: #f8f9fa;
+        }
+
+        /* 액션 버튼 */
+        .main-action-buttons {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            color: #4b5563;
-            font-weight: 500;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
         }
 
-        .quick-action-btn:hover {
-            background: #e9ecef;
-            transform: translateY(-2px);
-            border-color: #667eea;
-            color: #667eea;
+        .btn-large {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
         }
 
-        .quick-action-btn .action-icon {
-            font-size: 18px;
-        }
-
-        .quick-action-btn.primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .btn-large.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            border-color: #667eea;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
         }
 
-        .quick-action-btn.primary:hover {
-            background: linear-gradient(135deg, #5a67d8 0%, #6c5ce7 100%);
-            color: white;
+        .btn-large.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        /* 키보드 접근성 */
-        .lightning-btn:focus + .actions-panel {
-            transform: translateX(0) scale(1);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .lightning-btn:focus {
-            outline: 3px solid rgba(102, 126, 234, 0.3);
-            outline-offset: 2px;
-        }
-
-        /* 애니메이션 */
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .fade-out {
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 숨김 클래스 */
+        /* 숨김 */
         .hidden {
             display: none !important;
         }
 
-        /* 반응형 */
-        @media (max-width: 1200px) {
-            .left-panel {
-                width: 40%;
-                min-width: 320px;
-            }
-            
-            .team-chat-input {
-                width: 40%;
-                min-width: 320px;
-            }
+        /* 애니메이션 */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
         }
 
-        @media (max-width: 768px) {
-            .header {
-                padding: 12px 16px;
-                height: 70px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 팝업 스타일 */
+        .analysis-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .popup-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .popup-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+        
+        .popup-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6e6e73;
+        }
+        
+        .agent-section {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        .agent-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+        
+        .agent-capabilities {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .agent-capabilities li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .agent-capabilities li:before {
+            content: '•';
+            color: #667eea;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 1400px) {
+            .collaboration-workspace.with-panels {
+                grid-template-columns: 400px 1fr 400px;
             }
-            
-            .main-content {
-                margin-top: 70px;
-                min-height: calc(100vh - 70px);
-            }
-            
-            .step1-container {
-                min-height: calc(100vh - 70px);
-                padding: 40px 20px;
-            }
-            
-            .role-grid {
+        }
+        
+        @media (max-width: 1024px) {
+            .collaboration-workspace.with-panels {
                 grid-template-columns: 1fr;
-                gap: 16px;
+                grid-template-rows: auto 1fr auto;
             }
             
-            .step1-title {
-                font-size: 32px;
-            }
-            
-            .step1-subtitle {
-                font-size: 18px;
-            }
-            
-            .integrated-layout {
-                flex-direction: column;
-            }
-            
-            .agent-sidebar {
-                width: 100%;
-                min-width: auto;
+            .team-requests-panel {
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
                 max-height: 200px;
             }
             
-            .chat-interface {
-                width: 100%;
-            }
-            
-            .step2-container,
-            .step3-container {
-                height: calc(100vh - 70px);
-            }
-            
-            .workspace-main {
-                flex-direction: column;
-            }
-            
-            .left-panel {
-                width: 100%;
-                min-width: auto;
-                max-height: 250px;
-            }
-            
-            .team-chat-input {
-                width: 100%;
-                min-width: auto;
-                position: fixed;
-                left: 0;
-                right: 0;
+            .personal-workspace {
+                border-left: none;
+                border-top: 1px solid #e9ecef;
+                max-height: 200px;
             }
 
-            .keyword-cards {
+            .hybrid-editor {
                 grid-template-columns: 1fr;
-                gap: 12px;
             }
 
-            .chart-actions {
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .chart-btn {
-                font-size: 11px;
-                padding: 6px 10px;
-            }
-            
-            .center-panel {
-                margin: 8px;
-            }
-            
-            .progress-steps {
-                display: none;
-            }
-            
-            .floating-actions {
-                right: 16px;
-                bottom: 80px;
-            }
-            
-            .lightning-btn {
-                width: 48px;
-                height: 48px;
-                font-size: 20px;
-            }
-            
-            .actions-panel {
-                right: 60px;
-                min-width: 240px;
-            }
-            
-            .quick-action-grid {
+            .history-content {
                 grid-template-columns: 1fr;
-                gap: 8px;
             }
         }
     </style>
 </head>
+<style>
+/* 추가 스타일 */
+.central-panel-title {
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    border-bottom: 1px solid #e9ecef;
+    padding: 20px 24px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.central-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin-bottom: 8px;
+}
+
+.central-subtitle {
+    font-size: 14px;
+    color: #6e6e73;
+}
+
+.empty-state {
+    flex: 1;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.empty-state-content {
+    text-align: center;
+    max-width: 400px;
+}
+
+.empty-state-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+    opacity: 0.3;
+}
+
+.empty-state-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 12px;
+}
+
+.empty-state-desc {
+    font-size: 16px;
+    color: #6e6e73;
+    line-height: 1.5;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+</style>
 <body>
     <div class="container">
-        <!-- 헤더 - 상단 고정 -->
+        <!-- 헤더 -->
         <header class="header">
-            <div class="logo">Xpert</div>
-            <div class="progress-steps">
-                <div class="step active" id="step-indicator-1">
-                    <div class="step-number">1</div>
-                    <span>역할 선택</span>
-                </div>
-                <div class="step" id="step-indicator-2">
-                    <div class="step-number">2</div>
-                    <span>목적설정 & 데이터준비</span>
-                </div>
-                <div class="step" id="step-indicator-3">
-                    <div class="step-number">3</div>
-                    <span>협업 분석</span>
+            <div class="header-content">
+                <div class="logo">Xpert</div>
+                
+                <div class="progress-flow">
+                    <div class="step-indicator active" id="step1-indicator">
+                        <div class="step-number">1</div>
+                        <span>데이터 연결</span>
+                    </div>
+                    <div class="step-indicator pending" id="step2-indicator">
+                        <div class="step-number">2</div>
+                        <span>보안 처리</span>
+                    </div>
+                    <div class="step-indicator pending" id="step3-indicator">
+                        <div class="step-number">3</div>
+                        <span>협업 워크스페이스</span>
+                    </div>
+                    <div class="step-indicator pending" id="step4-indicator">
+                        <div class="step-number">4</div>
+                        <span>에이전트 분석</span>
+                    </div>
+                    <div class="step-indicator pending" id="step5-indicator">
+                        <div class="step-number">5</div>
+                        <span>통합 리포트</span>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- 메인 컨텐츠 -->
+        <!-- 메인 콘텐츠 -->
         <main class="main-content">
-            <!-- Step 1: 역할 선택 -->
-            <div class="step1-container" id="step1">
-                <div class="role-selection">
-                    <h1 class="step1-title">어떤 역할로 전략 분석을 시작하시겠습니까?</h1>
-                    <p class="step1-subtitle">선택한 역할에 따라 최적화된 AI Agent가 맞춤형 인사이트를 제공합니다</p>
-                    
-                    <div class="role-grid">
-                        <div class="role-card" data-role="ceo">
-                            <div class="role-icon">👔</div>
-                            <div class="role-name">CEO</div>
-                            <div class="role-description">전사적 관점에서 핵심 성과 지표와 전략적 의사결정을 지원합니다</div>
-                            <div class="role-keywords">
-                                <span class="keyword">전사 성과</span>
-                                <span class="keyword">전략 수립</span>
-                                <span class="keyword">ROI 분석</span>
-                            </div>
-                        </div>
-
-                        <div class="role-card" data-role="business-developer">
-                            <div class="role-icon">💼</div>
-                            <div class="role-name">Business Developer</div>
-                            <div class="role-description">신규 사업 기회 발굴과 파트너십 전략 수립을 전문으로 합니다</div>
-                            <div class="role-keywords">
-                                <span class="keyword">사업 개발</span>
-                                <span class="keyword">파트너십</span>
-                                <span class="keyword">시장 진입</span>
-                            </div>
-                        </div>
-
-                        <div class="role-card" data-role="marketer">
-                            <div class="role-icon">📈</div>
-                            <div class="role-name">Marketer</div>
-                            <div class="role-description">고객 행동 분석과 마케팅 성과 최적화에 특화된 인사이트를 제공합니다</div>
-                            <div class="role-keywords">
-                                <span class="keyword">고객 분석</span>
-                                <span class="keyword">캠페인 최적화</span>
-                                <span class="keyword">트렌드 예측</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 2: 통합 인터페이스 (목적설정 + 데이터준비) -->
-            <div class="step2-container" id="step2">
-                <div class="integrated-layout">
-                    <!-- 좌측: Agent 정보 + 역할 전환 (25%) -->
-                    <div class="agent-sidebar">
-                        <div class="agent-info-section">
-                            <div class="agent-avatar" id="agent-avatar">👔</div>
-                            <div class="agent-name" id="agent-name">CEO Agent</div>
-                            <div class="agent-subtitle" id="agent-subtitle">전사 전략 분석 전문</div>
-                        </div>
-
-                        <div class="role-switcher">
-                            <div class="switcher-title">다른 역할로 전환</div>
-                            <div class="role-options">
-                                <div class="role-option active" data-role="ceo">
-                                    <div class="role-option-icon">👔</div>
-                                    <div class="role-option-info">
-                                        <div class="role-option-name">CEO</div>
-                                        <div class="role-option-desc">전사 성과 분석</div>
-                                    </div>
-                                </div>
-                                <div class="role-option" data-role="business-developer">
-                                    <div class="role-option-icon">💼</div>
-                                    <div class="role-option-info">
-                                        <div class="role-option-name">Business Developer</div>
-                                        <div class="role-option-desc">사업 기회 발굴</div>
-                                    </div>
-                                </div>
-                                <div class="role-option" data-role="marketer">
-                                    <div class="role-option-icon">📈</div>
-                                    <div class="role-option-info">
-                                        <div class="role-option-name">Marketer</div>
-                                        <div class="role-option-desc">고객 행동 분석</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 우측: 채팅 인터페이스 (75%) -->
-                    <div class="chat-interface">
-                        <div class="chat-header">
-                            <div class="chat-agent-avatar" id="chat-agent-avatar">👔</div>
-                            <div class="chat-agent-info">
-                                <div class="chat-agent-name" id="chat-agent-name">CEO Agent</div>
-                                <div class="chat-agent-status" id="chat-agent-status">전략 분석을 도와드리겠습니다</div>
-                            </div>
-                        </div>
-
-                        <div class="chat-messages" id="chat-messages">
-                            <!-- 초기 메시지는 JavaScript로 동적 생성 -->
-                        </div>
-
-                        <div class="suggested-questions" id="suggested-questions">
-                            <div class="suggestion-chip">"이번 분기 매출 감소 원인과 개선 전략을 동시에 분석해줘"</div>
-                            <div class="suggestion-chip">"경쟁사 대비 우리 포지션과 차별화 전략은?"</div>
-                        </div>
-
-                        <div class="chat-input-area">
-                            <div class="chat-input-container">
-                                <textarea 
-                                    class="chat-input" 
-                                    id="chat-input" 
-                                    placeholder="분석하고 싶은 내용을 자유롭게 입력하세요"
-                                    rows="1"
-                                ></textarea>
-                                <button class="send-btn" id="send-btn" disabled>
-                                    ↗️
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 3: 협업 워크스페이스 -->
-            <div class="step3-container" id="step3">
+            <!-- 워크스페이스 컨테이너 -->
+            <section class="workspace-container fade-in">
                 <div class="workspace-header">
-                    <div class="workspace-info">
-                        <h3 class="workspace-title" id="workspace-title">CEO 전략 분석 워크스페이스</h3>
-                        <div class="analysis-badge">
-                            ✅ 분석 완료
-                        </div>
+                    <div>
+                        <div class="workspace-title">데이터 협업 워크스페이스</div>
+                        <div class="workspace-subtitle">안전한 데이터 처리부터 팀별 실시간 협업까지</div>
                     </div>
-                    <div class="workspace-actions">
-                        <button class="action-btn">📤 슬랙 공유</button>
-                        <button class="action-btn">📥 PDF 다운로드</button>
-                        <button class="action-btn">📖 북마크</button>
-                        <button class="action-btn primary">👥 협업자 초대</button>
-                    </div>
-                </div>
-
-                <div class="workspace-main">
-                    <!-- 좌측 패널: 팀원/댓글 (35%) -->
-                    <div class="left-panel">
-                        <div class="panel-header">
-                            <div class="panel-title">팀 협업</div>
-                            <div class="panel-subtitle">실시간 의견 교환</div>
-                        </div>
-
-                        <div class="team-members">
-                            <div class="member-item">
-                                <div class="member-avatar">김</div>
-                                <div class="member-info">
-                                    <div class="member-name">김대표</div>
-                                    <div class="member-role">CEO</div>
-                                </div>
-                                <div class="member-status"></div>
-                            </div>
-                            <div class="member-item">
-                                <div class="member-avatar" style="background: #34c759;">이</div>
-                                <div class="member-info">
-                                    <div class="member-name">이전략</div>
-                                    <div class="member-role">전략팀장</div>
-                                </div>
-                                <div class="member-status"></div>
-                            </div>
-                            <div class="member-item">
-                                <div class="member-avatar" style="background: #ff9500;">박</div>
-                                <div class="member-info">
-                                    <div class="member-name">박마켓</div>
-                                    <div class="member-role">마케팅팀장</div>
-                                </div>
-                                <div class="member-status" style="background: #9ca3af;"></div>
-                            </div>
-                        </div>
-
-                        <div class="team-chat-area">
-                            <div class="chat-message-item">
-                                <div class="chat-user-avatar" style="background: #34c759;">이</div>
-                                <div class="chat-message-content">
-                                    <div class="chat-user-info">
-                                        <span class="chat-user-name">이전략</span>
-                                        <span class="chat-user-role">전략팀장</span>
-                                        <span class="comment-time">2분 전</span>
-                                    </div>
-                                    <div class="chat-message-text">ROI 분석 결과가 예상보다 높네요. Q4 목표 상향 조정을 검토해보면 어떨까요?</div>
-                                </div>
-                            </div>
-                            
-                            <div class="chat-message-item">
-                                <div class="chat-user-avatar" style="background: #667eea;">김</div>
-                                <div class="chat-message-content">
-                                    <div class="chat-user-info">
-                                        <span class="chat-user-name">김대표</span>
-                                        <span class="chat-user-role">CEO</span>
-                                        <span class="comment-time">5분 전</span>
-                                    </div>
-                                    <div class="chat-message-text">경쟁 우위 분석 부분 특히 주목해서 봐주세요. 액션 아이템 우선순위 논의 필요합니다.</div>
-                                </div>
-                            </div>
-                            
-                            <div class="chat-message-item">
-                                <div class="chat-user-avatar" style="background: #ff9500;">박</div>
-                                <div class="chat-message-content">
-                                    <div class="chat-user-info">
-                                        <span class="chat-user-name">박마켓</span>
-                                        <span class="chat-user-role">마케팅팀장</span>
-                                        <span class="comment-time">8분 전</span>
-                                    </div>
-                                    <div class="chat-message-text">주요 발견 이슈로는 고객 세그먼트 A의 22% 이탈율이 우려됩니다. 추가 조사가 필요할 것 같습니다.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 중앙 패널: 결과 리포트 메인 (65%) -->
-                    <div class="center-panel">
-                        <div class="results-header">
-                            <div class="results-title">📊 CEO 전사 성과 분석 결과</div>
-                            <div class="workspace-actions">
-                                <button class="action-btn">🔄 새로고침</button>
-                                <button class="action-btn">⚙️ 설정</button>
-                            </div>
-                        </div>
-
-                        <div class="results-content">
-                            <div class="executive-summary">
-                                <div class="summary-badge">핵심 요약</div>
-                                <h3 class="summary-title">전사 성과 분석 결과</h3>
-                                <div class="summary-content">
-                                    <strong>전년 동기 대비 23% 매출 증가</strong>와 함께 순이익 15% 개선이 확인되었습니다. 
-                                    디지털 전환 투자 효과가 가시화되고 있으며, 시장점유율이 3위에서 2위로 상승했습니다.
-                                </div>
-                            </div>
-
-                            <div class="key-insights">
-                                <div class="insight-card">
-                                    <div class="insight-value">+23%</div>
-                                    <div class="insight-label">매출 증가율</div>
-                                    <div class="insight-change">전년 동기 대비</div>
-                                </div>
-                                <div class="insight-card">
-                                    <div class="insight-value">+15%</div>
-                                    <div class="insight-label">순이익 개선</div>
-                                    <div class="insight-change">마진 확대</div>
-                                </div>
-                                <div class="insight-card">
-                                    <div class="insight-value">2위</div>
-                                    <div class="insight-label">시장점유율</div>
-                                    <div class="insight-change">3위 → 2위 상승</div>
-                                </div>
-                            </div>
-
-                            <!-- 예시 그래프 영역 -->
-                            <div class="example-chart-section">
-                                <div class="example-chart-header">
-                                    <div class="example-chart-title">📊 ROI 트렌드 분석</div>
-                                    <div class="example-chart-subtitle">최근 12개월 투자 수익률 변화</div>
-                                </div>
-                                <div class="example-chart-frame">
-                                    <div class="chart-placeholder-content">
-                                        <div class="chart-placeholder-icon">📈</div>
-                                        <div class="chart-placeholder-text">그래프가 추가될 영역</div>
-                                        <div class="chart-placeholder-desc">ROI 트렌드 차트가 여기에 표시됩니다</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 팀 채팅 입력창 - 절대 위치로 안전 고정 -->
-                <div class="team-chat-input">
-                    <div class="chat-input-container">
-                        <textarea 
-                            class="team-input" 
-                            id="team-chat-input" 
-                            placeholder="팀 메시지 입력..."
-                            rows="1"
-                        ></textarea>
-                        <button class="team-send-btn" id="team-send-btn" disabled>
-                            ↗️
+                    <div class="header-controls">
+                        <button class="btn-large primary hidden" id="proceed-btn" type="button" onclick="window.location.href='xpert_agent_fixed.html'">
+                        에이전트 분석 시작 →
                         </button>
+                        <div class="workspace-stats">
+                            <div class="stat-item">
+                                <div class="stat-value" id="data-size">-</div>
+                                <div class="stat-label">처리된 데이터</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="team-count">-</div>
+                                <div class="stat-label">대기 중인 팀</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="status">준비</div>
+                                <div class="stat-label">현재 상태</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 번개 버튼 + 호버 확장 패널 -->
-                <div class="floating-actions">
-                    <button class="lightning-btn analysis-complete" id="lightning-btn" 
-                            tabindex="0" 
-                            aria-label="빠른 액션 메뉴"
-                            title="빠른 액션">
-                        ⚡
-                    </button>
-                    <div class="actions-panel" id="actions-panel">
-                        <div class="actions-panel-title">
-                            <span>⚡</span>
-                            <span>빠른 액션</span>
+                <div class="collaboration-workspace" id="workspace">
+                    <!-- 팀 요청 패널 -->
+                    <div class="team-requests-panel" id="team-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">데이터 탐색기</div>
                         </div>
-                        <div class="quick-action-grid">
-                            <button class="quick-action-btn primary">
-                                <span class="action-icon">📋</span>
-                                <span>체크리스트</br>생성</span>
-                            </button>
-                            <button class="quick-action-btn">
-                                <span class="action-icon">📧</span>
-                                <span>이메일 공유</span>
-                            </button>
-                            <button class="quick-action-btn">
-                                <span class="action-icon">📅</span>
-                                <span>후속 미팅</span>
-                            </button>
-                            <button class="quick-action-btn">
-                                <span class="action-icon">🔄</span>
-                                <span>재분석</span>
-                            </button>
-                            <button class="quick-action-btn">
-                                <span class="action-icon">📊</span>
-                                <span>차트 편집</span>
-                            </button>
-                            <button class="quick-action-btn">
-                                <span class="action-icon">💡</span>
-                                <span>AI 제안</span>
+
+                        <!-- 본체 데이터 섹션 -->
+                        <div class="master-data-section" onclick="selectMasterData()" style="cursor: pointer; position: sticky; top: 0; z-index: 10;">
+                            <div class="master-data-header">
+                                <div class="master-data-icon">🏛️</div>
+                                <div class="master-data-title">본체 데이터</div>
+                            </div>
+                            <div class="master-data-stats">
+                                <div class="master-stat"><strong>4.8GB</strong> 처리완료</div>
+                                <div class="master-stat"><strong>96%</strong> 품질유지</div>
+                            </div>
+                            <div class="master-data-desc">
+                                DTS 보안처리 완료된 마스터 데이터셋으로<br>
+                                팀별 안전한 협업이 가능합니다
+                            </div>
+                        </div>
+                        
+                        <div class="team-requests">
+                            <div class="team-request-card" onclick="selectTeamData('marketing')">
+                                <div class="team-info">
+                                    <div class="team-avatar team-marketing">📊</div>
+                                    <div class="team-name">마케팅팀</div>
+                                </div>
+                                <div class="request-purpose">고객별 구매 패턴 분석용</div>
+                                <div class="request-details">
+                                    <div class="data-format">Dashboard용</div>
+                                    <button class="team-request-btn" onclick="requestTeamData(event, 'marketing')">공유 요청</button>
+                                </div>
+                            </div>
+
+                            <div class="team-request-card" onclick="selectTeamData('dev')">
+                                <div class="team-info">
+                                    <div class="team-avatar team-dev">⚙️</div>
+                                    <div class="team-name">개발팀</div>
+                                </div>
+                                <div class="request-purpose">ML 모델 학습용</div>
+                                <div class="request-details">
+                                    <div class="data-format">API 연동</div>
+                                    <button class="team-request-btn" onclick="requestTeamData(event, 'dev')">공유 요청</button>
+                                </div>
+                            </div>
+
+                            <div class="team-request-card" onclick="selectTeamData('finance')">
+                                <div class="team-info">
+                                    <div class="team-avatar team-finance">💰</div>
+                                    <div class="team-name">재무팀</div>
+                                </div>
+                                <div class="request-purpose">월별 집계 리포트용</div>
+                                <div class="request-details">
+                                    <div class="data-format">Excel 출력</div>
+                                    <button class="team-request-btn" onclick="requestTeamData(event, 'finance')">공유 요청</button>
+                                </div>
+                            </div>
+
+                            <div class="team-request-card" onclick="selectTeamData('sales')">
+                                <div class="team-info">
+                                    <div class="team-avatar team-sales">🎯</div>
+                                    <div class="team-name">영업팀</div>
+                                </div>
+                                <div class="request-purpose">고객 세그먼트 분석용</div>
+                                <div class="request-details">
+                                    <div class="data-format">리포트용</div>
+                                    <button class="team-request-btn" onclick="requestTeamData(event, 'sales')">공유 요청</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 중앙 메인 영역 -->
+                    <div class="collaboration-main">
+                        <!-- 중앙 패널 통합 타이틀 - 초기에는 숨김 -->
+                        <div class="central-panel-title" id="central-panel-title" style="display: none;">
+                            <div class="central-title">편집 스튜디오</div>
+                            <div class="central-subtitle">데이터 탐색과 편집을 위한 통합 작업 공간</div>
+                        </div>
+                        
+                        <!-- 빈 상태 메시지 - 초기에는 숨김 -->
+                        <div class="empty-state" id="empty-state" style="display: none;">
+                            <div class="empty-state-content">
+                                <div class="empty-state-icon">📁</div>
+                                <div class="empty-state-title">데이터셋을 선택해주세요</div>
+                                <div class="empty-state-desc">좌측에서 본체 데이터 또는 팀별 데이터를 선택하면<br>편집 작업을 시작할 수 있습니다</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 1. 데이터 연결 단계 -->
+                        <div class="data-connection-stage" id="connection-stage">
+                            <div class="connection-title">데이터 소스 선택</div>
+                            <div class="connection-subtitle">안전한 협업을 위해 데이터 소스를 연결해주세요</div>
+                            
+                            <div class="connection-options">
+                                <div class="connection-card available" onclick="showAWSForm()">
+                                    <div class="connection-icon">☁️</div>
+                                    <div class="connection-name">AWS 연결</div>
+                                    <div class="connection-desc">일반 AWS 계정을 통한<br>데이터베이스 직접 연결</div>
+                                </div>
+                                
+                                <div class="connection-card available" onclick="useSampleData()">
+                                    <div class="connection-icon">📊</div>
+                                    <div class="connection-name">샘플 데이터</div>
+                                    <div class="connection-desc">즉시 체험 가능한<br>데모용 데이터셋</div>
+                                </div>
+                            </div>
+
+                            <!-- AWS 연결 폼 -->
+                            <div class="aws-connection-form" id="aws-form">
+                                <div class="form-group">
+                                    <label class="form-label">데이터베이스 IP 주소</label>
+                                    <input type="text" class="form-input" placeholder="예: 192.168.1.100" id="db-ip">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">포트</label>
+                                    <input type="text" class="form-input" placeholder="예: 3306" id="db-port">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">데이터베이스 이름</label>
+                                    <input type="text" class="form-input" placeholder="예: sales_db" id="db-name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">사용자명</label>
+                                    <input type="text" class="form-input" placeholder="사용자명" id="db-user">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">비밀번호</label>
+                                    <input type="password" class="form-input" placeholder="비밀번호" id="db-password">
+                                </div>
+                                <div class="form-buttons">
+                                    <button class="btn btn-secondary" onclick="hideAWSForm()">취소</button>
+                                    <button class="btn btn-primary" onclick="connectAWS()">연결</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. 스캔 단계 -->
+                        <div class="scanning-stage" id="scanning-stage">
+                            <div class="connection-title">민감정보 검증 중</div>
+                            <div class="connection-subtitle">연결된 데이터의 보안 상태를 자동으로 검증하고 있습니다</div>
+                            
+                            <div class="progress-circle" style="--progress: 75%">
+                                <div class="progress-text" id="scan-progress">75%</div>
+                            </div>
+                            <div style="text-align: center; margin-top: 16px;">
+                                <div style="font-size: 16px; color: #1d1d1f; margin-bottom: 8px;" id="scan-status">민감정보 검증 중...</div>
+                                <div style="font-size: 14px; color: #6e6e73;" id="scan-detail">4.8GB 데이터 분석 진행</div>
+                            </div>
+                        </div>
+
+                        <!-- 3. 보안 처리 단계 -->
+                        <div class="processing-stage" id="processing-stage">
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <div class="connection-title">보안 처리 진행 중</div>
+                                <div class="connection-subtitle">민감정보가 감지되어 DTS 및 보안 처리를 진행합니다</div>
+                            </div>
+                            
+                            <div class="processing-steps">
+                                <div class="process-step">
+                                    <div class="step-icon completed" id="step-dts">🔒</div>
+                                    <div class="step-label">DTS 변환</div>
+                                </div>
+                                <div class="step-connector completed" id="connector1"></div>
+                                <div class="process-step">
+                                    <div class="step-icon active" id="step-security">🛡️</div>
+                                    <div class="step-label">보안 처리</div>
+                                </div>
+                                <div class="step-connector" id="connector2"></div>
+                                <div class="process-step">
+                                    <div class="step-icon" id="step-quality">✅</div>
+                                    <div class="step-label">품질 검증</div>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px;">
+                                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #667eea; margin-bottom: 8px;">96%</div>
+                                    <div style="font-size: 14px; color: #6e6e73;">데이터 품질 유지율</div>
+                                </div>
+                                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #667eea; margin-bottom: 8px;">47건</div>
+                                    <div style="font-size: 14px; color: #6e6e73;">민감정보 보안 처리</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. 하이브리드 편집 인터페이스 -->
+                        <div class="hybrid-editor" id="hybrid-editor" style="display: none;">
+                            <div class="column-tree">
+                                <div class="tree-header">
+                                    <div class="tree-title">데이터 컬럼 (4.8GB)</div>
+                                </div>
+
+                                <div class="section-title-area" style="margin-bottom: 16px;">
+                                    <div style="font-size: 14px; font-weight: 600; color: #667eea; margin-bottom: 8px;">전체 데이터셋 구조</div>
+                                    <div style="font-size: 12px; color: #6e6e73;">좌측에서 팀을 선택하면 해당 팀에 맞춤화된 데이터가 표시됩니다</div>
+                                </div>
+
+                                <div class="column-group">
+                                    <div class="group-header" onclick="toggleGroup('customer')">
+                                        <span class="group-icon">▼</span>
+                                        <span class="group-name">고객 정보 (4개)</span>
+                                    </div>
+                                    <div class="column-list" id="customer-columns">
+                                        <div class="column-item" onclick="selectColumn('customer_id', '텍스트(20)', '고객 정보')">
+                                            <div class="column-name">customer_id</div>
+                                            <div class="column-type">텍스트</div>
+                                        </div>
+                                        <div class="column-item" onclick="selectColumn('customer_name', '텍스트(100)', '고객 정보')">
+                                            <div class="column-name">customer_name</div>
+                                            <div class="column-type">텍스트</div>
+                                        </div>
+                                        <div class="column-item" onclick="selectColumn('age_group', '텍스트(10)', '고객 정보')">
+                                            <div class="column-name">age_group</div>
+                                            <div class="column-type">텍스트</div>
+                                        </div>
+                                        <div class="column-item" onclick="selectColumn('region', '텍스트(50)', '고객 정보')">
+                                            <div class="column-name">region</div>
+                                            <div class="column-type">텍스트</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="column-group">
+                                    <div class="group-header" onclick="toggleGroup('transaction')">
+                                        <span class="group-icon">▼</span>
+                                        <span class="group-name">거래 정보 (3개)</span>
+                                    </div>
+                                    <div class="column-list" id="transaction-columns">
+                                        <div class="column-item" onclick="selectColumn('purchase_date', '날짜시간', '거래 정보')">
+                                            <div class="column-name">purchase_date</div>
+                                            <div class="column-type">날짜</div>
+                                        </div>
+                                        <div class="column-item" onclick="selectColumn('amount', '숫자(10,2)', '거래 정보')">
+                                            <div class="column-name">amount</div>
+                                            <div class="column-type">숫자</div>
+                                        </div>
+                                        <div class="column-item" onclick="selectColumn('product_category', '텍스트(50)', '거래 정보')">
+                                            <div class="column-name">product_category</div>
+                                            <div class="column-type">텍스트</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column-detail">
+                                <div class="detail-header">
+                                    <div class="selected-column-name" id="selected-column-name">컬럼을 선택하세요</div>
+                                </div>
+                                
+                                <div class="column-info" id="column-info" style="display: none;">
+                                    <div class="info-item">
+                                        <div class="info-label">데이터 타입</div>
+                                        <div class="info-value" id="column-type-detail">-</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">소속 그룹</div>
+                                        <div class="info-value" id="column-group-detail">-</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">샘플 데이터</div>
+                                        <div class="info-value" id="column-sample">예시 값이 표시됩니다</div>
+                                    </div>
+                                </div>
+
+                                <div class="column-actions" id="column-actions" style="display: none;">
+                                    <div class="action-group">
+                                        <div class="action-label">컬럼명 변경</div>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="renameColumn()">이름 변경</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="action-group">
+                                        <div class="action-label">데이터 변환</div>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="setTransform('normalize')">정규화</button>
+                                            <button class="action-btn" onclick="setTransform('categorize')">카테고리화</button>
+                                            <button class="action-btn" onclick="setTransform('aggregate')">집계</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="action-group">
+                                        <div class="action-label">접근 권한</div>
+                                        <div class="action-buttons">
+                                            <button class="action-btn active" onclick="setAccess('all')">전체 접근</button>
+                                            <button class="action-btn" onclick="setAccess('limited')">제한 접근</button>
+                                        </div>
+                                    </div>
+
+                                    <button class="send-to-workspace" onclick="sendToWorkspace()">
+                                        내 작업공간으로 보내기 →
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 우측 패널 - 팀 작업공간 -->
+                    <div class="personal-workspace" id="personal-workspace">
+                        <div class="workspace-header-personal">
+                            <div class="workspace-title-personal">팀 작업 데이터셋</div>
+                            <div class="workspace-subtitle-personal">선택한 컬럼들로 팀별 맞춤 데이터셋을 구성하세요</div>
+                        </div>
+
+                        <div class="drop-zone" id="drop-zone">
+                            <div class="drop-zone-icon">📥</div>
+                            <div class="drop-zone-text">
+                                좌측에서 컬럼을 선택하거나<br>
+                                드래그하여 이곳에 놓으세요
+                            </div>
+                        </div>
+
+                        <div class="selected-columns" id="selected-columns">
+                            <!-- 선택된 컬럼들이 여기에 표시됩니다 -->
+                        </div>
+
+                        <!-- 합성 데이터 증강 섹션 -->
+                        <div class="synthetic-data-section">
+                            <div class="workspace-title-personal">🧪 합성 데이터 증강</div>
+                            <div class="synthetic-options">
+                                <div class="synthetic-option" onclick="selectSyntheticOption('none')">
+                                    <input type="radio" name="synthetic" id="none" checked>
+                                    <label for="none">해당 없음</label>
+                                </div>
+                                <div class="synthetic-option" onclick="selectSyntheticOption('request')">
+                                    <input type="radio" name="synthetic" id="request">
+                                    <label for="request">요청 입력</label>
+                                </div>
+                            </div>
+                            
+                            <!-- 컬럼 선택 영역 (요청 입력 선택시 표시) -->
+                            <div class="column-selection-area" id="columnSelectionArea" style="display: none;">
+                                <div class="column-selection-title">증강할 컬럼 선택</div>
+                                <div class="selected-columns-for-augment" id="selectedColumnsForAugment">
+                                    <!-- 선택된 컬럼들이 체크박스로 표시됩니다 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 컬럼별 요청 코멘트 영역 -->
+                            <div class="column-comments" id="columnComments">
+                                <!-- 선택된 컬럼별 코멘트 입력란이 표시됩니다 -->
+                            </div>
+                            
+                            <!-- 요청 입력 클릭 시 나타나는 알림 설정 -->
+                            <div class="request-notification" id="requestNotification" style="display: none;">
+                                <div class="notification-text">
+                                    데이터 증강은 현재 추가 작업 시간이 필요합니다.<br>
+                                    백그라운드 작업을 위한 알람 채널을 알려주세요.
+                                </div>
+                                <div class="notification-channels">
+                                    <div class="channel-option">
+                                        <input type="checkbox" id="email" checked>
+                                        <label for="email">📧 이메일</label>
+                                    </div>
+                                    <div class="channel-option">
+                                        <input type="checkbox" id="sms">
+                                        <label for="sms">📱 문자</label>
+                                    </div>
+                                    <div class="channel-option">
+                                        <input type="checkbox" id="push">
+                                        <label for="push">🔔 푸시 알림</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="workspace-actions">
+                            <div class="export-options">
+                                <button class="export-btn" onclick="exportData('csv')">CSV</button>
+                                <button class="export-btn" onclick="exportData('json')">JSON</button>
+                                <button class="export-btn" onclick="exportData('excel')">Excel</button>
+                            </div>
+                            <button class="btn btn-primary" id="generateBtn" style="width: 100%; margin-top: 12px;" onclick="generateData()">
+                                팀 데이터셋 생성
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- 협업 히스토리 -->
+            <section class="collaboration-history fade-in" id="collaboration-history-section">
+                <div class="history-header">
+                    <div class="history-title">협업 히스토리</div>
+                </div>
+                
+                <div class="history-content">
+                    <div class="history-section">
+                        <div class="section-header">
+                            <div class="section-title">내가 요청한 내용</div>
+                            <div class="section-count">3</div>
+                        </div>
+                        
+                        <div class="history-item">
+                            <div class="history-item-header">
+                                <div class="history-item-title">마케팅팀에 고객 세그먼트 데이터 요청</div>
+                                <div class="history-status status-pending">승인 대기</div>
+                            </div>
+                            <div class="history-item-desc">
+                                고객 ID, 연령대, 구매 이력 컬럼이 포함된 데이터셋을 마케팅팀에 공유 요청
+                            </div>
+                            <div class="history-actions">
+                                <button class="history-action-btn">수정</button>
+                                <button class="history-action-btn">취소</button>
+                            </div>
+                        </div>
+
+                        <div class="history-item">
+                            <div class="history-item-header">
+                                <div class="history-item-title">개발팀에 API 연동 데이터 요청</div>
+                                <div class="history-status status-completed">완료</div>
+                            </div>
+                            <div class="history-item-desc">
+                                ML 학습용 정규화된 거래 데이터 JSON 포맷으로 공유 완료
+                            </div>
+                        </div>
+
+                        <div class="history-item">
+                            <div class="history-item-header">
+                                <div class="history-item-title">재무팀에 월별 리포트 데이터 요청</div>
+                                <div class="history-status status-approved">승인됨</div>
+                            </div>
+                            <div class="history-item-desc">
+                                월별 매출 집계 데이터 Excel 형태로 공유 예정
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="history-section">
+                        <div class="section-header">
+                            <div class="section-title">받은 요청</div>
+                            <div class="section-count">2</div>
+                        </div>
+                        
+                        <div class="history-item">
+                            <div class="history-item-header">
+                                <div class="history-item-title">영업팀이 고객 연락처 데이터 요청</div>
+                                <div class="history-status status-pending">검토 중</div>
+                            </div>
+                            <div class="history-item-desc">
+                                신규 고객 발굴을 위한 연락처 및 지역 정보 데이터 공유 요청
+                            </div>
+                            <div class="history-actions">
+                                <button class="history-action-btn approve">승인</button>
+                                <button class="history-action-btn reject">거절</button>
+                            </div>
+                        </div>
+
+                        <div class="history-item">
+                            <div class="history-item-header">
+                                <div class="history-item-title">재무팀이 결제 데이터 요청</div>
+                                <div class="history-status status-completed">승인 완료</div>
+                            </div>
+                            <div class="history-item-desc">
+                                분기별 매출 분석을 위한 결제 방법 및 금액 데이터 공유 완료
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div>
 
-    <!-- 파일 업로드 hidden input -->
-    <input type="file" id="file-input" style="display: none;" accept=".csv,.xlsx,.xls">
+    <!-- 분석 미리보기 팝업 -->
+    <div class="analysis-popup" id="analysis-popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <div class="popup-title">다음 단계 에이전트 분석 미리보기</div>
+                <button class="popup-close" onclick="closeAnalysisPopup()">×</button>
+            </div>
+            
+            <div class="agent-section">
+                <div class="agent-name">🎯 고객 세그멘테이션 에이전트</div>
+                <ul class="agent-capabilities">
+                    <li>연령대, 지역별 고객 그룹 자동 분류</li>
+                    <li>구매 패턴 기반 고객 성향 분석</li>
+                    <li>고객 생애가치(CLV) 예측 모델링</li>
+                    <li>맞춤형 마케팅 전략 추천</li>
+                </ul>
+            </div>
+            
+            <div class="agent-section">
+                <div class="agent-name">🤖 머신러닝 모델 에이전트</div>
+                <ul class="agent-capabilities">
+                    <li>데이터 전처리 및 피처 엔지니어링</li>
+                    <li>예측 모델 자동 학습 및 최적화</li>
+                    <li>모델 성능 평가 및 검증</li>
+                    <li>실시간 예측 API 자동 배포</li>
+                </ul>
+            </div>
+            
+            <div class="agent-section">
+                <div class="agent-name">📊 매출 예측 에이전트</div>
+                <ul class="agent-capabilities">
+                    <li>시계열 분석을 통한 매출 트렌드 예측</li>
+                    <li>계절성 및 주기성 패턴 감지</li>
+                    <li>외부 변수 고려한 정확도 향상</li>
+                    <li>리스크 시나리오 분석 및 대응안 제시</li>
+                </ul>
+            </div>
+            
+            <div class="agent-section">
+                <div class="agent-name">🎯 리드 스코어링 에이전트</div>
+                <ul class="agent-capabilities">
+                    <li>고객 행동 데이터 기반 전환 확률 계산</li>
+                    <li>영업 우선순위 자동 랭킹</li>
+                    <li>최적 접촉 시점 및 채널 추천</li>
+                    <li>성공 확률 기반 영업 전략 수립</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // 전역 변수
-        let currentStep = 1;
-        let selectedRole = 'ceo';
-        let selectedModule = null;
-        let isDataUploaded = false;
+        let currentStage = 'connection';
+        let scanProgress = 0;
+        let hasSensitiveData = Math.random() > 0.3;
+        let selectedColumns = [];
+        let selectedColumnData = null;
 
-        // 역할별 데이터 정의
-        const roleData = {
-            'ceo': {
-                name: 'CEO',
-                icon: '👔',
-                subtitle: '전사 전략 분석 전문',
-                description: '전사적 관점에서 핵심 성과 지표와 전략적 의사결정을 지원하는 전문 AI Agent입니다. 매출, 수익성, 시장점유율 등을 종합 분석하여 경영진 관점의 인사이트를 제공합니다.',
-                modules: [
-                    { id: 'performance', icon: '📊', name: '전사 성과 분석', desc: '매출, 수익성, 시장점유율 등 핵심 KPI 종합 분석' },
-                    { id: 'roi', icon: '📈', name: '투자 수익률 진단', desc: 'ROI, ROIC 분석을 통한 투자 효율성 평가' },
-                    { id: 'competitive', icon: '🎯', name: '경쟁 우위 발굴', desc: '시장 포지셔닝과 경쟁력 강화 방안 도출' }
-                ]
-            },
-            'business-developer': {
-                name: 'Business Developer',
-                icon: '💼',
-                subtitle: '사업 기회 발굴 전문',
-                description: '신규 사업 기회 발굴과 파트너십 전략 수립을 전문으로 하는 AI Agent입니다. 시장 트렌드 분석을 통한 비즈니스 기회 탐색과 전략적 제휴 모델을 설계합니다.',
-                modules: [
-                    { id: 'opportunity', icon: '🔍', name: '신규 사업 기회 발굴', desc: '시장 트렌드 분석을 통한 새로운 비즈니스 기회 탐색' },
-                    { id: 'partnership', icon: '📋', name: '파트너십 전략 수립', desc: '전략적 제휴 및 협업 모델 설계와 평가' },
-                    { id: 'market-entry', icon: '🚀', name: '시장 진입 계획', desc: '신시장 진출 전략과 실행 로드맵 수립' }
-                ]
-            },
-            'marketer': {
-                name: 'Marketer',
-                icon: '📈',
-                subtitle: '고객 행동 분석 전문',
-                description: '고객 행동 분석과 마케팅 성과 최적화에 특화된 AI Agent입니다. 고객 세그멘테이션과 캠페인 효과 측정을 통해 마케팅 ROI를 극대화합니다.',
-                modules: [
-                    { id: 'customer', icon: '👥', name: '고객 행동 분석', desc: '고객 세그멘테이션과 행동 패턴 심층 분석' },
-                    { id: 'campaign', icon: '📈', name: '캠페인 효과 측정', desc: '마케팅 캠페인 ROI와 전환율 최적화 분석' },
-                    { id: 'trend', icon: '💡', name: '트렌드 예측', desc: '시장 동향과 소비자 트렌드 예측 모델링' }
-                ]
-            }
-        };
-
-        // DOM 로드 완료 후 초기화
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeXpert();
-            setupFileUpload();
-        });
-
-        // Xpert 초기화
-        function initializeXpert() {
-            setupEventListeners();
-            updateStepIndicators();
-            console.log('🚀 Xpert v2.2 - Step 3 개선버전 (35:65 + 번개버튼)');
-        }
-
-        // 이벤트 리스너 설정
-        function setupEventListeners() {
-            // 역할 카드 클릭 이벤트
-            document.querySelectorAll('.role-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    selectRole(this.dataset.role);
-                });
-            });
-
-            // 역할 전환 버튼 이벤트
-            document.querySelectorAll('.role-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    switchRole(this.dataset.role);
-                });
-            });
-
-            // 추천 질문 클릭 이벤트
-            document.querySelectorAll('.suggestion-chip').forEach(chip => {
-                chip.addEventListener('click', function() {
-                    const input = document.getElementById('chat-input');
-                    if (input) {
-                        input.value = this.textContent;
-                        input.focus();
-                        document.getElementById('send-btn').disabled = false;
-                    }
-                });
-            });
-
-            // 채팅 입력 이벤트
-            const chatInput = document.getElementById('chat-input');
-            const sendBtn = document.getElementById('send-btn');
-
-            if (chatInput && sendBtn) {
-                sendBtn.addEventListener('click', sendMessage);
-                chatInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                    }
-                });
-                chatInput.addEventListener('input', function() {
-                    sendBtn.disabled = !this.value.trim();
-                    autoResize(this);
-                });
-            }
-
-            // 팀 채팅 입력 이벤트
-            setupTeamChatListeners();
-
-            // 번개 버튼 이벤트
-            setupLightningButton();
-        }
-
-        // 팀 채팅 리스너 설정
-        function setupTeamChatListeners() {
-            const teamChatInput = document.getElementById('team-chat-input');
-            const teamSendBtn = document.getElementById('team-send-btn');
-
-            if (teamChatInput && teamSendBtn) {
-                teamSendBtn.addEventListener('click', sendTeamMessage);
-                teamChatInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendTeamMessage();
-                    }
-                });
-                teamChatInput.addEventListener('input', function() {
-                    teamSendBtn.disabled = !this.value.trim();
-                    autoResize(this);
-                });
-            }
-        }
-
-        // 번개 버튼 설정
-        function setupLightningButton() {
-            const lightningBtn = document.getElementById('lightning-btn');
-            const actionsPanel = document.getElementById('actions-panel');
-
-            // 모바일에서는 클릭으로 토글
-            if (lightningBtn) {
-                lightningBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (window.innerWidth <= 768) {
-                        toggleActionsPanel();
-                    }
-                });
-
-                // 키보드 접근성
-                lightningBtn.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        toggleActionsPanel();
-                    }
-                });
-            }
-
-            // 빠른 액션 버튼들 이벤트
-            document.querySelectorAll('.quick-action-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const actionText = this.textContent.trim();
-                    handleQuickAction(actionText);
-                });
-            });
-        }
-
-        // 액션 패널 토글
-        function toggleActionsPanel() {
-            const actionsPanel = document.getElementById('actions-panel');
-            if (actionsPanel) {
-                const isVisible = actionsPanel.style.opacity === '1';
-                actionsPanel.style.transform = isVisible ? 
-                    'translateX(20px) scale(0.8)' : 'translateX(0) scale(1)';
-                actionsPanel.style.opacity = isVisible ? '0' : '1';
-                actionsPanel.style.pointerEvents = isVisible ? 'none' : 'auto';
-            }
-        }
-
-        // 빠른 액션 처리
-        function handleQuickAction(actionText) {
-            console.log('빠른 액션 실행:', actionText);
+        // 단계별 상태 업데이트
+        function updateStepIndicator(step) {
+            const indicators = ['step1-indicator', 'step2-indicator', 'step3-indicator', 'step4-indicator', 'step5-indicator'];
             
-            // 실제 액션 구현
-            switch(actionText) {
-                case '체크리스트 생성':
-                    addTeamChatMessage('시스템', '분석 결과 기반 액션 체크리스트가 생성되었습니다.', 'system');
-                    break;
-                case '이메일 공유':
-                    addTeamChatMessage('시스템', '분석 보고서가 이메일로 공유되었습니다.', 'system');
-                    break;
-                case '후속 미팅':
-                    addTeamChatMessage('시스템', '후속 미팅이 캘린더에 예약되었습니다.', 'system');
-                    break;
-                case '재분석':
-                    addTeamChatMessage('시스템', '최신 데이터로 재분석을 시작합니다.', 'system');
-                    break;
-                case '차트 편집':
-                    addTeamChatMessage('시스템', '차트 편집 모드가 활성화되었습니다.', 'system');
-                    break;
-                case 'AI 제안':
-                    addTeamChatMessage('시스템', 'AI가 추가 분석 제안을 준비 중입니다.', 'system');
-                    break;
-            }
-            
-            // 액션 후 패널 닫기 (모바일)
-            if (window.innerWidth <= 768) {
-                toggleActionsPanel();
-            }
-        }
-
-        // 파일 업로드 설정
-        function setupFileUpload() {
-            const fileInput = document.getElementById('file-input');
-            if (fileInput) {
-                fileInput.addEventListener('change', handleFileUpload);
-            }
-        }
-
-        // 텍스트 영역 자동 크기 조정
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-        }
-
-        // 역할 선택 처리
-        function selectRole(role) {
-            if (!role) return;
-            
-            selectedRole = role;
-            
-            // 선택된 카드 표시
-            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
-            const selectedCard = document.querySelector(`[data-role="${role}"]`);
-            if (selectedCard) {
-                selectedCard.classList.add('selected');
-            }
-
-            setTimeout(() => {
-                goToStep2();
-            }, 1000);
-        }
-
-        // Step 2로 전환
-        function goToStep2() {
-            currentStep = 2;
-            updateStepIndicators();
-            
-            const step1 = document.getElementById('step1');
-            if (step1) {
-                step1.classList.add('fade-out');
-            }
-            
-            setTimeout(() => {
-                if (step1) {
-                    step1.style.display = 'none';
-                }
+            indicators.forEach((id, index) => {
+                const indicator = document.getElementById(id);
+                indicator.classList.remove('active', 'completed', 'pending');
                 
-                const step2 = document.getElementById('step2');
-                if (step2) {
-                    step2.classList.add('show', 'fade-in');
-                    updateAgentInfo();
-                    initializeChat();
+                if (index < step - 1) {
+                    indicator.classList.add('completed');
+                } else if (index === step - 1) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.add('pending');
                 }
-            }, 500);
-        }
-
-        // Agent 정보 업데이트
-        function updateAgentInfo() {
-            const roleInfo = roleData[selectedRole];
-            if (!roleInfo) return;
-            
-            // 좌측 Agent 정보 업데이트
-            const agentAvatar = document.getElementById('agent-avatar');
-            const agentName = document.getElementById('agent-name');
-            const agentSubtitle = document.getElementById('agent-subtitle');
-            
-            if (agentAvatar) agentAvatar.textContent = roleInfo.icon;
-            if (agentName) agentName.textContent = `${roleInfo.name} Agent`;
-            if (agentSubtitle) agentSubtitle.textContent = roleInfo.subtitle;
-            
-            // 우측 채팅 헤더 업데이트
-            const chatAgentAvatar = document.getElementById('chat-agent-avatar');
-            const chatAgentName = document.getElementById('chat-agent-name');
-            const chatAgentStatus = document.getElementById('chat-agent-status');
-            
-            if (chatAgentAvatar) chatAgentAvatar.textContent = roleInfo.icon;
-            if (chatAgentName) chatAgentName.textContent = `${roleInfo.name} Agent`;
-            if (chatAgentStatus) chatAgentStatus.textContent = '전략 분석을 도와드리겠습니다';
-            
-            // 역할 전환 버튼 상태 업데이트
-            document.querySelectorAll('.role-option').forEach(option => {
-                option.classList.toggle('active', option.dataset.role === selectedRole);
             });
         }
 
-        // 채팅 초기화
-        function initializeChat() {
-            const roleInfo = roleData[selectedRole];
-            if (!roleInfo) return;
-            
-            const chatMessages = document.getElementById('chat-messages');
-            if (!chatMessages) return;
-            
-            chatMessages.innerHTML = `
-                <div class="message ai">
-                    <div class="message-avatar">🤖</div>
-                    <div class="message-content">
-                        <div class="message-text">
-                            안녕하세요! <strong>${roleInfo.name} Agent</strong>입니다. ${roleInfo.description.split('.')[0]}을 도와드리겠습니다.
-                        </div>
-                        <div class="message-text">
-                            <strong>복합 질문도 가능합니다!</strong> 예: "매출 감소 원인 분석과 개선 전략을 동시에 제시해줘"
-                        </div>
-                        <div class="message-actions">
-                            ${roleInfo.modules.map(module => `
-                                <button class="action-chip" onclick="selectModule('${module.id}')">
-                                    <span>${module.icon}</span>
-                                    <span>${module.name}</span>
-                                </button>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
+        // AWS 연결 폼 표시
+        function showAWSForm() {
+            document.querySelector('.connection-options').style.display = 'none';
+            document.getElementById('aws-form').style.display = 'block';
         }
 
-        // 역할 전환 처리
-        function switchRole(role) {
-            if (role === selectedRole || !role) return;
-            
-            selectedRole = role;
-            selectedModule = null;
-            isDataUploaded = false;
-            
-            updateAgentInfo();
-            initializeChat();
+        // AWS 연결 폼 숨김
+        function hideAWSForm() {
+            document.querySelector('.connection-options').style.display = 'grid';
+            document.getElementById('aws-form').style.display = 'none';
         }
 
-        // 모듈 선택 처리
-        function selectModule(moduleId) {
-            if (!moduleId) return;
+        // AWS 연결
+        function connectAWS() {
+            const ip = document.getElementById('db-ip').value;
+            const port = document.getElementById('db-port').value;
+            const dbName = document.getElementById('db-name').value;
             
-            selectedModule = moduleId;
-            const roleInfo = roleData[selectedRole];
-            const moduleInfo = roleInfo.modules.find(m => m.id === moduleId);
+            if (!ip || !port || !dbName) {
+                alert('모든 필드를 입력해주세요.');
+                return;
+            }
             
-            if (!moduleInfo) return;
-            
-            addMessage('user', `${moduleInfo.name} 분석을 요청합니다.`);
-            
-            setTimeout(() => {
-                addMessage('ai', `
-                    <div class="message-text">
-                        <strong>${moduleInfo.name}</strong> 분석을 진행하겠습니다.
-                    </div>
-                    <div class="message-text">
-                        분석할 데이터를 업로드해주세요. 업로드된 데이터는 DTS 기술로 완전히 익명화되어 안전하게 처리됩니다.
-                    </div>
-                    <div class="upload-zone" onclick="document.getElementById('file-input').click()">
-                        <div class="upload-zone-content">
-                            <div class="upload-icon">📁</div>
-                            <div class="upload-text">파일을 드래그하거나 클릭하여 업로드</div>
-                            <div class="upload-subtext">CSV, Excel 파일 지원 (최대 100MB)</div>
-                            <div class="upload-buttons">
-                                <button class="upload-btn" onclick="event.stopPropagation(); document.getElementById('file-input').click();">
-                                    🔎 파일 선택
-                                </button>
-                                <button class="upload-btn secondary" onclick="event.stopPropagation(); useSampleData();">
-                                    📊 샘플 데이터 사용
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `);
-            }, 1000);
+            startScanning();
         }
 
-        // 메시지 추가
-        function addMessage(sender, content) {
-            const chatMessages = document.getElementById('chat-messages');
-            if (!chatMessages) return;
-            
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            
-            const avatar = sender === 'ai' ? '🤖' : '👤';
-            messageDiv.innerHTML = `
-                <div class="message-avatar">${avatar}</div>
-                <div class="message-content">
-                    ${content.includes('<div') ? content : `<div class="message-text">${content}</div>`}
-                </div>
-            `;
-            
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        // 메시지 전송
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const sendBtn = document.getElementById('send-btn');
-            
-            if (!input || !sendBtn) return;
-            
-            const message = input.value.trim();
-            if (!message) return;
-            
-            addMessage('user', message);
-            input.value = '';
-            sendBtn.disabled = true;
-            input.style.height = 'auto';
-            
-            setTimeout(() => {
-                const responses = [
-                    '네, 해당 내용을 분석해드리겠습니다. 데이터를 업로드해주시면 시작하겠습니다.',
-                    '좋은 질문입니다. 더 정확한 분석을 위해 관련 데이터를 제공해주세요.',
-                    `${roleData[selectedRole].name} 관점에서 분석해드리겠습니다. 데이터를 준비해주세요.`,
-                    '복합 분석 요청을 확인했습니다. 단계별로 진행하여 종합적인 인사이트를 제공하겠습니다.'
-                ];
-                
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                addMessage('ai', randomResponse);
-            }, 1000);
-        }
-
-        // 팀 메시지 전송
-        function sendTeamMessage() {
-            const input = document.getElementById('team-chat-input');
-            const sendBtn = document.getElementById('team-send-btn');
-            
-            if (!input || !sendBtn) return;
-            
-            const message = input.value.trim();
-            if (!message) return;
-            
-            addTeamChatMessage('김대표', message, 'current-user');
-            input.value = '';
-            sendBtn.disabled = true;
-            input.style.height = 'auto';
-        }
-
-        // 팀 채팅 메시지 추가
-        function addTeamChatMessage(userName, message, userType = 'team') {
-            const chatArea = document.querySelector('.team-chat-area');
-            if (!chatArea) return;
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'chat-message-item';
-            
-            const avatarColors = {
-                'current-user': '#667eea',
-                'system': '#9ca3af',
-                'team': '#34c759'
-            };
-            
-            const roleNames = {
-                '김대표': 'CEO',
-                '이전략': '전략팀장',
-                '박마켓': '마케팅팀장',
-                '시스템': 'System'
-            };
-
-            messageDiv.innerHTML = `
-                <div class="chat-user-avatar" style="background: ${avatarColors[userType]};">
-                    ${userName.charAt(0)}
-                </div>
-                <div class="chat-message-content">
-                    <div class="chat-user-info">
-                        <span class="chat-user-name">${userName}</span>
-                        <span class="chat-user-role">${roleNames[userName] || '팀원'}</span>
-                        <span class="comment-time">방금 전</span>
-                    </div>
-                    <div class="chat-message-text">${message}</div>
-                </div>
-            `;
-            
-            chatArea.appendChild(messageDiv);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        // 파일 업로드 처리
-        function handleFileUpload(e) {
-            const files = e.target.files;
-            if (!files || files.length === 0) return;
-            
-            const file = files[0];
-            isDataUploaded = true;
-            
-            addMessage('user', `파일 업로드: ${file.name}`);
-            
-            setTimeout(() => {
-                addMessage('ai', `
-                    <div class="message-text">
-                        ✅ <strong>${file.name}</strong> 파일이 성공적으로 업로드되었습니다.
-                    </div>
-                    <div class="message-text">
-                        🛡️ DTS 보안 처리를 완료했습니다. 이제 분석을 시작하겠습니다.
-                    </div>
-                    <div class="message-actions">
-                        <button class="action-chip" onclick="startAnalysis()">
-                            <span>🚀</span>
-                            <span>분석 시작하기</span>
-                        </button>
-                    </div>
-                `);
-            }, 1500);
-        }
-
-        // 샘플 데이터 사용
+        // 샘플 데이터 사용 - 바로 협업 워크스페이스로 이동
         function useSampleData() {
-            isDataUploaded = true;
-            
-            addMessage('user', '샘플 데이터를 사용하겠습니다.');
-            
-            setTimeout(() => {
-                const roleInfo = roleData[selectedRole];
-                if (!roleInfo) return;
-                
-                addMessage('ai', `
-                    <div class="message-text">
-                        📊 <strong>${roleInfo.name}용 샘플 데이터</strong>가 로드되었습니다.
-                    </div>
-                    <div class="message-text">
-                        • 고객 데이터: 50,000명<br>
-                        • 거래 기록: 200,000건<br>
-                        • 기간: 최근 2년
-                    </div>
-                    <div class="message-text">
-                        🛡️ DTS 처리가 완료되어 완전히 익명화되었습니다.
-                    </div>
-                    <div class="message-actions">
-                        <button class="action-chip" onclick="startAnalysis()">
-                            <span>🚀</span>
-                            <span>분석 시작하기</span>
-                        </button>
-                    </div>
-                `);
-            }, 1500);
+            startCollaboration();
         }
 
-        // 분석 시작
-        function startAnalysis() {
-            const roleInfo = roleData[selectedRole];
-            const moduleInfo = roleInfo.modules.find(m => m.id === selectedModule);
+        // 스캔 시작
+        function startScanning() {
+            document.getElementById('connection-stage').style.display = 'none';
+            document.getElementById('scanning-stage').style.display = 'block';
+            currentStage = 'scanning';
             
-            addMessage('ai', `
-                <div class="message-text">
-                    🚀 <strong>${moduleInfo?.name || '전략'} 분석</strong>을 시작합니다.
-                </div>
-                <div class="message-text">
-                    분석이 완료되면 협업 워크스페이스로 이동합니다. 잠시만 기다려주세요...
-                </div>
-            `);
+            updateStepIndicator(2);
             
-            // 진행률 표시 시뮬레이션
-            setTimeout(() => {
-                addMessage('ai', '⏳ DTS 합성 데이터 생성 중... (30%)');
-            }, 1000);
+            const progressElement = document.getElementById('scan-progress');
+            const statusElement = document.getElementById('scan-status');
+            const detailElement = document.getElementById('scan-detail');
             
-            setTimeout(() => {
-                addMessage('ai', '📊 전략 분석 실행 중... (70%)');
-            }, 2000);
+            const scanInterval = setInterval(() => {
+                scanProgress += Math.random() * 15;
+                progressElement.textContent = Math.min(100, Math.floor(scanProgress)) + '%';
+                
+                const progressCircle = document.querySelector('.progress-circle');
+                progressCircle.style.setProperty('--progress', Math.min(100, scanProgress) + '%');
+                
+                if (scanProgress >= 100) {
+                    clearInterval(scanInterval);
+                    completeScan();
+                }
+            }, 300);
+        }
+
+        // 스캔 완료
+        function completeScan() {
+            const statusElement = document.getElementById('scan-status');
+            const detailElement = document.getElementById('scan-detail');
             
-            setTimeout(() => {
-                addMessage('ai', '✅ 분석 완료! 협업 워크스페이스로 이동합니다.');
+            if (hasSensitiveData) {
+                statusElement.textContent = '민감정보 감지됨';
+                detailElement.textContent = '보안 처리가 필요합니다';
+                
                 setTimeout(() => {
-                    goToStep3();
-                }, 1000);
+                    startProcessing();
+                }, 2000);
+            } else {
+                statusElement.textContent = '민감정보 없음';
+                detailElement.textContent = '보안 처리 완료 - 협업 워크스페이스 준비';
+                
+                setTimeout(() => {
+                    startCollaboration();
+                }, 2000);
+            }
+        }
+
+        // 보안 처리 시작
+        function startProcessing() {
+            document.getElementById('scanning-stage').style.display = 'none';
+            document.getElementById('processing-stage').style.display = 'block';
+            currentStage = 'processing';
+            
+            // 처리 단계 시뮬레이션
+            setTimeout(() => {
+                document.getElementById('step-security').classList.remove('active');
+                document.getElementById('step-security').classList.add('completed');
+                document.getElementById('connector2').classList.add('completed');
+                document.getElementById('step-quality').classList.add('active');
+                
+                setTimeout(() => {
+                    document.getElementById('step-quality').classList.remove('active');
+                    document.getElementById('step-quality').classList.add('completed');
+                    
+                    setTimeout(() => {
+                        startCollaboration();
+                    }, 1000);
+                }, 2000);
             }, 3000);
         }
 
-        // Step 3로 전환
-        function goToStep3() {
-            currentStep = 3;
-            updateStepIndicators();
+        // 협업 워크스페이스 시작
+        function startCollaboration() {
+            document.getElementById('scanning-stage').style.display = 'none';
+            document.getElementById('processing-stage').style.display = 'none';
+            document.getElementById('connection-stage').style.display = 'none';
             
-            const step2 = document.getElementById('step2');
-            if (step2) {
-                step2.classList.add('fade-out');
-            }
+            // 레이아웃 변경
+            document.getElementById('workspace').classList.add('with-panels');
+            document.getElementById('team-panel').classList.add('active');
+            document.getElementById('personal-workspace').classList.add('active');
             
-            setTimeout(() => {
-                if (step2) {
-                    step2.style.display = 'none';
-                }
-                
-                const step3 = document.getElementById('step3');
-                if (step3) {
-                    step3.classList.add('show', 'fade-in');
-                    updateWorkspaceTitle();
-                    // Step 3 이동 시 팀 채팅 이벤트 리스너 다시 설정
-                    setTimeout(() => {
-                        setupTeamChatListeners();
-                    }, 100);
-                }
-            }, 500);
+            // 중앙 패널 타이틀과 빈 상태 표시
+            document.getElementById('central-panel-title').style.display = 'block';
+            document.getElementById('empty-state').style.display = 'flex';
+            
+            // 상태 업데이트
+            updateStepIndicator(3);
+            document.getElementById('data-size').textContent = '4.8GB';
+            document.getElementById('team-count').textContent = '4개';
+            document.getElementById('status').textContent = '협업 중';
+            
+            // 진행 버튼 활성화
+            document.getElementById('proceed-btn').classList.remove('hidden');
+            
+            // 협업 히스토리 표시
+            document.querySelector('.collaboration-history').classList.add('show');
         }
 
-        // 워크스페이스 제목 업데이트
-        function updateWorkspaceTitle() {
-            const roleInfo = roleData[selectedRole];
-            const moduleInfo = roleInfo.modules.find(m => m.id === selectedModule);
-            const workspaceTitle = document.getElementById('workspace-title');
+        // 컬럼 그룹 토글
+        function toggleGroup(groupId) {
+            const columnList = document.getElementById(groupId + '-columns');
+            const icon = event.target.querySelector('.group-icon');
             
-            if (workspaceTitle && roleInfo) {
-                workspaceTitle.textContent = 
-                    `${roleInfo.name} ${moduleInfo ? moduleInfo.name : '전략 분석'} 워크스페이스`;
-            }
-        }
-
-        // 단계 표시기 업데이트
-        function updateStepIndicators() {
-            for (let i = 1; i <= 3; i++) {
-                const indicator = document.getElementById(`step-indicator-${i}`);
-                if (indicator) {
-                    indicator.classList.remove('active', 'completed');
-                    
-                    if (i < currentStep) {
-                        indicator.classList.add('completed');
-                    } else if (i === currentStep) {
-                        indicator.classList.add('active');
-                    }
-                }
+            if (columnList.style.display === 'none') {
+                columnList.style.display = 'block';
+                icon.classList.remove('collapsed');
+            } else {
+                columnList.style.display = 'none';
+                icon.classList.add('collapsed');
             }
         }
 
-        // 키보드 단축키
-        document.addEventListener('keydown', function(e) {
-            // ESC로 이전 단계 (개발용)
-            if (e.key === 'Escape' && currentStep > 1) {
-                console.log('이전 단계로 이동 요청');
+        // 컬럼 선택 (기본)
+        function selectColumn(name, type, group) {
+            // 이전 선택 해제
+            document.querySelectorAll('.column-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // 현재 항목 선택
+            event.target.classList.add('selected');
+            
+            // 상세 정보 업데이트
+            document.getElementById('selected-column-name').textContent = name;
+            document.getElementById('column-type-detail').textContent = type;
+            document.getElementById('column-group-detail').textContent = group;
+            
+            // 샘플 데이터 설정
+            const sampleData = {
+                'customer_id': 'C001, C002, C003...',
+                'customer_name': '김철수, 이영희, 박민수...',
+                'email': 'user@email.com, test@gmail.com...',
+                'amount': '15000, 89000, 45000...',
+                'purchase_date': '2024-01-15, 2024-01-16...'
+            };
+            document.getElementById('column-sample').textContent = sampleData[name] || '예시 값이 표시됩니다';
+            
+            // 액션 영역 표시
+            document.getElementById('column-info').style.display = 'flex';
+            document.getElementById('column-actions').style.display = 'block';
+            
+            selectedColumnData = { name, type, group };
+        }
+
+        // 팀별 컬럼 선택 (에이전트 정보 포함)
+        function selectTeamColumn(name, type, group, agent) {
+            selectColumn(name, type, group);
+            selectedColumnData.agent = agent;
+            
+            // 에이전트 정보 추가 표시
+            const columnInfo = document.getElementById('column-info');
+            const existingAgentInfo = columnInfo.querySelector('.agent-info');
+            if (existingAgentInfo) {
+                existingAgentInfo.remove();
             }
             
-            // Ctrl/Cmd + Enter로 분석 시작
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                if (isDataUploaded && selectedModule && currentStep === 2) {
-                    startAnalysis();
-                }
-            }
-        });
+            const agentInfoDiv = document.createElement('div');
+            agentInfoDiv.className = 'info-item agent-info';
+            agentInfoDiv.innerHTML = `
+                <div class="info-label">활용 가능 에이전트</div>
+                <div class="info-value agent-badge" onclick="showAgentPreview('${agent}')" style="cursor: pointer; color: #667eea; text-decoration: underline;">${agent}</div>
+            `;
+            columnInfo.appendChild(agentInfoDiv);
+        }
 
-        // 성능 모니터링 (개발용)
-        if (window.performance) {
-            window.addEventListener('load', function() {
-                setTimeout(function() {
-                    try {
-                        const perfData = performance.timing;
-                        const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-                        console.log(`📊 페이지 로드 시간: ${pageLoadTime}ms`);
-                    } catch (e) {
-                        console.log('성능 측정 오류:', e.message);
-                    }
-                }, 0);
+        // 에이전트 미리보기 표시
+        function showAgentPreview(agentName) {
+            const agentAnalysis = {
+                '고객 세그멘테이션 에이전트': '• 연령대별 고객 그룹 분류\n• 구매 패턴 기반 세그먼트 예측\n• 고객 가치 점수 산출\n• 맞춤형 마케팅 캠페인 추천',
+                '머신러닝 모델 학습 에이전트': '• 데이터 전처리 및 정규화\n• 기계학습 모델 학습\n• 예측 정확도 평가\n• API 연동을 위한 모델 배포',
+                '매출 예측 에이전트': '• 월별/분기별 매출 예측\n• 계절성 트렌드 분석\n• 예상 수익성 계산\n• 리스크 요인 식별 및 대응방안 제시',
+                '리드 스코어링 에이전트': '• 고객 전환 가능성 점수화\n• 영업 우선순위 추천\n• 접촉 시점 최적화\n• 성공 확률 기반 전략 수립'
+            };
+            
+            alert('해당 에이전트에서 수행 가능한 분석:\n\n' + (agentAnalysis[agentName] || '• 데이터 기반 인사이트 도출\n• 특화된 분석 리포트 생성\n• 비즈니스 전략 추천'));
+        }
+
+        // 분석 미리보기 토글
+        function togglePreview() {
+            const tooltip = document.getElementById('preview-tooltip');
+            tooltip.classList.toggle('show');
+        }
+
+        // 작업공간으로 보내기
+        function sendToWorkspace() {
+            if (!selectedColumnData) return;
+            
+            const selectedColumnsContainer = document.getElementById('selected-columns');
+            const dropZone = document.getElementById('drop-zone');
+            
+            // 이미 추가된 컬럼인지 확인
+            if (selectedColumns.find(col => col.name === selectedColumnData.name)) {
+                alert('이미 추가된 컬럼입니다.');
+                return;
+            }
+            
+            selectedColumns.push(selectedColumnData);
+            
+            // 드롭존 숨기기
+            if (selectedColumns.length === 1) {
+                dropZone.style.display = 'none';
+            }
+            
+            // 컬럼 추가
+            const columnElement = document.createElement('div');
+            columnElement.className = 'selected-column';
+            columnElement.innerHTML = `
+                <div class="selected-column-info">
+                    <div class="selected-column-name-small">${selectedColumnData.name}</div>
+                    <div class="selected-column-source">${selectedColumnData.group}</div>
+                </div>
+                <button class="remove-column" onclick="removeColumn('${selectedColumnData.name}')">×</button>
+            `;
+            
+            selectedColumnsContainer.appendChild(columnElement);
+            
+            // 증강용 컬럼 선택 업데이트 (요청 입력이 선택된 경우)
+            const requestOption = document.getElementById('request');
+            if (requestOption && requestOption.checked) {
+                updateColumnSelectionForAugment();
+            }
+        }
+
+        // 컬럼 제거
+        function removeColumn(columnName) {
+            selectedColumns = selectedColumns.filter(col => col.name !== columnName);
+            
+            // UI 업데이트
+            const selectedColumnsContainer = document.getElementById('selected-columns');
+            selectedColumnsContainer.innerHTML = '';
+            
+            selectedColumns.forEach(col => {
+                const columnElement = document.createElement('div');
+                columnElement.className = 'selected-column';
+                columnElement.innerHTML = `
+                    <div class="selected-column-info">
+                        <div class="selected-column-name-small">${col.name}</div>
+                        <div class="selected-column-source">${col.group}</div>
+                    </div>
+                    <button class="remove-column" onclick="removeColumn('${col.name}')">×</button>
+                `;
+                selectedColumnsContainer.appendChild(columnElement);
+            });
+            
+            // 컬럼이 없으면 드롭존 다시 표시
+            if (selectedColumns.length === 0) {
+                document.getElementById('drop-zone').style.display = 'flex';
+            }
+        }
+
+        // 본체 데이터 선택
+        function selectMasterData() {
+            // 다른 선택 해제
+            document.querySelectorAll('.team-request-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // 본체 데이터 선택 표시
+            document.querySelector('.master-data-section').style.background = '#e0e7ff';
+            document.querySelector('.master-data-section').style.borderColor = '#667eea';
+            
+            // 빈 상태 숨기고 편집 영역 표시
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('hybrid-editor').style.display = 'grid';
+            resetCentralPanelToMaster();
+            
+            // 협업 히스토리 표시
+            document.querySelector('.collaboration-history').classList.add('show');
+            
+            console.log('Selected master data');
+        }
+        
+        // 팀 데이터 선택
+        function selectTeamData(teamId) {
+            // 본체 데이터 선택 해제
+            document.querySelector('.master-data-section').style.background = '#f8f9ff';
+            document.querySelector('.master-data-section').style.borderColor = '#e0e7ff';
+            
+            document.querySelectorAll('.team-request-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.closest('.team-request-card').classList.add('active');
+            
+            // 빈 상태 숨기고 편집 영역 표시
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('hybrid-editor').style.display = 'grid';
+            
+            // 팀별로 중앙 패널의 데이터 목록 업데이트
+            updateCentralPanelForTeam(teamId);
+            console.log('Selected team data:', teamId);
+        }
+
+        // 팀별로 중앙 패널 데이터 업데이트
+        function updateCentralPanelForTeam(teamId) {
+            const teamDataConfigs = {
+                'marketing': {
+                    title: '마케팅팀 맞춤 데이터',
+                    subtitle: '고객 분석 및 세그멘테이션을 위한 데이터셋',
+                    columns: [
+                        { group: '고객 정보', name: 'customer_id', type: '텍스트(20)', agent: '고객 세그멘테이션 에이전트' },
+                        { group: '고객 정보', name: 'age_group', type: '텍스트(10)', agent: '인구통계 분석 에이전트' },
+                        { group: '고객 정보', name: 'region', type: '텍스트(50)', agent: '지역별 마케팅 에이전트' },
+                        { group: '거래 정보', name: 'purchase_date', type: '날짜시간', agent: '구매 패턴 분석 에이전트' },
+                        { group: '거래 정보', name: 'product_category', type: '텍스트(50)', agent: '상품 추천 에이전트' }
+                    ]
+                },
+                'dev': {
+                    title: '개발팀 ML 학습용 데이터',
+                    subtitle: '머신러닝 모델 학습 및 예측을 위한 데이터셋',
+                    columns: [
+                        { group: '거래 정보', name: 'transaction_id', type: '텍스트(20)', agent: 'ML 전처리 에이전트' },
+                        { group: '거래 정보', name: 'amount', type: '숫자(10,2)', agent: '금액 예측 에이전트' },
+                        { group: '거래 정보', name: 'payment_method', type: '텍스트(20)', agent: '결제 패턴 분석 에이전트' },
+                        { group: '고객 정보', name: 'customer_id', type: '텍스트(20)', agent: '고객 행동 예측 에이전트' }
+                    ]
+                },
+                'finance': {
+                    title: '재무팀 리포트용 데이터',
+                    subtitle: '월별 집계 및 재무 분석을 위한 데이터셋',
+                    columns: [
+                        { group: '거래 정보', name: 'amount', type: '숫자(10,2)', agent: '매출 예측 에이전트' },
+                        { group: '거래 정보', name: 'purchase_date', type: '날짜시간', agent: '트렌드 분석 에이전트' },
+                        { group: '거래 정보', name: 'payment_method', type: '텍스트(20)', agent: '결제 비용 최적화 에이전트' },
+                        { group: '고객 정보', name: 'region', type: '텍스트(50)', agent: '지역별 수익성 에이전트' }
+                    ]
+                },
+                'sales': {
+                    title: '영업팀 고객 분석용 데이터',
+                    subtitle: '고객 세그먼트 및 리드 스코어링을 위한 데이터셋',
+                    columns: [
+                        { group: '고객 정보', name: 'customer_name', type: '텍스트(100)', agent: '리드 스코어링 에이전트' },
+                        { group: '고객 정보', name: 'email', type: 'VARCHAR(200)', agent: '이메일 마케팅 에이전트' },
+                        { group: '고객 정보', name: 'phone', type: 'VARCHAR(15)', agent: '콜 센터 에이전트' },
+                        { group: '거래 정보', name: 'amount', type: '숫자(10,2)', agent: '고객 가치 분석 에이전트' }
+                    ]
+                }
+            };
+
+            const config = teamDataConfigs[teamId];
+            if (!config) return;
+
+            // 중앙 패널 업데이트
+            updateCentralPanelContent(config);
+        }
+
+        // 중앙 패널을 원본 마스터 데이터로 리셋
+        function resetCentralPanelToMaster() {
+            const treeTitle = document.querySelector('.tree-title');
+            treeTitle.textContent = '데이터 컬럼 (4.8GB)';
+            
+            // 기존 팀별 그룹 제거
+            document.querySelectorAll('.team-specific-group').forEach(group => group.remove());
+            
+            // 기본 그룹들을 다시 표시
+            document.getElementById('customer-columns').style.display = 'block';
+            document.getElementById('transaction-columns').style.display = 'block';
+        }
+
+        // 중앙 패널 컨텐츠 업데이트
+        function updateCentralPanelContent(config) {
+            const treeTitle = document.querySelector('.tree-title');
+            
+            // 제목 업데이트
+            treeTitle.textContent = config.title;
+            
+            // 기본 그룹들 숨기기
+            document.getElementById('customer-columns').style.display = 'none';
+            document.getElementById('transaction-columns').style.display = 'none';
+            
+            // 기존 팀별 그룹 제거
+            document.querySelectorAll('.team-specific-group').forEach(group => group.remove());
+            
+            // 새로운 컨텐츠 생성
+            const columnTree = document.querySelector('.column-tree');
+            
+            const groupedColumns = config.columns.reduce((acc, col) => {
+                if (!acc[col.group]) acc[col.group] = [];
+                acc[col.group].push(col);
+                return acc;
+            }, {});
+            
+            Object.keys(groupedColumns).forEach(groupName => {
+                const cols = groupedColumns[groupName];
+                const groupElement = document.createElement('div');
+                groupElement.className = 'column-group team-specific-group';
+                groupElement.innerHTML = `
+                    <div class="group-header" onclick="toggleGroup('team-${groupName.replace(/\\s/g, '')}')">
+                        <span class="group-icon">▼</span>
+                        <span class="group-name">${groupName} (${cols.length}개)</span>
+                    </div>
+                    <div class="column-list" id="team-${groupName.replace(/\\s/g, '')}-columns">
+                        ${cols.map(col => `
+                            <div class="column-item" onclick="selectTeamColumn('${col.name}', '${col.type}', '${col.group}', '${col.agent}')">
+                                <div class="column-name">${col.name}</div>
+                                <div class="column-type">${col.type.split('(')[0]}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                columnTree.appendChild(groupElement);
             });
         }
 
-        // 오류 처리
-        window.addEventListener('error', function(e) {
-            console.error('🚨 JavaScript 오류:', e.message);
-            console.error('파일:', e.filename);
-            console.error('라인:', e.lineno);
-        });
+        // 데이터 내보내기
+        function exportData(format) {
+            if (selectedColumns.length === 0) {
+                alert('먼저 컬럼을 선택해주세요.');
+                return;
+            }
+            
+            alert(`${format.toUpperCase()} 형식으로 ${selectedColumns.length}개 컬럼을 내보냅니다.`);
+        }
 
-        // 브라우저 호환성 체크
-        function checkBrowserCompatibility() {
-            const features = {
-                'CSS Grid': CSS && CSS.supports && CSS.supports('display', 'grid'),
-                'CSS Flexbox': CSS && CSS.supports && CSS.supports('display', 'flex'),
-                'ES6 Classes': typeof class {} === 'function',
-                'Fetch API': typeof fetch !== 'undefined'
-            };
+        // 합성 데이터 옵션 선택
+        function selectSyntheticOption(option) {
+            const requestNotification = document.getElementById('requestNotification');
+            const columnSelectionArea = document.getElementById('columnSelectionArea');
             
-            const unsupported = Object.entries(features)
-                .filter(([name, supported]) => !supported)
-                .map(([name]) => name);
-            
-            if (unsupported.length > 0) {
-                console.warn('⚠️ 지원되지 않는 기능:', unsupported.join(', '));
-                console.warn('최신 브라우저 사용을 권장합니다.');
+            if (option === 'request') {
+                requestNotification.style.display = 'block';
+                columnSelectionArea.style.display = 'block';
+                updateColumnSelectionForAugment();
             } else {
-                console.log('✅ 브라우저 호환성 검사 통과');
+                requestNotification.style.display = 'none';
+                columnSelectionArea.style.display = 'none';
+                document.getElementById('columnComments').innerHTML = '';
             }
         }
 
-        // 초기화 시 호환성 체크 실행
+        // 증강용 컬럼 선택 업데이트
+        function updateColumnSelectionForAugment() {
+            const container = document.getElementById('selectedColumnsForAugment');
+            container.innerHTML = '';
+            
+            if (selectedColumns.length === 0) {
+                container.innerHTML = '<div style="color: #8e8e93; font-size: 12px; padding: 8px;">먼저 좌측에서 컬럼을 선택해주세요.</div>';
+                return;
+            }
+            
+            selectedColumns.forEach((column, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'augment-column-option';
+                optionDiv.innerHTML = `
+                    <input type="checkbox" id="augment-${index}" onchange="toggleColumnComment('${column.name}', ${index})">
+                    <label for="augment-${index}">${column.name} (${column.type})</label>
+                `;
+                container.appendChild(optionDiv);
+            });
+        }
+
+        // 컬럼별 코멘트 토글
+        function toggleColumnComment(columnName, index) {
+            const checkbox = document.getElementById(`augment-${index}`);
+            const commentId = `comment-${index}`;
+            const commentContainer = document.getElementById('columnComments');
+            let commentItem = document.getElementById(commentId);
+            
+            if (checkbox.checked) {
+                if (!commentItem) {
+                    commentItem = document.createElement('div');
+                    commentItem.id = commentId;
+                    commentItem.className = 'column-comment-item';
+                    commentItem.innerHTML = `
+                        <div class="column-comment-title">${columnName} 증강 요청</div>
+                        <textarea class="column-comment-textarea" placeholder="이 컬럼에 대한 구체적인 데이터 증강 요청사항을 입력해주세요..."></textarea>
+                    `;
+                    commentContainer.appendChild(commentItem);
+                }
+                commentItem.classList.add('show');
+            } else {
+                if (commentItem) {
+                    commentItem.classList.remove('show');
+                    setTimeout(() => {
+                        if (commentItem && !commentItem.classList.contains('show')) {
+                            commentItem.remove();
+                        }
+                    }, 300);
+                }
+            }
+        }
+
+        // 데이터 생성 함수
+        function generateData() {
+            const requestOption = document.getElementById('request');
+            
+            if (requestOption && requestOption.checked) {
+                // 요청 입력이 선택된 경우 데이터 증강 상태로 변경
+                // 새로운 팀별 데이터 요청을 왼쪽 패널에 추가 (증강 상태)
+                addAugmentingTeamDataRequest(selectedColumns);
+            } else {
+                // 일반적인 팀 데이터셋 생성 로직
+                createTeamDataset();
+            }
+        }
+
+        // 데이터 증강 중인 팀별 데이터 요청 추가
+        function addAugmentingTeamDataRequest(columns) {
+            const teamRequestsContainer = document.querySelector('.team-requests');
+            const newRequestId = 'augmenting-request-' + Date.now();
+            
+            const newRequestCard = document.createElement('div');
+            newRequestCard.className = 'team-request-card new-request augmenting';
+            newRequestCard.style.border = '2px solid #ff9500';
+            newRequestCard.style.backgroundColor = 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)';
+            newRequestCard.onclick = () => selectTeamData(newRequestId);
+            
+            newRequestCard.innerHTML = `
+                <div class="team-info">
+                    <div class="team-avatar" style="background: #ff9500;">🧪</div>
+                    <div class="team-name">데이터 증강 요청</div>
+                </div>
+                <div class="request-purpose">합성 데이터 생성 중</div>
+                <div class="request-details">
+                    <div class="data-format">증강 진행 중</div>
+                    <div class="augmenting-text" style="position: static; transform: none; background: #ff9500; margin-top: 8px;">데이터 증강 중</div>
+                </div>
+            `;
+            
+            // 맨 위에 추가
+            teamRequestsContainer.insertBefore(newRequestCard, teamRequestsContainer.firstChild);
+            
+            alert('데이터 증강 요청이 생성되었습니다.\n좌측 데이터 탐색기에서 진행 상황을 확인할 수 있습니다.');
+        }
+
+        // 팀 데이터셋 생성
+        function createTeamDataset() {
+            if (selectedColumns.length === 0) {
+                alert('먼저 컬럼을 선택해주세요.');
+                return;
+            }
+            
+            // 새로운 팀별 데이터 요청을 왼쪽 패널에 추가
+            addTeamDataRequest(selectedColumns);
+            
+            alert(`${selectedColumns.length}개 컬럼으로 팀 데이터셋을 생성했습니다.\n포함된 컬럼: ${selectedColumns.map(col => col.name).join(', ')}\n\n새로운 팀별 데이터 요청이 왼쪽 패널에 추가되었습니다.`);
+        }
+
+        // 팀별 데이터 요청 추가
+        function addTeamDataRequest(columns) {
+            const teamRequestsContainer = document.querySelector('.team-requests');
+            const newRequestId = 'new-request-' + Date.now();
+            
+            const newRequestCard = document.createElement('div');
+            newRequestCard.className = 'team-request-card new-request';
+            newRequestCard.style.border = '2px solid #667eea';
+            newRequestCard.style.backgroundColor = '#f8f9ff';
+            newRequestCard.onclick = () => selectTeamData(newRequestId);
+            
+            newRequestCard.innerHTML = `
+                <div class="team-info">
+                    <div class="team-avatar" style="background: #667eea;">📊</div>
+                    <div class="team-name">새 데이터 요청</div>
+                    <div class="priority-badge priority-high">New</div>
+                </div>
+                <div class="request-purpose">방금 생성한 맞춤 데이터셋 (${columns.length}개 컬럼)</div>
+                <div class="request-details">
+                    <div class="data-format">맞춤형</div>
+                </div>
+            `;
+            
+            // 맨 위에 추가
+            teamRequestsContainer.insertBefore(newRequestCard, teamRequestsContainer.firstChild);
+            
+            // 5초 후 일반 스타일로 변경
+            setTimeout(() => {
+                newRequestCard.style.border = '1px solid #e9ecef';
+                newRequestCard.style.backgroundColor = 'white';
+            }, 5000);
+        }
+
+        // 컬럼 이름 변경
+        function renameColumn() {
+            if (!selectedColumnData) return;
+            
+            const newName = prompt('새로운 컬럼명을 입력하세요:', selectedColumnData.name);
+            if (newName && newName !== selectedColumnData.name) {
+                document.getElementById('selected-column-name').textContent = newName;
+                selectedColumnData.name = newName;
+                alert('컬럼명이 변경되었습니다.');
+            }
+        }
+
+        // 데이터 변환 설정
+        function setTransform(type) {
+            document.querySelectorAll('.action-group:nth-child(2) .action-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log('Transform type set:', type);
+        }
+
+        // 접근 권한 설정
+        function setAccess(level) {
+            document.querySelectorAll('.action-group:nth-child(3) .action-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log('Access level set:', level);
+        }
+
+        // 에이전트 분석으로 진행
+        function proceedToAnalysis() {
+            if (confirm('협업 워크스페이스 설정이 완료되었습니다.\n에이전트 분석 단계로 진행하시겠습니까?')) {
+                updateStepIndicator(4);
+                alert('Step 4 (에이전트 분석) 단계로 진행합니다.\n\n협업 완료 결과:\n- 선택된 개인 컬럼: ' + selectedColumns.length + '개\n- 팀별 데이터 요청 처리 완료\n- 협업 히스토리 기록 완료');
+            }
+        }
+
+        // 드래그 앤 드롭 지원 (향후 구현)
         document.addEventListener('DOMContentLoaded', function() {
-            try {
-                checkBrowserCompatibility();
-            } catch (e) {
-                console.warn('호환성 체크 실패:', e.message);
+            const dropZone = document.getElementById('drop-zone');
+            
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            
+            dropZone.addEventListener('dragleave', function(e) {
+                dropZone.classList.remove('dragover');
+            });
+            
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                // 드롭 처리 로직은 추후 구현
+            });
+            
+            // 초기 상태 설정
+            updateStepIndicator(1);
+        });
+        
+        // 팀 데이터 전체 요청
+        function requestTeamData(event, teamId) {
+            event.stopPropagation(); // 부모 클릭 이벤트 방지
+            
+            const teamNames = {
+                'marketing': '마케팅팀',
+                'dev': '개발팀', 
+                'finance': '재무팀',
+                'sales': '영업팀'
+            };
+            
+            const teamName = teamNames[teamId] || teamId;
+            
+            // 히스토리에 새 항목 추가 시뮬레이션
+            alert(`${teamName}에서 데이터 공유 요청이 접수되었습니다.\n\n요청 내용이 하단 협업 히스토리에 기록됩니다.\n승인/거절을 통해 협업을 진행할 수 있습니다.`);
+            
+            // 협업 히스토리 표시
+            document.querySelector('.collaboration-history').classList.add('show');
+            
+            console.log('Team data requested:', teamId);
+        }
+        
+        // 분석 미리보기 팝업 표시
+        function showAnalysisPopup() {
+            document.getElementById('analysis-popup').style.display = 'flex';
+        }
+        
+        // 분석 미리보기 팝업 닫기
+        function closeAnalysisPopup() {
+            document.getElementById('analysis-popup').style.display = 'none';
+        }
+        
+        // 팝업 배경 클릭 시 닫기
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('analysis-popup');
+            if (event.target === popup) {
+                closeAnalysisPopup();
             }
         });
-
-        // 전역 함수로 노출 (HTML onclick에서 사용)
-        window.selectModule = selectModule;
-        window.useSampleData = useSampleData;
-        window.startAnalysis = startAnalysis;
-        window.sendTeamMessage = sendTeamMessage;
     </script>
 </body>
 </html>

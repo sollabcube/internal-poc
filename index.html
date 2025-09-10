@@ -578,6 +578,37 @@
             color: #495057;
         }
 
+        /* 증강 세부 옵션 */
+        .augment-detail-options {
+            margin-top: 16px;
+            padding: 12px;
+            background: #f0f2f5;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+        }
+
+        .augment-detail-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .augment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .augment-method {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #495057;
+        }
+
         .request-notification {
             background: #fff3e0;
             border: 1px solid #ffcc02;
@@ -586,12 +617,7 @@
             margin-top: 16px;
         }
 
-        .notification-text {
-            font-size: 14px;
-            color: #f57c00;
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
+        /* 기본 알림 텍스트 스타일은 위에서 정의됨 */
 
         .notification-channels {
             display: flex;
@@ -1158,6 +1184,13 @@
             color: #6e6e73;
         }
 
+        .selected-column-description {
+            font-size: 10px;
+            color: #8e8e93;
+            font-style: italic;
+            margin-top: 2px;
+        }
+
         .remove-column {
             background: none;
             border: none;
@@ -1195,18 +1228,261 @@
             color: #667eea;
         }
 
-        /* 협업 히스토리 */
-        .collaboration-history {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            padding: 32px;
+        /* 중복 방지 시스템 */
+        .duplicate-check-section {
+            margin-top: 24px;
+            border-top: 1px solid #e9ecef;
+            padding-top: 20px;
+        }
+
+        .duplicate-check-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .duplicate-indicator {
+            background: #fff8f0;
+            border: 1px solid #ffd0a6;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
             display: none;
         }
-        
-        .collaboration-history.show {
+
+        .duplicate-indicator.active {
             display: block;
+        }
+
+        .duplicate-indicator.high {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .duplicate-indicator.medium {
+            background: #fffbeb;
+            border-color: #fed7aa;
+        }
+
+        .duplicate-indicator.low {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .duplicate-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .duplicate-score {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .duplicate-score.high {
+            color: #dc2626;
+        }
+
+        .duplicate-score.medium {
+            color: #d97706;
+        }
+
+        .duplicate-score.low {
+            color: #16a34a;
+        }
+
+        .duplicate-team-info {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .duplicate-columns {
+            font-size: 11px;
+            color: #9ca3af;
+            background: rgba(0,0,0,0.05);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .related-reports-section {
+            margin-top: 16px;
+        }
+
+        .related-reports-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .related-report-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .related-report-item:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        .report-agent-info {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .report-title {
+            font-size: 12px;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        /* 알림 버튼 */
+        .notification-button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .notification-button:hover {
+            transform: scale(1.05) translateY(-1px);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .notification-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* 백그라운드 알림용 텍스트 */
+        .request-notification .notification-text {
+            color: #b8860b;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        /* 사이드 패널 */
+        .collaboration-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .collaboration-panel.active {
+            right: 0;
+        }
+
+        .panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .panel-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .panel-header {
+            padding: 24px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f9fa;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .panel-close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #e9ecef;
+            font-size: 18px;
+            font-weight: 600;
+            color: #6c757d;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .panel-close-btn:hover {
+            background: #dee2e6;
+            color: #495057;
+        }
+
+        .panel-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
         }
 
         .history-header {
@@ -1583,6 +1859,12 @@
                         <span>통합 리포트</span>
                     </div>
                 </div>
+                
+                <!-- 알림 버튼 -->
+                <div class="notification-button" id="notification-button" onclick="toggleCollaborationPanel()" style="display: none;">
+                    <span class="notification-text">협업 요청</span>
+                    <div class="notification-badge" id="notification-badge">3</div>
+                </div>
             </div>
         </header>
 
@@ -1596,7 +1878,7 @@
                         <div class="workspace-subtitle">안전한 데이터 처리부터 팀별 실시간 협업까지</div>
                     </div>
                     <div class="header-controls">
-                        <button class="btn-large primary hidden" id="proceed-btn" type="button" onclick="window.location.href='xpert_agent_fixed.html'">
+                        <button class="btn-large primary hidden" id="proceed-btn" type="button" onclick="window.location.href='xpert_agent_plusa.html'">
                         에이전트 분석 시작 →
                         </button>
                         <div class="workspace-stats">
@@ -1882,13 +2164,30 @@
                                         <div class="info-label">샘플 데이터</div>
                                         <div class="info-value" id="column-sample">예시 값이 표시됩니다</div>
                                     </div>
+                                    
+                                    <div class="info-item" id="column-alias-info" style="display: none;">
+                                        <div class="info-label">별칭</div>
+                                        <div class="info-value" id="column-alias-value">-</div>
+                                    </div>
+                                    
+                                    <div class="info-item" id="column-description-info" style="display: none;">
+                                        <div class="info-label">설명</div>
+                                        <div class="info-value" id="column-description-value">-</div>
+                                    </div>
                                 </div>
 
                                 <div class="column-actions" id="column-actions" style="display: none;">
                                     <div class="action-group">
-                                        <div class="action-label">컬럼명 변경</div>
+                                        <div class="action-label">별칭 추가</div>
                                         <div class="action-buttons">
-                                            <button class="action-btn" onclick="renameColumn()">이름 변경</button>
+                                            <button class="action-btn" onclick="addColumnAlias()">별칭 추가</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="action-group">
+                                        <div class="action-label">컬럼 설명</div>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="addColumnDescription()">설명 추가</button>
                                         </div>
                                     </div>
 
@@ -1944,23 +2243,25 @@
                                     <input type="radio" name="synthetic" id="none" checked>
                                     <label for="none">해당 없음</label>
                                 </div>
-                                <div class="synthetic-option" onclick="selectSyntheticOption('request')">
-                                    <input type="radio" name="synthetic" id="request">
-                                    <label for="request">요청 입력</label>
+                                <div class="synthetic-option" onclick="selectSyntheticOption('enable')">
+                                    <input type="radio" name="synthetic" id="enable">
+                                    <label for="enable">증강 적용</label>
                                 </div>
                             </div>
                             
-                            <!-- 컬럼 선택 영역 (요청 입력 선택시 표시) -->
-                            <div class="column-selection-area" id="columnSelectionArea" style="display: none;">
-                                <div class="column-selection-title">증강할 컬럼 선택</div>
-                                <div class="selected-columns-for-augment" id="selectedColumnsForAugment">
-                                    <!-- 선택된 컬럼들이 체크박스로 표시됩니다 -->
+                            <!-- 증강 세부 옵션 (증강 적용 선택시 표시) -->
+                            <div class="augment-detail-options" id="augmentDetailOptions" style="display: none;">
+                                <div class="augment-detail-title">증강 방식 선택 (복수 선택 가능)</div>
+                                <div class="augment-methods">
+                                    <div class="augment-method">
+                                        <input type="checkbox" id="crawling" onchange="updateAugmentMethod()">
+                                        <label for="crawling">크롤링 기반</label>
+                                    </div>
+                                    <div class="augment-method">
+                                        <input type="checkbox" id="row" onchange="updateAugmentMethod()">
+                                        <label for="row">로우 단위</label>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <!-- 컬럼별 요청 코멘트 영역 -->
-                            <div class="column-comments" id="columnComments">
-                                <!-- 선택된 컬럼별 코멘트 입력란이 표시됩니다 -->
                             </div>
                             
                             <!-- 요청 입력 클릭 시 나타나는 알림 설정 -->
@@ -1996,90 +2297,41 @@
                                 팀 데이터셋 생성
                             </button>
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            <!-- 협업 히스토리 -->
-            <section class="collaboration-history fade-in" id="collaboration-history-section">
-                <div class="history-header">
-                    <div class="history-title">협업 히스토리</div>
-                </div>
-                
-                <div class="history-content">
-                    <div class="history-section">
-                        <div class="section-header">
-                            <div class="section-title">내가 요청한 내용</div>
-                            <div class="section-count">3</div>
-                        </div>
-                        
-                        <div class="history-item">
-                            <div class="history-item-header">
-                                <div class="history-item-title">마케팅팀에 고객 세그먼트 데이터 요청</div>
-                                <div class="history-status status-pending">승인 대기</div>
+                        <!-- 중복 방지 시스템 -->
+                        <div class="duplicate-check-section" id="duplicate-check-section">
+                            <div class="duplicate-check-title">
+                                🔍 실시간 중복도 검사
                             </div>
-                            <div class="history-item-desc">
-                                고객 ID, 연령대, 구매 이력 컬럼이 포함된 데이터셋을 마케팅팀에 공유 요청
+                            
+                            <!-- 중복도 표시 영역 -->
+                            <div class="duplicate-indicator" id="duplicate-indicator">
+                                <div class="duplicate-header">
+                                    <div class="duplicate-score" id="duplicate-score">중복도 95%</div>
+                                    <div style="font-size: 12px; color: #6b7280;">높음</div>
+                                </div>
+                                <div class="duplicate-team-info" id="duplicate-team-info">
+                                    마케팅팀 데이터셋과 높은 유사성
+                                </div>
+                                <div class="duplicate-columns" id="duplicate-columns">
+                                    공통 컬럼: customer_id, purchase_date, amount
+                                </div>
                             </div>
-                            <div class="history-actions">
-                                <button class="history-action-btn">수정</button>
-                                <button class="history-action-btn">취소</button>
-                            </div>
-                        </div>
 
-                        <div class="history-item">
-                            <div class="history-item-header">
-                                <div class="history-item-title">개발팀에 API 연동 데이터 요청</div>
-                                <div class="history-status status-completed">완료</div>
-                            </div>
-                            <div class="history-item-desc">
-                                ML 학습용 정규화된 거래 데이터 JSON 포맷으로 공유 완료
-                            </div>
-                        </div>
-
-                        <div class="history-item">
-                            <div class="history-item-header">
-                                <div class="history-item-title">재무팀에 월별 리포트 데이터 요청</div>
-                                <div class="history-status status-approved">승인됨</div>
-                            </div>
-                            <div class="history-item-desc">
-                                월별 매출 집계 데이터 Excel 형태로 공유 예정
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="history-section">
-                        <div class="section-header">
-                            <div class="section-title">받은 요청</div>
-                            <div class="section-count">2</div>
-                        </div>
-                        
-                        <div class="history-item">
-                            <div class="history-item-header">
-                                <div class="history-item-title">영업팀이 고객 연락처 데이터 요청</div>
-                                <div class="history-status status-pending">검토 중</div>
-                            </div>
-                            <div class="history-item-desc">
-                                신규 고객 발굴을 위한 연락처 및 지역 정보 데이터 공유 요청
-                            </div>
-                            <div class="history-actions">
-                                <button class="history-action-btn approve">승인</button>
-                                <button class="history-action-btn reject">거절</button>
-                            </div>
-                        </div>
-
-                        <div class="history-item">
-                            <div class="history-item-header">
-                                <div class="history-item-title">재무팀이 결제 데이터 요청</div>
-                                <div class="history-status status-completed">승인 완료</div>
-                            </div>
-                            <div class="history-item-desc">
-                                분기별 매출 분석을 위한 결제 방법 및 금액 데이터 공유 완료
+                            <!-- 관련 리포트 섹션 -->
+                            <div class="related-reports-section" id="related-reports-section" style="display: none;">
+                                <div class="related-reports-title">
+                                    📊 관련 컬럼 리포트
+                                </div>
+                                <div id="related-reports-container">
+                                    <!-- 관련 리포트들이 여기에 동적으로 추가됩니다 -->
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+
 
         </main>
     </div>
@@ -2140,6 +2392,8 @@
         let hasSensitiveData = Math.random() > 0.3;
         let selectedColumns = [];
         let selectedColumnData = null;
+        // 컬럼별 메타데이터 저장소 (별칭, 설명 등)
+        let columnMetadata = {};
 
         // 단계별 상태 업데이트
         function updateStepIndicator(step) {
@@ -2286,8 +2540,8 @@
             // 진행 버튼 활성화
             document.getElementById('proceed-btn').classList.remove('hidden');
             
-            // 협업 히스토리 표시
-            document.querySelector('.collaboration-history').classList.add('show');
+            // 알림 버튼 표시
+            document.getElementById('notification-button').style.display = 'flex';
         }
 
         // 컬럼 그룹 토글
@@ -2334,6 +2588,27 @@
             document.getElementById('column-actions').style.display = 'block';
             
             selectedColumnData = { name, type, group };
+            
+            // 저장된 메타데이터 불러오기
+            const metadata = columnMetadata[name] || {};
+            selectedColumnData.alias = metadata.alias;
+            selectedColumnData.description = metadata.description;
+            selectedColumnData.originalName = metadata.originalName || name;
+            
+            // 별칭과 설명 정보 업데이트 (기존 데이터가 있다면 표시)
+            if (selectedColumnData.alias) {
+                document.getElementById('column-alias-value').textContent = selectedColumnData.alias;
+                document.getElementById('column-alias-info').style.display = 'flex';
+            } else {
+                document.getElementById('column-alias-info').style.display = 'none';
+            }
+            
+            if (selectedColumnData.description) {
+                document.getElementById('column-description-value').textContent = selectedColumnData.description;
+                document.getElementById('column-description-info').style.display = 'flex';
+            } else {
+                document.getElementById('column-description-info').style.display = 'none';
+            }
         }
 
         // 팀별 컬럼 선택 (에이전트 정보 포함)
@@ -2395,16 +2670,31 @@
                 dropZone.style.display = 'none';
             }
             
+            // 저장된 메타데이터 확인
+            const metadata = columnMetadata[selectedColumnData.name] || {};
+            const displayName = metadata.alias ? `${metadata.alias} (${selectedColumnData.name})` : selectedColumnData.name;
+            
             // 컬럼 추가
             const columnElement = document.createElement('div');
             columnElement.className = 'selected-column';
-            columnElement.innerHTML = `
+            
+            let columnHTML = `
                 <div class="selected-column-info">
-                    <div class="selected-column-name-small">${selectedColumnData.name}</div>
+                    <div class="selected-column-name-small">${displayName}</div>
                     <div class="selected-column-source">${selectedColumnData.group}</div>
+            `;
+            
+            // 설명이 있으면 추가
+            if (metadata.description) {
+                columnHTML += `<div class="selected-column-description">${metadata.description}</div>`;
+            }
+            
+            columnHTML += `
                 </div>
                 <button class="remove-column" onclick="removeColumn('${selectedColumnData.name}')">×</button>
             `;
+            
+            columnElement.innerHTML = columnHTML;
             
             selectedColumnsContainer.appendChild(columnElement);
             
@@ -2412,6 +2702,11 @@
             const requestOption = document.getElementById('request');
             if (requestOption && requestOption.checked) {
                 updateColumnSelectionForAugment();
+            }
+
+            // 중복도 검사 실행 (2개 이상 컬럼이 있을 때)
+            if (selectedColumns.length >= 2) {
+                checkDuplication();
             }
         }
 
@@ -2424,21 +2719,43 @@
             selectedColumnsContainer.innerHTML = '';
             
             selectedColumns.forEach(col => {
+                // 저장된 메타데이터 확인
+                const metadata = columnMetadata[col.name] || {};
+                const displayName = metadata.alias ? `${metadata.alias} (${col.name})` : col.name;
+                
                 const columnElement = document.createElement('div');
                 columnElement.className = 'selected-column';
-                columnElement.innerHTML = `
+                
+                let columnHTML = `
                     <div class="selected-column-info">
-                        <div class="selected-column-name-small">${col.name}</div>
+                        <div class="selected-column-name-small">${displayName}</div>
                         <div class="selected-column-source">${col.group}</div>
+                `;
+                
+                // 설명이 있으면 추가
+                if (metadata.description) {
+                    columnHTML += `<div class="selected-column-description">${metadata.description}</div>`;
+                }
+                
+                columnHTML += `
                     </div>
                     <button class="remove-column" onclick="removeColumn('${col.name}')">×</button>
                 `;
+                
+                columnElement.innerHTML = columnHTML;
                 selectedColumnsContainer.appendChild(columnElement);
             });
             
             // 컬럼이 없으면 드롭존 다시 표시
             if (selectedColumns.length === 0) {
                 document.getElementById('drop-zone').style.display = 'flex';
+            }
+
+            // 중복도 검사 업데이트 (2개 이상 컬럼이 있을 때)
+            if (selectedColumns.length >= 2) {
+                checkDuplication();
+            } else {
+                hideDuplicationIndicator();
             }
         }
 
@@ -2458,8 +2775,8 @@
             document.getElementById('hybrid-editor').style.display = 'grid';
             resetCentralPanelToMaster();
             
-            // 협업 히스토리 표시
-            document.querySelector('.collaboration-history').classList.add('show');
+            // 알림 버튼 표시
+            document.getElementById('notification-button').style.display = 'flex';
             
             console.log('Selected master data');
         }
@@ -2607,17 +2924,51 @@
 
         // 합성 데이터 옵션 선택
         function selectSyntheticOption(option) {
+            const augmentDetailOptions = document.getElementById('augmentDetailOptions');
             const requestNotification = document.getElementById('requestNotification');
-            const columnSelectionArea = document.getElementById('columnSelectionArea');
             
-            if (option === 'request') {
+            if (option === 'enable') {
+                // 증강 적용 선택 시 세부 옵션 표시
+                augmentDetailOptions.style.display = 'block';
+                requestNotification.style.display = 'none';
+            } else {
+                // 해당 없음 선택 시 세부 옵션 숨김
+                augmentDetailOptions.style.display = 'none';
+                requestNotification.style.display = 'none';
+                
+                // 세부 옵션 체크박스들 초기화
+                document.getElementById('crawling').checked = false;
+                document.getElementById('row').checked = false;
+            }
+        }
+
+        // 증강 방식 업데이트
+        function updateAugmentMethod() {
+            const requestNotification = document.getElementById('requestNotification');
+            
+            // 하나라도 선택되면 알림 표시
+            const crawlingChecked = document.getElementById('crawling').checked;
+            const rowChecked = document.getElementById('row').checked;
+            
+            if (crawlingChecked || rowChecked) {
                 requestNotification.style.display = 'block';
-                columnSelectionArea.style.display = 'block';
-                updateColumnSelectionForAugment();
+                
+                // 선택된 옵션에 따른 메시지 업데이트
+                const notificationText = document.querySelector('#requestNotification .notification-text');
+                let message = '데이터 증강이 선택되었습니다.<br>';
+                
+                if (crawlingChecked && rowChecked) {
+                    message += '크롤링 기반 및 로우 단위 증강이 적용됩니다.<br>';
+                } else if (crawlingChecked) {
+                    message += '크롤링 기반 증강이 적용됩니다.<br>';
+                } else if (rowChecked) {
+                    message += '로우 단위 증강이 적용됩니다.<br>';
+                }
+                
+                message += '백그라운드 작업을 위한 알람 채널을 알려주세요.';
+                notificationText.innerHTML = message;
             } else {
                 requestNotification.style.display = 'none';
-                columnSelectionArea.style.display = 'none';
-                document.getElementById('columnComments').innerHTML = '';
             }
         }
 
@@ -2675,10 +3026,13 @@
 
         // 데이터 생성 함수
         function generateData() {
-            const requestOption = document.getElementById('request');
+            const enableOption = document.getElementById('enable');
+            const crawlingOption = document.getElementById('crawling');
+            const rowOption = document.getElementById('row');
             
-            if (requestOption && requestOption.checked) {
-                // 요청 입력이 선택된 경우 데이터 증강 상태로 변경
+            // 증강이 활성화되고 세부 방식이 선택된 경우
+            if (enableOption && enableOption.checked && 
+                ((crawlingOption && crawlingOption.checked) || (rowOption && rowOption.checked))) {
                 // 새로운 팀별 데이터 요청을 왼쪽 패널에 추가 (증강 상태)
                 addAugmentingTeamDataRequest(selectedColumns);
             } else {
@@ -2696,7 +3050,7 @@
             newRequestCard.className = 'team-request-card new-request augmenting';
             newRequestCard.style.border = '2px solid #ff9500';
             newRequestCard.style.backgroundColor = 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)';
-            newRequestCard.onclick = () => selectTeamData(newRequestId);
+            newRequestCard.onclick = () => selectAugmentingData(newRequestId);
             
             newRequestCard.innerHTML = `
                 <div class="team-info">
@@ -2714,6 +3068,49 @@
             teamRequestsContainer.insertBefore(newRequestCard, teamRequestsContainer.firstChild);
             
             alert('데이터 증강 요청이 생성되었습니다.\n좌측 데이터 탐색기에서 진행 상황을 확인할 수 있습니다.');
+        }
+
+        // 데이터 증강 요청 선택 (협업 요청 알림 없이)
+        function selectAugmentingData(requestId) {
+            // 본체 데이터 선택 해제
+            document.querySelector('.master-data-section').style.background = '#f8f9ff';
+            document.querySelector('.master-data-section').style.borderColor = '#e0e7ff';
+            
+            document.querySelectorAll('.team-request-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.closest('.team-request-card').classList.add('active');
+            
+            // 빈 상태 숨기고 편집 영역 표시
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('hybrid-editor').style.display = 'grid';
+            
+            // 증강 데이터 전용 중앙 패널 업데이트
+            updateCentralPanelForAugmenting(requestId);
+            
+            console.log('Selected augmenting data:', requestId);
+        }
+
+        // 증강 데이터용 중앙 패널 업데이트
+        function updateCentralPanelForAugmenting(requestId) {
+            // 증강 진행 상태 표시
+            const dataTitle = document.querySelector('.data-title');
+            const dataSubtitle = document.querySelector('.data-subtitle');
+            
+            if (dataTitle) dataTitle.textContent = '데이터 증강 진행 중';
+            if (dataSubtitle) dataSubtitle.textContent = '합성 데이터 생성 및 처리 중입니다. 완료까지 약 5-10분 소요됩니다.';
+            
+            // 컬럼 목록은 빈 상태로 표시 (증강 중이므로)
+            const columnGroups = document.querySelector('.column-groups');
+            if (columnGroups) {
+                columnGroups.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #8e8e93;">
+                        <div style="font-size: 24px; margin-bottom: 12px;">⏳</div>
+                        <div>데이터 증강 처리 중...</div>
+                        <div style="font-size: 12px; margin-top: 8px;">잠시만 기다려주세요</div>
+                    </div>
+                `;
+            }
         }
 
         // 팀 데이터셋 생성
@@ -2762,15 +3159,75 @@
             }, 5000);
         }
 
-        // 컬럼 이름 변경
-        function renameColumn() {
+        // 컬럼 별칭 추가
+        function addColumnAlias() {
             if (!selectedColumnData) return;
             
-            const newName = prompt('새로운 컬럼명을 입력하세요:', selectedColumnData.name);
-            if (newName && newName !== selectedColumnData.name) {
-                document.getElementById('selected-column-name').textContent = newName;
-                selectedColumnData.name = newName;
-                alert('컬럼명이 변경되었습니다.');
+            // 원본 컬럼명이 없으면 현재 이름을 원본으로 저장
+            if (!selectedColumnData.originalName) {
+                selectedColumnData.originalName = selectedColumnData.name;
+            }
+            
+            const alias = prompt('컬럼 별칭을 입력하세요:', selectedColumnData.alias || '');
+            if (alias !== null) {
+                if (alias.trim()) {
+                    selectedColumnData.alias = alias.trim();
+                    document.getElementById('column-alias-value').textContent = alias.trim();
+                    document.getElementById('column-alias-info').style.display = 'flex';
+                    
+                    // 메타데이터 영구 저장
+                    if (!columnMetadata[selectedColumnData.name]) {
+                        columnMetadata[selectedColumnData.name] = {};
+                    }
+                    columnMetadata[selectedColumnData.name].alias = alias.trim();
+                    columnMetadata[selectedColumnData.name].originalName = selectedColumnData.originalName;
+                    
+                    alert(`별칭 '${alias.trim()}'이 추가되었습니다.\n원본 컬럼명 '${selectedColumnData.originalName}'은 보존됩니다.`);
+                } else {
+                    // 빈 별칭인 경우 별칭 제거
+                    selectedColumnData.alias = null;
+                    document.getElementById('column-alias-info').style.display = 'none';
+                    
+                    // 메타데이터에서 별칭 제거
+                    if (columnMetadata[selectedColumnData.name]) {
+                        delete columnMetadata[selectedColumnData.name].alias;
+                    }
+                    
+                    alert('별칭이 제거되었습니다.');
+                }
+            }
+        }
+
+        // 컬럼 설명 추가
+        function addColumnDescription() {
+            if (!selectedColumnData) return;
+            
+            const description = prompt('컬럼 설명을 입력하세요:', selectedColumnData.description || '');
+            if (description !== null) {
+                if (description.trim()) {
+                    selectedColumnData.description = description.trim();
+                    document.getElementById('column-description-value').textContent = description.trim();
+                    document.getElementById('column-description-info').style.display = 'flex';
+                    
+                    // 메타데이터 영구 저장
+                    if (!columnMetadata[selectedColumnData.name]) {
+                        columnMetadata[selectedColumnData.name] = {};
+                    }
+                    columnMetadata[selectedColumnData.name].description = description.trim();
+                    
+                    alert(`컬럼 설명이 저장되었습니다.`);
+                } else {
+                    // 빈 설명인 경우 설명 제거
+                    selectedColumnData.description = null;
+                    document.getElementById('column-description-info').style.display = 'none';
+                    
+                    // 메타데이터에서 설명 제거
+                    if (columnMetadata[selectedColumnData.name]) {
+                        delete columnMetadata[selectedColumnData.name].description;
+                    }
+                    
+                    alert('컬럼 설명이 제거되었습니다.');
+                }
             }
         }
 
@@ -2799,6 +3256,196 @@
             if (confirm('협업 워크스페이스 설정이 완료되었습니다.\n에이전트 분석 단계로 진행하시겠습니까?')) {
                 updateStepIndicator(4);
                 alert('Step 4 (에이전트 분석) 단계로 진행합니다.\n\n협업 완료 결과:\n- 선택된 개인 컬럼: ' + selectedColumns.length + '개\n- 팀별 데이터 요청 처리 완료\n- 협업 히스토리 기록 완료');
+            }
+        }
+
+        // 중복도 검사 시스템
+        
+        // 모의 팀 데이터셋 정보 (실제로는 서버에서 가져올 데이터)
+        const mockTeamDatasets = [
+            {
+                team: '마케팅팀',
+                columns: ['customer_id', 'purchase_date', 'amount', 'product_category', 'campaign_source'],
+                createdBy: 'user@marketing.team'
+            },
+            {
+                team: '재무팀',
+                columns: ['customer_id', 'amount', 'payment_method', 'transaction_date', 'currency'],
+                createdBy: 'user@finance.team'
+            },
+            {
+                team: '영업팀',
+                columns: ['customer_id', 'contact_date', 'lead_score', 'sales_stage', 'expected_revenue'],
+                createdBy: 'user@sales.team'
+            }
+        ];
+
+        // 모의 관련 리포트 정보
+        const mockRelatedReports = [
+            {
+                agent: '마케팅 분석 에이전트',
+                title: '고객 구매 패턴 분석 리포트',
+                columns: ['customer_id', 'purchase_date', 'amount'],
+                reportId: 'marketing_001'
+            },
+            {
+                agent: '재무 분석 에이전트',
+                title: '월별 매출 트렌드 분석',
+                columns: ['amount', 'purchase_date', 'currency'],
+                reportId: 'finance_001'
+            },
+            {
+                agent: '영업 분석 에이전트',
+                title: '리드 스코어링 모델 결과',
+                columns: ['customer_id', 'lead_score', 'contact_date'],
+                reportId: 'sales_001'
+            }
+        ];
+
+        // 중복도 검사 실행
+        function checkDuplication() {
+            if (selectedColumns.length < 2) {
+                hideDuplicationIndicator();
+                return;
+            }
+
+            // 현재 선택된 컬럼 이름들
+            const currentColumns = selectedColumns.map(col => col.name);
+            
+            let highestDuplicate = null;
+            let maxScore = 0;
+
+            // 각 팀 데이터셋과 비교
+            mockTeamDatasets.forEach(dataset => {
+                const commonColumns = dataset.columns.filter(col => currentColumns.includes(col));
+                const score = Math.round((commonColumns.length / Math.max(currentColumns.length, dataset.columns.length)) * 100);
+                
+                if (score > maxScore && score > 30) { // 30% 이상일 때만 표시
+                    maxScore = score;
+                    highestDuplicate = {
+                        team: dataset.team,
+                        score: score,
+                        commonColumns: commonColumns,
+                        createdBy: dataset.createdBy
+                    };
+                }
+            });
+
+            if (highestDuplicate) {
+                showDuplicationIndicator(highestDuplicate);
+                checkRelatedReports(currentColumns);
+            } else {
+                hideDuplicationIndicator();
+            }
+        }
+
+        // 중복도 표시
+        function showDuplicationIndicator(duplicate) {
+            const indicator = document.getElementById('duplicate-indicator');
+            const score = document.getElementById('duplicate-score');
+            const teamInfo = document.getElementById('duplicate-team-info');
+            const columns = document.getElementById('duplicate-columns');
+
+            // 중복도에 따른 레벨 결정
+            let level = 'low';
+            let levelText = '낮음';
+            if (duplicate.score >= 80) {
+                level = 'high';
+                levelText = '높음';
+            } else if (duplicate.score >= 50) {
+                level = 'medium';
+                levelText = '보통';
+            }
+
+            // CSS 클래스 업데이트
+            indicator.className = `duplicate-indicator active ${level}`;
+            score.className = `duplicate-score ${level}`;
+            score.textContent = `중복도 ${duplicate.score}%`;
+
+            // 레벨 텍스트 업데이트
+            const levelElement = score.nextElementSibling;
+            levelElement.textContent = levelText;
+
+            teamInfo.textContent = `${duplicate.team} 데이터셋과 높은 유사성`;
+            columns.textContent = `공통 컬럼: ${duplicate.commonColumns.join(', ')}`;
+
+            indicator.style.display = 'block';
+        }
+
+        // 중복도 표시 숨기기
+        function hideDuplicationIndicator() {
+            const indicator = document.getElementById('duplicate-indicator');
+            const reportsSection = document.getElementById('related-reports-section');
+            
+            indicator.style.display = 'none';
+            reportsSection.style.display = 'none';
+        }
+
+        // 관련 리포트 검사
+        function checkRelatedReports(currentColumns) {
+            const relatedReports = [];
+
+            mockRelatedReports.forEach(report => {
+                const commonColumns = report.columns.filter(col => currentColumns.includes(col));
+                if (commonColumns.length >= 2) { // 2개 이상 공통 컬럼
+                    relatedReports.push({
+                        ...report,
+                        commonColumns: commonColumns,
+                        relevanceScore: Math.round((commonColumns.length / report.columns.length) * 100)
+                    });
+                }
+            });
+
+            if (relatedReports.length > 0) {
+                showRelatedReports(relatedReports);
+            }
+        }
+
+        // 관련 리포트 표시
+        function showRelatedReports(reports) {
+            const reportsSection = document.getElementById('related-reports-section');
+            const container = document.getElementById('related-reports-container');
+
+            container.innerHTML = '';
+
+            reports.forEach(report => {
+                const reportElement = document.createElement('div');
+                reportElement.className = 'related-report-item';
+                reportElement.onclick = () => navigateToReport(report.reportId);
+
+                reportElement.innerHTML = `
+                    <div class="report-agent-info">${report.agent} • 연관도 ${report.relevanceScore}%</div>
+                    <div class="report-title">${report.title}</div>
+                `;
+
+                container.appendChild(reportElement);
+            });
+
+            reportsSection.style.display = 'block';
+        }
+
+        // 리포트로 이동
+        function navigateToReport(reportId) {
+            // 실제로는 리포트 페이지로 이동하는 로직 구현
+            alert(`${reportId} 리포트로 이동합니다.\n\n분석 결과를 확인하여 중복된 작업을 방지하고 기존 인사이트를 활용할 수 있습니다.`);
+            
+            // 예시: 리포트 섹션으로 스크롤 또는 모달 표시
+            // window.location.hash = `#report-${reportId}`;
+        }
+
+        // 협업 히스토리 사이드 패널 열기/닫기
+        function toggleCollaborationPanel() {
+            const panel = document.getElementById('collaboration-panel');
+            const overlay = document.getElementById('panel-overlay');
+            
+            if (panel.classList.contains('active')) {
+                // 패널 닫기
+                panel.classList.remove('active');
+                overlay.classList.remove('active');
+            } else {
+                // 패널 열기
+                panel.classList.add('active');
+                overlay.classList.add('active');
             }
         }
 
@@ -2839,10 +3486,10 @@
             const teamName = teamNames[teamId] || teamId;
             
             // 히스토리에 새 항목 추가 시뮬레이션
-            alert(`${teamName}에서 데이터 공유 요청이 접수되었습니다.\n\n요청 내용이 하단 협업 히스토리에 기록됩니다.\n승인/거절을 통해 협업을 진행할 수 있습니다.`);
+            alert(`${teamName}에서 데이터 공유 요청이 접수되었습니다.\n\n요청 내용이 협업 히스토리에 기록됩니다.\n상단 알림 버튼을 클릭하여 승인/거절을 통해 협업을 진행할 수 있습니다.`);
             
-            // 협업 히스토리 표시
-            document.querySelector('.collaboration-history').classList.add('show');
+            // 알림 버튼 표시
+            document.getElementById('notification-button').style.display = 'flex';
             
             console.log('Team data requested:', teamId);
         }
@@ -2865,5 +3512,90 @@
             }
         });
     </script>
+
+    <!-- 협업 히스토리 사이드 패널 -->
+    <div class="collaboration-panel" id="collaboration-panel">
+        <div class="panel-header">
+            <div class="panel-title">협업 히스토리</div>
+            <button class="panel-close-btn" onclick="toggleCollaborationPanel()">×</button>
+        </div>
+        
+        <div class="panel-content">
+            <div class="history-section">
+                <div class="section-header">
+                    <div class="section-title">내가 요청한 내용</div>
+                    <div class="section-count">3</div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <div class="history-item-title">마케팅팀에 고객 세그먼트 데이터 요청</div>
+                        <div class="history-status status-pending">승인 대기</div>
+                    </div>
+                    <div class="history-item-desc">
+                        고객 ID, 연령대, 구매 이력 컬럼이 포함된 데이터셋을 마케팅팀에 공유 요청
+                    </div>
+                    <div class="history-actions">
+                        <button class="history-action-btn">수정</button>
+                        <button class="history-action-btn">취소</button>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <div class="history-item-title">개발팀에 API 연동 데이터 요청</div>
+                        <div class="history-status status-completed">완료</div>
+                    </div>
+                    <div class="history-item-desc">
+                        ML 학습용 정규화된 거래 데이터 JSON 포맷으로 공유 완료
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <div class="history-item-title">재무팀에 월별 리포트 데이터 요청</div>
+                        <div class="history-status status-approved">승인됨</div>
+                    </div>
+                    <div class="history-item-desc">
+                        월별 매출 집계 데이터 Excel 형태로 공유 예정
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-section">
+                <div class="section-header">
+                    <div class="section-title">받은 요청</div>
+                    <div class="section-count">2</div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <div class="history-item-title">영업팀이 고객 연락처 데이터 요청</div>
+                        <div class="history-status status-pending">검토 중</div>
+                    </div>
+                    <div class="history-item-desc">
+                        신규 고객 발굴을 위한 연락처 및 지역 정보 데이터 공유 요청
+                    </div>
+                    <div class="history-actions">
+                        <button class="history-action-btn approve">승인</button>
+                        <button class="history-action-btn reject">거절</button>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <div class="history-item-title">재무팀이 결제 데이터 요청</div>
+                        <div class="history-status status-completed">승인 완료</div>
+                    </div>
+                    <div class="history-item-desc">
+                        분기별 매출 분석을 위한 결제 방법 및 금액 데이터 공유 완료
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 사이드 패널 배경 오버레이 -->
+    <div class="panel-overlay" id="panel-overlay" onclick="toggleCollaborationPanel()"></div>
 </body>
 </html>

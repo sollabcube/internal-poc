@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xpert v3 - Step 5: 에이전트 분석</title>
+    <title>Xpert v3</title>
     <style>
         * {
             margin: 0;
@@ -2476,8 +2476,8 @@
 
             <!-- 하단 컨트롤 -->
             <div class="bottom-controls">
-                <button class="nav-button" onclick="goToStep4()">← Step 4로 돌아가기</button>
-                <button class="nav-button primary" id="nextButton" disabled onclick="goToStep6()">Step 6: 통합 리포트 →</button>
+                <button class="nav-button" type="button" onclick="window.location.href='index.html'">◁ Step 3: 협업 워크스페이스</button>
+                <button class="nav-button" type="button" onclick="window.location.href='report_fixed.html'">Step 5: 통합 리포트 ▷</button>
             </div>
         </div>
     </div>
@@ -3305,14 +3305,14 @@
 
         // 네비게이션 함수들
         function goToStep4() {
-            if (confirm('Step 4 협업 워크스페이스로 이동하시겠습니까?\n현재 분석 진행상황은 저장됩니다.')) {
-                alert('Step 4 협업 워크스페이스로 이동합니다.');
+            if (confirm('Step 3 협업 워크스페이스로 이동하시겠습니까?\n현재 분석 진행상황은 저장됩니다.')) {
+                alert('Step 3 협업 워크스페이스로 이동합니다.');
             }
         }
 
         function goToStep6() {
             if (isAnalysisComplete) {
-                alert('Step 6 통합 리포트로 이동합니다.');
+                alert('Step 5 통합 리포트로 이동합니다.');
             }
         }
     </script>
